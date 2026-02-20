@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cascade Protocol Conformance Fixture",
+  "description": "Schema for conformance test fixtures that validate SDK serialization of Cascade Protocol health data types to RDF/Turtle.",
+  "type": "object",
+  "required": ["id", "description", "dataType", "vocabulary", "input", "expectedOutput", "shouldAccept", "tags"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z]+-[0-9]{3}$",
+      "description": "Unique fixture identifier in the format {type-prefix}-{number}, e.g., med-001, cond-002"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of what this fixture tests"
+    },
+    "dataType": {
+      "type": "string",
+      "enum": ["Medication", "Condition", "Allergy", "LabResult", "VitalSign", "PatientProfile", "Immunization", "Coverage", "PodStructure"],
+      "description": "The Cascade Protocol data type under test"
+    },
+    "vocabulary": {
+      "type": "string",
+      "enum": ["health", "clinical", "core", "coverage", "cascade"],
+      "description": "The primary Cascade Protocol vocabulary namespace used"
+    },
+    "input": {
+      "type": "object",
+      "description": "The data model as a plain JSON object that an SDK would receive as input before serialization. Field names use camelCase mappings of the Turtle predicates."
+    },
+    "expectedOutput": {
+      "type": "object",
+      "properties": {
+        "turtle": {
+          "type": "string",
+          "description": "The expected RDF/Turtle serialization output, including namespace prefix declarations"
+        },
+        "validationMode": {
+          "type": "string",
+          "enum": ["shacl-valid", "exact-match"],
+          "description": "How to validate: 'shacl-valid' checks SHACL constraints pass, 'exact-match' requires normalized triple-by-triple equivalence"
+        }
+      },
+      "required": ["turtle", "validationMode"]
+    },
+    "shouldAccept": {
+      "type": "boolean",
+      "description": "If true, the input is valid and serialization should succeed. If false, the input violates a constraint and should be rejected."
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "happy-path",
+          "full-fields",
+          "multi-code",
+          "provenance",
+          "negative",
+          "required-field",
+          "enum-constraint",
+          "pattern-constraint",
+          "type-constraint",
+          "clinical",
+          "self-reported",
+          "device",
+          "ehr-import",
+          "discontinued",
+          "prn",
+          "pod-structure",
+          "manifest",
+          "container"
+        ]
+      },
+      "description": "Tags classifying the fixture for filtering and coverage reporting"
+    },
+    "shaclConstraintViolated": {
+      "type": "string",
+      "description": "For negative fixtures (shouldAccept=false): describes which SHACL constraint is violated, e.g., 'MedicationShape requires health:medicationName (sh:minCount 1)'"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional explanatory notes about the test case, edge cases, or implementation considerations"
+    }
+  },
+  "if": {
+    "properties": { "shouldAccept": { "const": false } }
+  },
+  "then": {
+    "required": ["shaclConstraintViolated"]
+  }
+}
