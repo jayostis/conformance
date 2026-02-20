@@ -1,0 +1,33 @@
+{
+  "id": "lab-005",
+  "description": "Provenance: Lab result (WBC) with ClinicalGenerated provenance and hematology category",
+  "dataType": "LabResult",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:1ab0-0011-aaaa-bbbb-ccccddddeeee",
+    "type": "LabResultRecord",
+    "testName": "White Blood Cell Count",
+    "resultValue": "6.8",
+    "interpretation": "normal",
+    "performedDate": "2026-01-15T08:30:00Z",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "testCode": "http://loinc.org/rdf#6690-2",
+    "labCategory": "Hematology",
+    "resultUnit": "x10^3/uL",
+    "referenceRange": "4.5 - 11.0",
+    "specimenType": "Whole Blood",
+    "reportedDate": "2026-01-15T14:00:00Z",
+    "orderingProvider": "Dr. Sarah Chen",
+    "performingLab": "Cascade Regional Medical Lab",
+    "notes": "Within normal limits. No signs of infection or hematologic abnormality.",
+    "sourceRecordId": "ehr-lab-2026-0115-011"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix loinc: <http://loinc.org/rdf#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:1ab0-0011-aaaa-bbbb-ccccddddeeee> a health:LabResultRecord ;\n    health:testName \"White Blood Cell Count\" ;\n    health:resultValue \"6.8\" ;\n    health:interpretation \"normal\" ;\n    health:performedDate \"2026-01-15T08:30:00Z\"^^xsd:dateTime ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:testCode <http://loinc.org/rdf#6690-2> ;\n    health:labCategory \"Hematology\" ;\n    health:resultUnit \"x10^3/uL\" ;\n    health:referenceRange \"4.5 - 11.0\" ;\n    health:specimenType \"Whole Blood\" ;\n    health:reportedDate \"2026-01-15T14:00:00Z\"^^xsd:dateTime ;\n    health:orderingProvider \"Dr. Sarah Chen\" ;\n    health:performingLab \"Cascade Regional Medical Lab\" ;\n    health:notes \"Within normal limits. No signs of infection or hematologic abnormality.\" ;\n    health:sourceRecordId \"ehr-lab-2026-0115-011\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["provenance", "clinical", "ehr-import"],
+  "notes": "Based on Lab 11 (WBC Count) from the Reference Patient Pod. Tests hematology category lab result with ClinicalGenerated provenance."
+}

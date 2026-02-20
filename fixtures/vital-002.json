@@ -1,0 +1,28 @@
+{
+  "id": "vital-002",
+  "description": "Happy path: Heart rate reading within normal range",
+  "dataType": "VitalSign",
+  "vocabulary": "clinical",
+  "input": {
+    "id": "urn:uuid:vs01-hr00-0120-aaaa-bbbbccccdddd",
+    "type": "VitalSign",
+    "vitalType": "heartRate",
+    "vitalTypeName": "Heart Rate",
+    "value": 72,
+    "unit": "bpm",
+    "effectiveDate": "2026-01-20T09:15:00Z",
+    "loincCode": "http://loinc.org/rdf#8867-4",
+    "snomedCode": "http://snomed.info/sct/364075005",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "referenceRangeLow": 60,
+    "referenceRangeHigh": 100
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix sct: <http://snomed.info/sct/> .\n@prefix loinc: <http://loinc.org/rdf#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:vs01-hr00-0120-aaaa-bbbbccccdddd> a clinical:VitalSign ;\n    clinical:vitalType \"heartRate\" ;\n    clinical:vitalTypeName \"Heart Rate\" ;\n    clinical:value 72 ;\n    clinical:unit \"bpm\" ;\n    clinical:effectiveDate \"2026-01-20T09:15:00Z\"^^xsd:dateTime ;\n    clinical:loincCode <http://loinc.org/rdf#8867-4> ;\n    clinical:snomedCode <http://snomed.info/sct/364075005> ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    clinical:referenceRangeLow 60 ;\n    clinical:referenceRangeHigh 100 .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "clinical", "ehr-import"],
+  "notes": "Based on Vital Signs Day 1 (Heart Rate) from the Reference Patient Pod. Tests normal heart rate without interpretation field."
+}

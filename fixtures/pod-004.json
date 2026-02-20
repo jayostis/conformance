@@ -1,0 +1,22 @@
+{
+  "id": "pod-004",
+  "description": "Negative: Export manifest missing required schemaVersion",
+  "dataType": "PodStructure",
+  "vocabulary": "cascade",
+  "input": {
+    "id": "",
+    "type": "ExportManifest",
+    "title": "Incomplete Manifest",
+    "description": "A manifest without schema version.",
+    "created": "2026-02-19T00:00:00Z",
+    "creator": "Test"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "exact-match"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "pod-structure", "manifest"],
+  "shaclConstraintViolated": "ExportManifest requires cascade:schemaVersion. Without a schema version, consuming agents cannot determine compatibility.",
+  "notes": "Tests that a manifest without cascade:schemaVersion is rejected. Schema version is mandatory for all Cascade Protocol metadata resources."
+}

@@ -1,0 +1,28 @@
+{
+  "id": "cond-003",
+  "description": "Full fields: Condition with all available fields populated including monitoring metadata",
+  "dataType": "Condition",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:c0nd-0003-aaaa-bbbb-ccccddddeeee",
+    "type": "ConditionRecord",
+    "conditionName": "Mild Persistent Asthma",
+    "status": "active",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "onsetDate": "2005-09-01T00:00:00Z",
+    "icd10Code": "http://hl7.org/fhir/sid/icd-10-cm/J45.30",
+    "snomedCode": "http://snomed.info/sct/195967001",
+    "notes": "Well-controlled with PRN albuterol. No recent exacerbations.",
+    "sourceRecordId": "ehr-cond-2005-0901-001",
+    "conditionClass": "respiratory",
+    "monitoredVitalSigns": ["respiratoryRate", "oxygenSaturation"]
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix sct: <http://snomed.info/sct/> .\n@prefix icd10: <http://hl7.org/fhir/sid/icd-10-cm/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:c0nd-0003-aaaa-bbbb-ccccddddeeee> a health:ConditionRecord ;\n    health:conditionName \"Mild Persistent Asthma\" ;\n    health:status \"active\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:onsetDate \"2005-09-01T00:00:00Z\"^^xsd:dateTime ;\n    health:icd10Code <http://hl7.org/fhir/sid/icd-10-cm/J45.30> ;\n    health:snomedCode <http://snomed.info/sct/195967001> ;\n    health:notes \"Well-controlled with PRN albuterol. No recent exacerbations.\" ;\n    health:sourceRecordId \"ehr-cond-2005-0901-001\" ;\n    health:conditionClass \"respiratory\" ;\n    health:monitoredVitalSigns (\"respiratoryRate\" \"oxygenSaturation\") .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["full-fields", "clinical", "ehr-import"],
+  "notes": "Based on Condition 3 (Mild Persistent Asthma) from the Reference Patient Pod. Exercises all condition properties including monitoredVitalSigns RDF list."
+}

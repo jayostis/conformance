@@ -1,0 +1,23 @@
+{
+  "id": "pod-003",
+  "description": "Negative: Pod container missing required ldp:contains (empty pod)",
+  "dataType": "PodStructure",
+  "vocabulary": "cascade",
+  "input": {
+    "id": "",
+    "type": "BasicContainer",
+    "title": "Empty Patient Pod",
+    "description": "A pod with no resources.",
+    "created": "2026-02-19T00:00:00Z",
+    "schemaVersion": "1.3",
+    "contains": []
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "exact-match"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "pod-structure", "container"],
+  "shaclConstraintViolated": "A Cascade Pod root container must contain at least one resource via ldp:contains. An empty pod has no clinical utility.",
+  "notes": "Tests that an empty pod container with no resources is rejected. A valid Cascade Pod must contain at least the profile and manifest resources."
+}

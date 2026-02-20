@@ -1,0 +1,25 @@
+{
+  "id": "med-010",
+  "description": "Negative: Medication with invalid schemaVersion format (missing minor version)",
+  "dataType": "Medication",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:neg0-0003-aaaa-bbbb-ccccddddeeee",
+    "type": "MedicationRecord",
+    "medicationName": "Ibuprofen",
+    "isActive": true,
+    "dataProvenance": "SelfReported",
+    "schemaVersion": "1",
+    "dose": "400 mg",
+    "frequency": "as needed",
+    "provenanceClass": "userTracked"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "pattern-constraint"],
+  "shaclConstraintViolated": "MedicationShape requires cascade:schemaVersion to match pattern '^[0-9]+\\.[0-9]+$'. The value '1' does not include a minor version number.",
+  "notes": "Derived from clinical:MedicationShape which requires cascade:schemaVersion with sh:pattern constraint for major.minor format."
+}

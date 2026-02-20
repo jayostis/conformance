@@ -1,0 +1,25 @@
+{
+  "id": "profile-003",
+  "description": "Provenance: Patient profile with SelfReported provenance for patient-entered demographics",
+  "dataType": "PatientProfile",
+  "vocabulary": "core",
+  "input": {
+    "id": "urn:uuid:pr0f-self-aaaa-bbbb-ccccddddeeee",
+    "type": "PatientProfile",
+    "schemaVersion": "2.0",
+    "dataProvenance": "SelfReported",
+    "dateOfBirth": "1985-03-15",
+    "biologicalSex": "female",
+    "computedAge": 40,
+    "ageGroup": "adult",
+    "genderIdentity": "woman",
+    "profileId": "pr0f-self-aaaa-bbbb-ccccddddeeee"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:pr0f-self-aaaa-bbbb-ccccddddeeee> a cascade:PatientProfile ;\n    cascade:schemaVersion \"2.0\" ;\n    cascade:dataProvenance cascade:SelfReported ;\n    cascade:dateOfBirth \"1985-03-15\"^^xsd:date ;\n    cascade:biologicalSex \"female\" ;\n    cascade:computedAge \"40\"^^xsd:integer ;\n    cascade:ageGroup \"adult\" ;\n    cascade:genderIdentity \"woman\" ;\n    cascade:profileId \"pr0f-self-aaaa-bbbb-ccccddddeeee\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["provenance", "self-reported"],
+  "notes": "Synthetic patient profile testing SelfReported provenance with genderIdentity field. Based on the spec Section 7.3 example."
+}

@@ -1,0 +1,24 @@
+{
+  "id": "med-009",
+  "description": "Negative: Medication missing required dataProvenance field",
+  "dataType": "Medication",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:neg0-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "MedicationRecord",
+    "medicationName": "Aspirin",
+    "isActive": true,
+    "schemaVersion": "1.3",
+    "dose": "81 mg",
+    "frequency": "once daily",
+    "provenanceClass": "userTracked"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "required-field"],
+  "shaclConstraintViolated": "MedicationShape requires cascade:dataProvenance (sh:minCount 1). Every medication record must declare its provenance source.",
+  "notes": "Derived from clinical:MedicationShape which requires cascade:dataProvenance with sh:minCount 1 and sh:in constraint for valid provenance classes."
+}

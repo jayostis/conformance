@@ -1,0 +1,22 @@
+{
+  "id": "cond-006",
+  "description": "Negative: Condition missing required conditionName field",
+  "dataType": "Condition",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:neg0-c001-aaaa-bbbb-ccccddddeeee",
+    "type": "ConditionRecord",
+    "status": "active",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "onsetDate": "2020-01-01T00:00:00Z"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "required-field"],
+  "shaclConstraintViolated": "ConditionShape requires health:conditionName (sh:minCount 1). Every condition record must have a name.",
+  "notes": "Derived from clinical:ConditionShape which requires clinical:conditionName with sh:minCount 1 and sh:minLength 1."
+}

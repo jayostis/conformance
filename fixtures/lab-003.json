@@ -1,0 +1,33 @@
+{
+  "id": "lab-003",
+  "description": "Full fields: Lab result (Serum Potassium) with all properties including clinically significant borderline value",
+  "dataType": "LabResult",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:1ab0-0009-aaaa-bbbb-ccccddddeeee",
+    "type": "LabResultRecord",
+    "testName": "Serum Potassium",
+    "resultValue": "5.1",
+    "interpretation": "abnormal",
+    "performedDate": "2026-01-15T08:30:00Z",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "testCode": "http://loinc.org/rdf#2823-3",
+    "labCategory": "Chemistry",
+    "resultUnit": "mEq/L",
+    "referenceRange": "3.5 - 5.0",
+    "specimenType": "Serum",
+    "reportedDate": "2026-01-15T14:00:00Z",
+    "orderingProvider": "Dr. Sarah Chen",
+    "performingLab": "Cascade Regional Medical Lab",
+    "notes": "BORDERLINE HIGH. Patient is on lisinopril (ACE inhibitor) which can elevate potassium. Verify patient is not taking potassium supplements. Recheck in 2 weeks.",
+    "sourceRecordId": "ehr-lab-2026-0115-009"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix loinc: <http://loinc.org/rdf#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:1ab0-0009-aaaa-bbbb-ccccddddeeee> a health:LabResultRecord ;\n    health:testName \"Serum Potassium\" ;\n    health:resultValue \"5.1\" ;\n    health:interpretation \"abnormal\" ;\n    health:performedDate \"2026-01-15T08:30:00Z\"^^xsd:dateTime ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:testCode <http://loinc.org/rdf#2823-3> ;\n    health:labCategory \"Chemistry\" ;\n    health:resultUnit \"mEq/L\" ;\n    health:referenceRange \"3.5 - 5.0\" ;\n    health:specimenType \"Serum\" ;\n    health:reportedDate \"2026-01-15T14:00:00Z\"^^xsd:dateTime ;\n    health:orderingProvider \"Dr. Sarah Chen\" ;\n    health:performingLab \"Cascade Regional Medical Lab\" ;\n    health:notes \"BORDERLINE HIGH. Patient is on lisinopril (ACE inhibitor) which can elevate potassium. Verify patient is not taking potassium supplements. Recheck in 2 weeks.\" ;\n    health:sourceRecordId \"ehr-lab-2026-0115-009\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["full-fields", "clinical", "ehr-import"],
+  "notes": "Based on Lab 9 (Serum Potassium) from the Reference Patient Pod. Clinically significant borderline-high result related to ACE inhibitor + potassium supplement interaction scenario."
+}

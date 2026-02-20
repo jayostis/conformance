@@ -1,0 +1,25 @@
+{
+  "id": "vital-007",
+  "description": "Negative: Vital sign with invalid vitalType value not in enumerated list",
+  "dataType": "VitalSign",
+  "vocabulary": "clinical",
+  "input": {
+    "id": "urn:uuid:neg0-v002-aaaa-bbbb-ccccddddeeee",
+    "type": "VitalSign",
+    "vitalType": "painScore",
+    "vitalTypeName": "Pain Score",
+    "value": 4,
+    "unit": "scale",
+    "effectiveDate": "2026-01-20T09:15:00Z",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "enum-constraint"],
+  "shaclConstraintViolated": "VitalSignShape requires clinical:vitalType to be one of the enumerated values (heartRate, bloodPressureSystolic, bloodPressureDiastolic, respiratoryRate, temperature, oxygenSaturation, etc.). 'painScore' is not a valid vital type.",
+  "notes": "Derived from clinical:VitalSignShape sh:in constraint on clinical:vitalType. Pain score is not part of the Cascade Protocol vital sign vocabulary."
+}

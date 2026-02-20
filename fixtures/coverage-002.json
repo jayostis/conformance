@@ -1,0 +1,33 @@
+{
+  "id": "coverage-002",
+  "description": "Full fields: Coverage record with all available insurance fields including pharmacy benefits",
+  "dataType": "Coverage",
+  "vocabulary": "coverage",
+  "input": {
+    "id": "urn:uuid:c0vr-full-aaaa-bbbb-ccccddddeeee",
+    "type": "InsurancePlan",
+    "providerName": "Aetna",
+    "memberId": "AET-2024-55123",
+    "dataProvenance": "SelfReported",
+    "schemaVersion": "1.3",
+    "groupNumber": "GRP-44567",
+    "planName": "Aetna Choice POS II",
+    "planType": "pos",
+    "coverageType": "primary",
+    "subscriberRelationship": "self",
+    "effectiveStart": "2024-01-01",
+    "effectiveEnd": "2024-12-31",
+    "subscriberId": "AET-2024-55123",
+    "subscriberName": "Jane Smith",
+    "rxBin": "003858",
+    "rxPcn": "ADV",
+    "rxGroup": "RX9456"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix coverage: <https://ns.cascadeprotocol.org/coverage/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:c0vr-full-aaaa-bbbb-ccccddddeeee> a coverage:InsurancePlan ;\n    coverage:providerName \"Aetna\" ;\n    coverage:memberId \"AET-2024-55123\" ;\n    cascade:dataProvenance cascade:SelfReported ;\n    cascade:schemaVersion \"1.3\" ;\n    coverage:groupNumber \"GRP-44567\" ;\n    coverage:planName \"Aetna Choice POS II\" ;\n    coverage:planType \"pos\" ;\n    coverage:coverageType \"primary\" ;\n    coverage:subscriberRelationship \"self\" ;\n    coverage:effectiveStart \"2024-01-01\"^^xsd:date ;\n    coverage:effectiveEnd \"2024-12-31\"^^xsd:date ;\n    coverage:subscriberId \"AET-2024-55123\" ;\n    coverage:subscriberName \"Jane Smith\" ;\n    coverage:rxBin \"003858\" ;\n    coverage:rxPcn \"ADV\" ;\n    coverage:rxGroup \"RX9456\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["full-fields", "self-reported"],
+  "notes": "Synthetic full-field coverage record using the coverage vocabulary (coverage:InsurancePlan). Tests all InsurancePlanShape properties including pharmacy benefit fields (rxBin, rxPcn, rxGroup)."
+}

@@ -1,0 +1,25 @@
+{
+  "id": "allergy-002",
+  "description": "Happy path: Self-reported severe food allergy (Shellfish) with epinephrine note",
+  "dataType": "Allergy",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:alrg-0003-aaaa-bbbb-ccccddddeeee",
+    "type": "AllergyRecord",
+    "allergen": "Shellfish",
+    "dataProvenance": "SelfReported",
+    "schemaVersion": "1.3",
+    "allergyCategory": "food",
+    "reaction": "Throat swelling (angioedema)",
+    "allergySeverity": "severe",
+    "onsetDate": "1995-07-04T00:00:00Z",
+    "notes": "Severe reaction to shrimp. Carries epinephrine auto-injector. Avoid all crustaceans and mollusks."
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:alrg-0003-aaaa-bbbb-ccccddddeeee> a health:AllergyRecord ;\n    health:allergen \"Shellfish\" ;\n    cascade:dataProvenance cascade:SelfReported ;\n    cascade:schemaVersion \"1.3\" ;\n    health:allergyCategory \"food\" ;\n    health:reaction \"Throat swelling (angioedema)\" ;\n    health:allergySeverity \"severe\" ;\n    health:onsetDate \"1995-07-04T00:00:00Z\"^^xsd:dateTime ;\n    health:notes \"Severe reaction to shrimp. Carries epinephrine auto-injector. Avoid all crustaceans and mollusks.\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "self-reported"],
+  "notes": "Based on Allergy 3 (Shellfish) from the Reference Patient Pod. Tests self-reported allergy without sourceRecordId."
+}

@@ -1,0 +1,28 @@
+{
+  "id": "profile-001",
+  "description": "Happy path: Patient profile with core demographics and nested blank nodes",
+  "dataType": "PatientProfile",
+  "vocabulary": "core",
+  "input": {
+    "id": "urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "type": "PatientProfile",
+    "schemaVersion": "2.0",
+    "dataProvenance": "ClinicalGenerated",
+    "dateOfBirth": "1973-08-15",
+    "biologicalSex": "male",
+    "computedAge": 52,
+    "ageGroup": "adult",
+    "name": "Alex Rivera",
+    "givenName": "Alex",
+    "familyName": "Rivera",
+    "bloodType": "aPositive",
+    "profileId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890> a cascade:PatientProfile ;\n    cascade:schemaVersion \"2.0\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:dateOfBirth \"1973-08-15\"^^xsd:date ;\n    cascade:biologicalSex \"male\" ;\n    cascade:computedAge \"52\"^^xsd:integer ;\n    cascade:ageGroup \"adult\" ;\n    foaf:name \"Alex Rivera\" ;\n    foaf:givenName \"Alex\" ;\n    foaf:familyName \"Rivera\" ;\n    health:bloodType \"aPositive\" ;\n    cascade:profileId \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "clinical"],
+  "notes": "Based on Patient Profile from the Reference Patient Pod (Alex Rivera). Tests core demographics without nested blank nodes for simplicity."
+}

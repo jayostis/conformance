@@ -1,0 +1,33 @@
+{
+  "id": "lab-001",
+  "description": "Happy path: Abnormal lab result (HbA1c 7.2%) with LOINC code from EHR",
+  "dataType": "LabResult",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:1ab0-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "LabResultRecord",
+    "testName": "Hemoglobin A1c",
+    "resultValue": "7.2",
+    "interpretation": "abnormal",
+    "performedDate": "2026-01-15T08:30:00Z",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "testCode": "http://loinc.org/rdf#4548-4",
+    "labCategory": "Chemistry",
+    "resultUnit": "%",
+    "referenceRange": "4.0 - 5.6",
+    "specimenType": "Whole Blood",
+    "reportedDate": "2026-01-15T14:00:00Z",
+    "orderingProvider": "Dr. Sarah Chen",
+    "performingLab": "Cascade Regional Medical Lab",
+    "notes": "Above target of <7.0%. Discuss lifestyle modifications at next visit.",
+    "sourceRecordId": "ehr-lab-2026-0115-001"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix loinc: <http://loinc.org/rdf#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:1ab0-0001-aaaa-bbbb-ccccddddeeee> a health:LabResultRecord ;\n    health:testName \"Hemoglobin A1c\" ;\n    health:resultValue \"7.2\" ;\n    health:interpretation \"abnormal\" ;\n    health:performedDate \"2026-01-15T08:30:00Z\"^^xsd:dateTime ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:testCode <http://loinc.org/rdf#4548-4> ;\n    health:labCategory \"Chemistry\" ;\n    health:resultUnit \"%\" ;\n    health:referenceRange \"4.0 - 5.6\" ;\n    health:specimenType \"Whole Blood\" ;\n    health:reportedDate \"2026-01-15T14:00:00Z\"^^xsd:dateTime ;\n    health:orderingProvider \"Dr. Sarah Chen\" ;\n    health:performingLab \"Cascade Regional Medical Lab\" ;\n    health:notes \"Above target of <7.0%. Discuss lifestyle modifications at next visit.\" ;\n    health:sourceRecordId \"ehr-lab-2026-0115-001\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "clinical", "ehr-import"],
+  "notes": "Based on Lab 1 (HbA1c) from the Reference Patient Pod. Tests abnormal lab result with full reporting details."
+}

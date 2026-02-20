@@ -1,0 +1,23 @@
+{
+  "id": "profile-004",
+  "description": "Negative: Patient profile missing required dateOfBirth field",
+  "dataType": "PatientProfile",
+  "vocabulary": "core",
+  "input": {
+    "id": "urn:uuid:neg0-p001-aaaa-bbbb-ccccddddeeee",
+    "type": "PatientProfile",
+    "schemaVersion": "2.0",
+    "dataProvenance": "SelfReported",
+    "biologicalSex": "male",
+    "computedAge": 35,
+    "ageGroup": "young_adult"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "required-field"],
+  "shaclConstraintViolated": "PatientProfileShape requires cascade:dateOfBirth (sh:minCount 1, sh:Violation). Date of birth is mandatory for age calculation and screening eligibility.",
+  "notes": "Derived from cascade:PatientProfileShape which requires cascade:dateOfBirth with sh:minCount 1 at sh:Violation severity."
+}

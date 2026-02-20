@@ -1,0 +1,45 @@
+{
+  "id": "med-007",
+  "description": "Provenance: Discontinued medication (Amlodipine) with endDate and SelfReported provenance change scenario",
+  "dataType": "Medication",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:med0-0005-aaaa-bbbb-ccccddddeeee",
+    "type": "MedicationRecord",
+    "medicationName": "Amlodipine",
+    "isActive": false,
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "dose": "5 mg",
+    "frequency": "once daily",
+    "route": "oral",
+    "prescriber": "Dr. Sarah Chen",
+    "startDate": "2018-03-22T00:00:00Z",
+    "endDate": "2024-06-15T00:00:00Z",
+    "rxNormCode": "http://www.nlm.nih.gov/research/umls/rxnorm/197361",
+    "notes": "Discontinued 2024-06-15. Switched to lisinopril monotherapy for better renal protection given diabetes diagnosis.",
+    "sourceRecordId": "ehr-med-2018-0322-001",
+    "drugCodes": [
+      "http://www.nlm.nih.gov/research/umls/rxnorm/197361"
+    ],
+    "provenanceClass": "healthKitFHIR",
+    "sourceFhirResourceType": "MedicationStatement",
+    "clinicalIntent": "reportedUse",
+    "indication": "Essential Hypertension",
+    "courseOfTherapyType": "continuous",
+    "asNeeded": false,
+    "medicationForm": "tablet",
+    "activeIngredient": "Amlodipine Besylate",
+    "ingredientStrength": "5 mg",
+    "prescriptionCategory": "community",
+    "medicationClass": "antihypertensive",
+    "affectsVitalSigns": ["bloodPressure", "heartRate"]
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix rxnorm: <http://www.nlm.nih.gov/research/umls/rxnorm/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:med0-0005-aaaa-bbbb-ccccddddeeee> a health:MedicationRecord ;\n    health:medicationName \"Amlodipine\" ;\n    health:isActive false ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:dose \"5 mg\" ;\n    health:frequency \"once daily\" ;\n    health:route \"oral\" ;\n    health:prescriber \"Dr. Sarah Chen\" ;\n    health:startDate \"2018-03-22T00:00:00Z\"^^xsd:dateTime ;\n    health:endDate \"2024-06-15T00:00:00Z\"^^xsd:dateTime ;\n    health:rxNormCode <http://www.nlm.nih.gov/research/umls/rxnorm/197361> ;\n    health:notes \"Discontinued 2024-06-15. Switched to lisinopril monotherapy for better renal protection given diabetes diagnosis.\" ;\n    health:sourceRecordId \"ehr-med-2018-0322-001\" ;\n    clinical:drugCode <http://www.nlm.nih.gov/research/umls/rxnorm/197361> ;\n    clinical:provenanceClass \"healthKitFHIR\" ;\n    clinical:sourceFhirResourceType \"MedicationStatement\" ;\n    clinical:clinicalIntent \"reportedUse\" ;\n    clinical:indication \"Essential Hypertension\" ;\n    clinical:courseOfTherapyType \"continuous\" ;\n    clinical:asNeeded false ;\n    clinical:medicationForm \"tablet\" ;\n    clinical:activeIngredient \"Amlodipine Besylate\" ;\n    clinical:ingredientStrength \"5 mg\" ;\n    clinical:prescriptionCategory \"community\" ;\n    health:medicationClass \"antihypertensive\" ;\n    health:affectsVitalSigns (\"bloodPressure\" \"heartRate\") .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["provenance", "discontinued", "clinical"],
+  "notes": "Based on Medication 5 (Amlodipine) from the Reference Patient Pod. Tests discontinued medication with endDate, MedicationStatement source type, and reportedUse clinical intent."
+}

@@ -1,0 +1,46 @@
+{
+  "id": "profile-002",
+  "description": "Full fields: Patient profile with emergency contact, address, pharmacy, and all demographics",
+  "dataType": "PatientProfile",
+  "vocabulary": "core",
+  "input": {
+    "id": "urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "type": "PatientProfile",
+    "schemaVersion": "2.0",
+    "dataProvenance": "ClinicalGenerated",
+    "dateOfBirth": "1973-08-15",
+    "biologicalSex": "male",
+    "computedAge": 52,
+    "ageGroup": "adult",
+    "name": "Alex Rivera",
+    "givenName": "Alex",
+    "familyName": "Rivera",
+    "bloodType": "aPositive",
+    "emergencyContact": {
+      "contactName": "Maria Rivera",
+      "contactRelationship": "spouse",
+      "contactPhone": "555-0142"
+    },
+    "address": {
+      "addressLine": "742 Evergreen Terrace",
+      "addressCity": "Portland",
+      "addressState": "OR",
+      "addressPostalCode": "97205",
+      "addressCountry": "US",
+      "addressUse": "home"
+    },
+    "preferredPharmacy": {
+      "pharmacyName": "Cascade Pharmacy",
+      "pharmacyAddress": "100 NW 23rd Ave, Portland, OR 97210",
+      "pharmacyPhone": "555-0199"
+    },
+    "profileId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890> a cascade:PatientProfile ;\n    cascade:schemaVersion \"2.0\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:dateOfBirth \"1973-08-15\"^^xsd:date ;\n    cascade:biologicalSex \"male\" ;\n    cascade:computedAge \"52\"^^xsd:integer ;\n    cascade:ageGroup \"adult\" ;\n    foaf:name \"Alex Rivera\" ;\n    foaf:givenName \"Alex\" ;\n    foaf:familyName \"Rivera\" ;\n    health:bloodType \"aPositive\" ;\n    cascade:emergencyContact [\n        a cascade:EmergencyContact ;\n        cascade:contactName \"Maria Rivera\" ;\n        cascade:contactRelationship \"spouse\" ;\n        cascade:contactPhone \"555-0142\"\n    ] ;\n    cascade:address [\n        a cascade:Address ;\n        cascade:addressLine \"742 Evergreen Terrace\" ;\n        cascade:addressCity \"Portland\" ;\n        cascade:addressState \"OR\" ;\n        cascade:addressPostalCode \"97205\" ;\n        cascade:addressCountry \"US\" ;\n        cascade:addressUse \"home\"\n    ] ;\n    cascade:preferredPharmacy [\n        a cascade:PharmacyInfo ;\n        cascade:pharmacyName \"Cascade Pharmacy\" ;\n        cascade:pharmacyAddress \"100 NW 23rd Ave, Portland, OR 97210\" ;\n        cascade:pharmacyPhone \"555-0199\"\n    ] ;\n    cascade:profileId \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["full-fields", "clinical"],
+  "notes": "Based on the complete Patient Profile from the Reference Patient Pod. Tests blank node serialization for EmergencyContact, Address, and PharmacyInfo."
+}

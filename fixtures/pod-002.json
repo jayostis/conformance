@@ -1,0 +1,34 @@
+{
+  "id": "pod-002",
+  "description": "Happy path: Export manifest with record counts and provenance metadata",
+  "dataType": "PodStructure",
+  "vocabulary": "cascade",
+  "input": {
+    "id": "",
+    "type": "ExportManifest",
+    "title": "Cascade Reference Patient Pod - Alex Rivera",
+    "description": "Synthetic patient pod for protocol validation, SDK testing, and agent development.",
+    "created": "2026-02-19T00:00:00Z",
+    "creator": "Cascade Protocol Team",
+    "schemaVersion": "1.3",
+    "patientProfileVersion": "2.0",
+    "provenanceLayers": ["ClinicalGenerated", "DeviceGenerated", "SelfReported"],
+    "clinicalSummary": {
+      "domain": "clinical",
+      "conditionCount": 5,
+      "medicationCount": 8,
+      "allergyCount": 3,
+      "labResultCount": 11,
+      "immunizationCount": 4,
+      "vitalSignDays": 30,
+      "coverageCount": 1
+    }
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix dcterms: <http://purl.org/dc/terms/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<> a cascade:ExportManifest ;\n    dcterms:title \"Cascade Reference Patient Pod - Alex Rivera\" ;\n    dcterms:description \"Synthetic patient pod for protocol validation, SDK testing, and agent development.\" ;\n    dcterms:created \"2026-02-19T00:00:00Z\"^^xsd:dateTime ;\n    dcterms:creator \"Cascade Protocol Team\" ;\n    cascade:schemaVersion \"1.3\" ;\n    cascade:patientProfileVersion \"2.0\" ;\n    cascade:provenanceLayers (\n        cascade:ClinicalGenerated\n        cascade:DeviceGenerated\n        cascade:SelfReported\n    ) ;\n    cascade:clinicalSummary [\n        a cascade:RecordSummary ;\n        cascade:domain \"clinical\" ;\n        cascade:conditionCount \"5\"^^xsd:integer ;\n        cascade:medicationCount \"8\"^^xsd:integer ;\n        cascade:allergyCount \"3\"^^xsd:integer ;\n        cascade:labResultCount \"11\"^^xsd:integer ;\n        cascade:immunizationCount \"4\"^^xsd:integer ;\n        cascade:vitalSignDays \"30\"^^xsd:integer ;\n        cascade:coverageCount \"1\"^^xsd:integer\n    ] .\n",
+    "validationMode": "exact-match"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "pod-structure", "manifest"],
+  "notes": "Based on the manifest.ttl from the Reference Patient Pod. Tests ExportManifest with clinical summary record counts and provenance layer enumeration."
+}

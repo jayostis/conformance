@@ -1,0 +1,32 @@
+{
+  "id": "imm-001",
+  "description": "Happy path: COVID-19 vaccine (Pfizer-BioNTech) with all standard immunization fields",
+  "dataType": "Immunization",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:1mmz-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "ImmunizationRecord",
+    "vaccineName": "COVID-19 mRNA Vaccine (Pfizer-BioNTech, 2024-2025 Formula)",
+    "administrationDate": "2024-10-15T10:00:00Z",
+    "status": "completed",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "vaccineCode": "CVX-308",
+    "manufacturer": "Pfizer-BioNTech",
+    "lotNumber": "FN2487",
+    "doseQuantity": "0.3 mL",
+    "route": "intramuscular",
+    "site": "Left deltoid",
+    "administeringProvider": "RN Maria Thompson",
+    "administeringLocation": "Cascade Primary Care",
+    "notes": "2024-2025 updated formulation. No adverse reactions observed during 15-min monitoring period.",
+    "sourceRecordId": "ehr-imm-2024-1015-001"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:1mmz-0001-aaaa-bbbb-ccccddddeeee> a health:ImmunizationRecord ;\n    health:vaccineName \"COVID-19 mRNA Vaccine (Pfizer-BioNTech, 2024-2025 Formula)\" ;\n    health:administrationDate \"2024-10-15T10:00:00Z\"^^xsd:dateTime ;\n    health:status \"completed\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:vaccineCode \"CVX-308\" ;\n    health:manufacturer \"Pfizer-BioNTech\" ;\n    health:lotNumber \"FN2487\" ;\n    health:doseQuantity \"0.3 mL\" ;\n    health:route \"intramuscular\" ;\n    health:site \"Left deltoid\" ;\n    health:administeringProvider \"RN Maria Thompson\" ;\n    health:administeringLocation \"Cascade Primary Care\" ;\n    health:notes \"2024-2025 updated formulation. No adverse reactions observed during 15-min monitoring period.\" ;\n    health:sourceRecordId \"ehr-imm-2024-1015-001\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "clinical", "ehr-import"],
+  "notes": "Based on Immunization 1 (COVID-19 Pfizer) from the Reference Patient Pod. Tests full immunization record with all standard fields."
+}

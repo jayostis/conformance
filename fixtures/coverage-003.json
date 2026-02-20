@@ -1,0 +1,28 @@
+{
+  "id": "coverage-003",
+  "description": "Provenance: Coverage with EHRVerified provenance for dependent relationship",
+  "dataType": "Coverage",
+  "vocabulary": "coverage",
+  "input": {
+    "id": "urn:uuid:c0vr-prov-aaaa-bbbb-ccccddddeeee",
+    "type": "InsurancePlan",
+    "providerName": "United Healthcare",
+    "memberId": "UHC-DEP-2024-99887",
+    "dataProvenance": "EHRVerified",
+    "schemaVersion": "1.3",
+    "groupNumber": "GRP-78901",
+    "planType": "hmo",
+    "coverageType": "primary",
+    "subscriberRelationship": "child",
+    "effectiveStart": "2024-01-01",
+    "subscriberId": "UHC-2024-99880",
+    "subscriberName": "Robert Johnson"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix coverage: <https://ns.cascadeprotocol.org/coverage/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:c0vr-prov-aaaa-bbbb-ccccddddeeee> a coverage:InsurancePlan ;\n    coverage:providerName \"United Healthcare\" ;\n    coverage:memberId \"UHC-DEP-2024-99887\" ;\n    cascade:dataProvenance cascade:EHRVerified ;\n    cascade:schemaVersion \"1.3\" ;\n    coverage:groupNumber \"GRP-78901\" ;\n    coverage:planType \"hmo\" ;\n    coverage:coverageType \"primary\" ;\n    coverage:subscriberRelationship \"child\" ;\n    coverage:effectiveStart \"2024-01-01\"^^xsd:date ;\n    coverage:subscriberId \"UHC-2024-99880\" ;\n    coverage:subscriberName \"Robert Johnson\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["provenance", "ehr-import"],
+  "notes": "Synthetic coverage record testing EHRVerified provenance with dependent (child) subscriber relationship."
+}

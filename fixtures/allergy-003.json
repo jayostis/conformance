@@ -1,0 +1,26 @@
+{
+  "id": "allergy-003",
+  "description": "Full fields: Drug allergy (Sulfonamides) with all available allergy fields populated",
+  "dataType": "Allergy",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:alrg-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "AllergyRecord",
+    "allergen": "Sulfonamide antibiotics",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "allergyCategory": "medication",
+    "reaction": "Maculopapular rash",
+    "allergySeverity": "mild",
+    "onsetDate": "2008-11-10T00:00:00Z",
+    "notes": "Rash developed after trimethoprim-sulfamethoxazole course. Resolved after discontinuation.",
+    "sourceRecordId": "ehr-allergy-2008-1110-001"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:alrg-0002-aaaa-bbbb-ccccddddeeee> a health:AllergyRecord ;\n    health:allergen \"Sulfonamide antibiotics\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:allergyCategory \"medication\" ;\n    health:reaction \"Maculopapular rash\" ;\n    health:allergySeverity \"mild\" ;\n    health:onsetDate \"2008-11-10T00:00:00Z\"^^xsd:dateTime ;\n    health:notes \"Rash developed after trimethoprim-sulfamethoxazole course. Resolved after discontinuation.\" ;\n    health:sourceRecordId \"ehr-allergy-2008-1110-001\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["full-fields", "clinical", "ehr-import"],
+  "notes": "Based on Allergy 2 (Sulfa Drugs) from the Reference Patient Pod. Exercises all allergy fields."
+}

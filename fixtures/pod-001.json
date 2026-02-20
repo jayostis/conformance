@@ -1,0 +1,40 @@
+{
+  "id": "pod-001",
+  "description": "Happy path: Root LDP container with all pod resources listed",
+  "dataType": "PodStructure",
+  "vocabulary": "cascade",
+  "input": {
+    "id": "",
+    "type": "BasicContainer",
+    "title": "Alex Rivera - Cascade Reference Patient Pod",
+    "description": "A complete synthetic patient pod demonstrating all Cascade Protocol data types.",
+    "created": "2026-02-19T00:00:00Z",
+    "schemaVersion": "1.3",
+    "contains": [
+      "profile/card.ttl",
+      "settings/publicTypeIndex.ttl",
+      "settings/privateTypeIndex.ttl",
+      "clinical/patient-profile.ttl",
+      "clinical/conditions.ttl",
+      "clinical/medications.ttl",
+      "clinical/allergies.ttl",
+      "clinical/lab-results.ttl",
+      "clinical/immunizations.ttl",
+      "clinical/vital-signs.ttl",
+      "clinical/insurance.ttl",
+      "wellness/heart-rate.ttl",
+      "wellness/blood-pressure.ttl",
+      "wellness/activity.ttl",
+      "wellness/sleep.ttl",
+      "wellness/supplements.ttl",
+      "manifest.ttl"
+    ]
+  },
+  "expectedOutput": {
+    "turtle": "@prefix ldp: <http://www.w3.org/ns/ldp#> .\n@prefix dcterms: <http://purl.org/dc/terms/> .\n@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<> a ldp:BasicContainer ;\n    dcterms:title \"Alex Rivera - Cascade Reference Patient Pod\" ;\n    dcterms:description \"A complete synthetic patient pod demonstrating all Cascade Protocol data types.\" ;\n    dcterms:created \"2026-02-19T00:00:00Z\"^^xsd:dateTime ;\n    cascade:schemaVersion \"1.3\" ;\n    ldp:contains\n        <profile/card.ttl> ,\n        <settings/publicTypeIndex.ttl> ,\n        <settings/privateTypeIndex.ttl> ,\n        <clinical/patient-profile.ttl> ,\n        <clinical/conditions.ttl> ,\n        <clinical/medications.ttl> ,\n        <clinical/allergies.ttl> ,\n        <clinical/lab-results.ttl> ,\n        <clinical/immunizations.ttl> ,\n        <clinical/vital-signs.ttl> ,\n        <clinical/insurance.ttl> ,\n        <wellness/heart-rate.ttl> ,\n        <wellness/blood-pressure.ttl> ,\n        <wellness/activity.ttl> ,\n        <wellness/sleep.ttl> ,\n        <wellness/supplements.ttl> ,\n        <manifest.ttl> .\n",
+    "validationMode": "exact-match"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "pod-structure", "container"],
+  "notes": "Based on the index.ttl root container from the Reference Patient Pod. Tests LDP BasicContainer structure with all pod resources listed via ldp:contains."
+}

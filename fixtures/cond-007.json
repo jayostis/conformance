@@ -1,0 +1,22 @@
+{
+  "id": "cond-007",
+  "description": "Negative: Condition missing required schemaVersion field",
+  "dataType": "Condition",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:neg0-c002-aaaa-bbbb-ccccddddeeee",
+    "type": "ConditionRecord",
+    "conditionName": "Migraine",
+    "status": "active",
+    "dataProvenance": "SelfReported",
+    "onsetDate": "2015-06-01T00:00:00Z"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "required-field"],
+  "shaclConstraintViolated": "ConditionShape requires cascade:schemaVersion (sh:minCount 1). The schema version is mandatory for all records to ensure compatibility.",
+  "notes": "Derived from clinical:ConditionShape which requires cascade:schemaVersion with sh:minCount 1 and sh:pattern for major.minor format."
+}

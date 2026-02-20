@@ -1,0 +1,32 @@
+{
+  "id": "imm-002",
+  "description": "Happy path: Influenza vaccine with minimal required fields",
+  "dataType": "Immunization",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:1mmz-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "ImmunizationRecord",
+    "vaccineName": "Influenza Vaccine, Quadrivalent (2025-2026)",
+    "administrationDate": "2025-09-20T14:30:00Z",
+    "status": "completed",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "vaccineCode": "CVX-197",
+    "manufacturer": "Sanofi Pasteur",
+    "lotNumber": "UF4892",
+    "doseQuantity": "0.5 mL",
+    "route": "intramuscular",
+    "site": "Right deltoid",
+    "administeringProvider": "RN Maria Thompson",
+    "administeringLocation": "Cascade Primary Care",
+    "notes": "Annual influenza vaccination. Standard-dose quadrivalent.",
+    "sourceRecordId": "ehr-imm-2025-0920-001"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:1mmz-0002-aaaa-bbbb-ccccddddeeee> a health:ImmunizationRecord ;\n    health:vaccineName \"Influenza Vaccine, Quadrivalent (2025-2026)\" ;\n    health:administrationDate \"2025-09-20T14:30:00Z\"^^xsd:dateTime ;\n    health:status \"completed\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:vaccineCode \"CVX-197\" ;\n    health:manufacturer \"Sanofi Pasteur\" ;\n    health:lotNumber \"UF4892\" ;\n    health:doseQuantity \"0.5 mL\" ;\n    health:route \"intramuscular\" ;\n    health:site \"Right deltoid\" ;\n    health:administeringProvider \"RN Maria Thompson\" ;\n    health:administeringLocation \"Cascade Primary Care\" ;\n    health:notes \"Annual influenza vaccination. Standard-dose quadrivalent.\" ;\n    health:sourceRecordId \"ehr-imm-2025-0920-001\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "clinical", "ehr-import"],
+  "notes": "Based on Immunization 2 (Influenza) from the Reference Patient Pod."
+}

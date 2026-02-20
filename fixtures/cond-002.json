@@ -1,0 +1,27 @@
+{
+  "id": "cond-002",
+  "description": "Happy path: Active condition (Type 2 Diabetes) with endocrine classification",
+  "dataType": "Condition",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:c0nd-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "ConditionRecord",
+    "conditionName": "Type 2 Diabetes Mellitus",
+    "status": "active",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "onsetDate": "2020-06-10T00:00:00Z",
+    "icd10Code": "http://hl7.org/fhir/sid/icd-10-cm/E11.9",
+    "snomedCode": "http://snomed.info/sct/44054006",
+    "notes": "Managed with metformin. HbA1c target <7%. Last A1c 7.2% on 2026-01-15.",
+    "sourceRecordId": "ehr-cond-2020-0610-001",
+    "conditionClass": "endocrine"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix sct: <http://snomed.info/sct/> .\n@prefix icd10: <http://hl7.org/fhir/sid/icd-10-cm/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:c0nd-0002-aaaa-bbbb-ccccddddeeee> a health:ConditionRecord ;\n    health:conditionName \"Type 2 Diabetes Mellitus\" ;\n    health:status \"active\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:onsetDate \"2020-06-10T00:00:00Z\"^^xsd:dateTime ;\n    health:icd10Code <http://hl7.org/fhir/sid/icd-10-cm/E11.9> ;\n    health:snomedCode <http://snomed.info/sct/44054006> ;\n    health:notes \"Managed with metformin. HbA1c target <7%. Last A1c 7.2% on 2026-01-15.\" ;\n    health:sourceRecordId \"ehr-cond-2020-0610-001\" ;\n    health:conditionClass \"endocrine\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "clinical", "ehr-import"],
+  "notes": "Based on Condition 2 (Type 2 Diabetes Mellitus) from the Reference Patient Pod."
+}

@@ -1,0 +1,28 @@
+{
+  "id": "vital-005",
+  "description": "Provenance: Vital sign (oxygen saturation) with device provenance for clinical measurement",
+  "dataType": "VitalSign",
+  "vocabulary": "clinical",
+  "input": {
+    "id": "urn:uuid:vs-prov-spo2-aaaa-bbbbccccdddd",
+    "type": "VitalSign",
+    "vitalType": "oxygenSaturation",
+    "vitalTypeName": "Oxygen Saturation",
+    "value": 97,
+    "unit": "%",
+    "effectiveDate": "2026-01-20T09:15:00Z",
+    "loincCode": "http://loinc.org/rdf#2708-6",
+    "snomedCode": "http://snomed.info/sct/431314004",
+    "dataProvenance": "DeviceGenerated",
+    "schemaVersion": "1.3",
+    "referenceRangeLow": 95,
+    "referenceRangeHigh": 100
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix sct: <http://snomed.info/sct/> .\n@prefix loinc: <http://loinc.org/rdf#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:vs-prov-spo2-aaaa-bbbbccccdddd> a clinical:VitalSign ;\n    clinical:vitalType \"oxygenSaturation\" ;\n    clinical:vitalTypeName \"Oxygen Saturation\" ;\n    clinical:value 97 ;\n    clinical:unit \"%\" ;\n    clinical:effectiveDate \"2026-01-20T09:15:00Z\"^^xsd:dateTime ;\n    clinical:loincCode <http://loinc.org/rdf#2708-6> ;\n    clinical:snomedCode <http://snomed.info/sct/431314004> ;\n    cascade:dataProvenance cascade:DeviceGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    clinical:referenceRangeLow 95 ;\n    clinical:referenceRangeHigh 100 .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["provenance", "device", "clinical"],
+  "notes": "Synthetic vital sign testing DeviceGenerated provenance for pulse oximeter reading."
+}

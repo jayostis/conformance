@@ -1,0 +1,23 @@
+{
+  "id": "profile-005",
+  "description": "Negative: Patient profile missing required biologicalSex field",
+  "dataType": "PatientProfile",
+  "vocabulary": "core",
+  "input": {
+    "id": "urn:uuid:neg0-p002-aaaa-bbbb-ccccddddeeee",
+    "type": "PatientProfile",
+    "schemaVersion": "2.0",
+    "dataProvenance": "SelfReported",
+    "dateOfBirth": "1990-06-20",
+    "computedAge": 35,
+    "ageGroup": "young_adult"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "required-field"],
+  "shaclConstraintViolated": "PatientProfileShape requires cascade:biologicalSex (sh:minCount 1, sh:Violation). Biological sex must be one of 'male', 'female', or 'intersex' for clinical calculations.",
+  "notes": "Derived from cascade:PatientProfileShape which requires cascade:biologicalSex with sh:minCount 1, sh:in ('male', 'female', 'intersex') at sh:Violation severity."
+}

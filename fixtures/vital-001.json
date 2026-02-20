@@ -1,0 +1,29 @@
+{
+  "id": "vital-001",
+  "description": "Happy path: Systolic blood pressure reading with LOINC and SNOMED codes",
+  "dataType": "VitalSign",
+  "vocabulary": "clinical",
+  "input": {
+    "id": "urn:uuid:vs01-sys0-0120-aaaa-bbbbccccdddd",
+    "type": "VitalSign",
+    "vitalType": "bloodPressureSystolic",
+    "vitalTypeName": "Systolic Blood Pressure",
+    "value": 134,
+    "unit": "mmHg",
+    "effectiveDate": "2026-01-20T09:15:00Z",
+    "loincCode": "http://loinc.org/rdf#8480-6",
+    "snomedCode": "http://snomed.info/sct/271649006",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "referenceRangeLow": 90,
+    "referenceRangeHigh": 120,
+    "interpretation": "elevated"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix sct: <http://snomed.info/sct/> .\n@prefix loinc: <http://loinc.org/rdf#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:vs01-sys0-0120-aaaa-bbbbccccdddd> a clinical:VitalSign ;\n    clinical:vitalType \"bloodPressureSystolic\" ;\n    clinical:vitalTypeName \"Systolic Blood Pressure\" ;\n    clinical:value 134 ;\n    clinical:unit \"mmHg\" ;\n    clinical:effectiveDate \"2026-01-20T09:15:00Z\"^^xsd:dateTime ;\n    clinical:loincCode <http://loinc.org/rdf#8480-6> ;\n    clinical:snomedCode <http://snomed.info/sct/271649006> ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    clinical:referenceRangeLow 90 ;\n    clinical:referenceRangeHigh 120 ;\n    clinical:interpretation \"elevated\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "clinical", "ehr-import"],
+  "notes": "Based on Vital Signs Day 1 (Systolic BP) from the Reference Patient Pod. Tests elevated clinical vital sign with reference range."
+}

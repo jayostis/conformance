@@ -1,0 +1,24 @@
+{
+  "id": "med-008",
+  "description": "Negative: Medication missing required medicationName field",
+  "dataType": "Medication",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:neg0-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "MedicationRecord",
+    "isActive": true,
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "dose": "500 mg",
+    "frequency": "twice daily",
+    "provenanceClass": "healthKitFHIR"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "required-field"],
+  "shaclConstraintViolated": "MedicationShape requires health:medicationName (sh:minCount 1). The drug name is mandatory for all medication records.",
+  "notes": "Derived from clinical:MedicationShape which requires clinical:drugName with sh:minCount 1. In the SDK serialization pattern, this maps to health:medicationName being required."
+}

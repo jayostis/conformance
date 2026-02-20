@@ -1,0 +1,27 @@
+{
+  "id": "cond-004",
+  "description": "Multi-code: Condition with both ICD-10 and SNOMED CT codes (Hyperlipidemia)",
+  "dataType": "Condition",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:c0nd-0004-aaaa-bbbb-ccccddddeeee",
+    "type": "ConditionRecord",
+    "conditionName": "Hyperlipidemia",
+    "status": "active",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "onsetDate": "2019-11-05T00:00:00Z",
+    "icd10Code": "http://hl7.org/fhir/sid/icd-10-cm/E78.5",
+    "snomedCode": "http://snomed.info/sct/55822004",
+    "notes": "Managed with atorvastatin 40mg. LDL target <100 mg/dL.",
+    "sourceRecordId": "ehr-cond-2019-1105-001",
+    "conditionClass": "cardiovascular"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix sct: <http://snomed.info/sct/> .\n@prefix icd10: <http://hl7.org/fhir/sid/icd-10-cm/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:c0nd-0004-aaaa-bbbb-ccccddddeeee> a health:ConditionRecord ;\n    health:conditionName \"Hyperlipidemia\" ;\n    health:status \"active\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:onsetDate \"2019-11-05T00:00:00Z\"^^xsd:dateTime ;\n    health:icd10Code <http://hl7.org/fhir/sid/icd-10-cm/E78.5> ;\n    health:snomedCode <http://snomed.info/sct/55822004> ;\n    health:notes \"Managed with atorvastatin 40mg. LDL target <100 mg/dL.\" ;\n    health:sourceRecordId \"ehr-cond-2019-1105-001\" ;\n    health:conditionClass \"cardiovascular\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["multi-code", "clinical", "ehr-import"],
+  "notes": "Based on Condition 4 (Hyperlipidemia) from the Reference Patient Pod. Tests dual coding with ICD-10-CM E78.5 and SNOMED CT 55822004."
+}
