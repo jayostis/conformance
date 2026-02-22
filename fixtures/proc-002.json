@@ -1,0 +1,27 @@
+{
+  "id": "proc-002",
+  "description": "Full fields: Colonoscopy with all available procedure fields populated",
+  "dataType": "ProcedureRecord",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:proc-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "ProcedureRecord",
+    "procedureName": "Screening Colonoscopy",
+    "performedDate": "2025-03-20T09:00:00Z",
+    "status": "completed",
+    "snomedCode": "http://snomed.info/sct/73761001",
+    "performer": "Dr. Linda Park, MD",
+    "location": "Valley Endoscopy Center",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "notes": "Routine screening. Two small polyps removed and sent to pathology. Follow-up in 5 years.",
+    "sourceRecordId": "ehr-proc-2025-0320-001"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix sct: <http://snomed.info/sct/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:proc-0002-aaaa-bbbb-ccccddddeeee> a health:ProcedureRecord ;\n    health:procedureName \"Screening Colonoscopy\" ;\n    health:performedDate \"2025-03-20T09:00:00Z\"^^xsd:dateTime ;\n    health:status \"completed\" ;\n    health:snomedCode <http://snomed.info/sct/73761001> ;\n    health:performer \"Dr. Linda Park, MD\" ;\n    health:location \"Valley Endoscopy Center\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:notes \"Routine screening. Two small polyps removed and sent to pathology. Follow-up in 5 years.\" ;\n    health:sourceRecordId \"ehr-proc-2025-0320-001\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["full-fields", "clinical", "ehr-import"],
+  "notes": "Exercises all procedure fields. Based on a routine screening colonoscopy with follow-up notes."
+}

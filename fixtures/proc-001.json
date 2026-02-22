@@ -1,0 +1,27 @@
+{
+  "id": "proc-001",
+  "description": "Happy path: Completed cardiac catheterization with SNOMED code from EHR import",
+  "dataType": "ProcedureRecord",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:proc-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "ProcedureRecord",
+    "procedureName": "Cardiac Catheterization",
+    "performedDate": "2024-11-15T14:30:00Z",
+    "status": "completed",
+    "snomedCode": "http://snomed.info/sct/41976001",
+    "performer": "Dr. James Mitchell, MD",
+    "location": "Cascade Medical Center - Cardiology Suite",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "notes": "Procedure without complications. Coronary arteries patent.",
+    "sourceRecordId": "ehr-proc-2024-1115-001"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix sct: <http://snomed.info/sct/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:proc-0001-aaaa-bbbb-ccccddddeeee> a health:ProcedureRecord ;\n    health:procedureName \"Cardiac Catheterization\" ;\n    health:performedDate \"2024-11-15T14:30:00Z\"^^xsd:dateTime ;\n    health:status \"completed\" ;\n    health:snomedCode <http://snomed.info/sct/41976001> ;\n    health:performer \"Dr. James Mitchell, MD\" ;\n    health:location \"Cascade Medical Center - Cardiology Suite\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:notes \"Procedure without complications. Coronary arteries patent.\" ;\n    health:sourceRecordId \"ehr-proc-2024-1115-001\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "clinical", "ehr-import"],
+  "notes": "Tests core procedure serialization with EHR-sourced data including SNOMED code, performer, and location."
+}

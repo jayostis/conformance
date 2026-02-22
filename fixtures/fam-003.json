@@ -1,0 +1,22 @@
+{
+  "id": "fam-003",
+  "description": "Negative: Family history missing required conditionName field",
+  "dataType": "FamilyHistory",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:neg0-fhx0-aaaa-bbbb-ccccddddeeee",
+    "type": "FamilyHistoryRecord",
+    "relationship": "sibling",
+    "onsetAge": 35,
+    "dataProvenance": "SelfReported",
+    "schemaVersion": "1.3"
+  },
+  "expectedOutput": {
+    "turtle": "",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "required-field"],
+  "shaclConstraintViolated": "FamilyHistoryShape requires health:conditionName (sh:minCount 1). Every family history record must include the name of the reported condition.",
+  "notes": "Tests that a family history record without a condition name is rejected by validation. The serializer will still produce output but the record fails SHACL validation."
+}
