@@ -20,7 +20,14 @@ The suite covers all Phase 1 data types:
 | Immunization | `imm-` | 3 | Vaccine records |
 | Coverage | `coverage-` | 4 | Insurance and coverage |
 | Pod Structure | `pod-` | 4 | LDP containers and manifests |
-| **Total** | | **53** | |
+| Encounter | `encounter-` | 2 | Clinical encounters and visits |
+| Medication Administration | `medadmin-` | 2 | Medication administration events |
+| Implanted Device | `device-` | 1 | Implanted medical devices |
+| Imaging Study | `imaging-` | 2 | Imaging studies and results |
+| Claim Record | `claim-` | 2 | Insurance claim records |
+| Benefit Statement | `benefit-` | 1 | Explanation of benefits |
+| Denial Notice | `denial-` | 1 | Coverage denial notices |
+| **Total** | | **66** | |
 
 ## Fixture Format
 
@@ -326,7 +333,14 @@ The fixture suite covers these test categories per data type:
 | Immunization | 2 | -- | -- | -- | 1 | 3 |
 | Coverage | 1 | 1 | -- | 1 | 1 | 4 |
 | Pod Structure | 2 | -- | -- | -- | 2 | 4 |
-| **Total** | **16** | **7** | **5** | **8** | **17** | **53** |
+| Encounter | 1 | 1 | -- | -- | -- | 2 |
+| Medication Administration | 1 | 1 | -- | -- | -- | 2 |
+| Implanted Device | 1 | -- | -- | -- | -- | 1 |
+| Imaging Study | 1 | 1 | -- | -- | -- | 2 |
+| Claim Record | 1 | 1 | -- | -- | -- | 2 |
+| Benefit Statement | 1 | -- | -- | -- | -- | 1 |
+| Denial Notice | 1 | -- | -- | -- | -- | 1 |
+| **Total** | **23** | **12** | **5** | **8** | **18** | **66** |
 
 ### Tag Descriptions
 
