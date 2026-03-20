@@ -1,0 +1,25 @@
+{
+  "id": "medadmin-001",
+  "description": "Happy path: IV antibiotic administered pre-surgery from EHR",
+  "dataType": "MedicationAdministration",
+  "vocabulary": "clinical",
+  "input": {
+    "id": "urn:uuid:mda0-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "MedicationAdministration",
+    "medicationName": "Cefazolin",
+    "administeredDate": "2026-02-10T07:30:00Z",
+    "administeredDose": "2g",
+    "administeredRoute": "IV",
+    "administrationStatus": "completed",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "sourceRecordId": "ehr-mda-2026-0210-001"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:mda0-0001-aaaa-bbbb-ccccddddeeee> a clinical:MedicationAdministration ;\n    health:medicationName \"Cefazolin\" ;\n    clinical:administeredDate \"2026-02-10T07:30:00Z\"^^xsd:dateTime ;\n    clinical:administeredDose \"2g\" ;\n    clinical:administeredRoute \"IV\" ;\n    clinical:administrationStatus \"completed\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:sourceRecordId \"ehr-mda-2026-0210-001\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "clinical", "ehr-import"],
+  "notes": "Tests MedicationAdministration serialization for a pre-surgical IV antibiotic dose. medicationName reuses health: prefix per vocabulary layering."
+}

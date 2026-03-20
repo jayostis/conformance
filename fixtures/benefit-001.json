@@ -1,0 +1,27 @@
+{
+  "id": "benefit-001",
+  "description": "Happy path: Explanation of Benefits for completed endocrinology claim",
+  "dataType": "BenefitStatement",
+  "vocabulary": "coverage",
+  "input": {
+    "id": "urn:uuid:eob0-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "BenefitStatement",
+    "adjudicationDate": "2026-01-28T00:00:00Z",
+    "adjudicationStatus": "completed",
+    "outcomeCode": "complete",
+    "totalBilled": 450.00,
+    "totalAllowed": 320.00,
+    "totalPaid": 256.00,
+    "patientResponsibility": 64.00,
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "sourceRecordId": "ehr-eob-2026-0128-001"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix coverage: <https://ns.cascadeprotocol.org/coverage/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:eob0-0001-aaaa-bbbb-ccccddddeeee> a coverage:BenefitStatement ;\n    coverage:adjudicationDate \"2026-01-28T00:00:00Z\"^^xsd:dateTime ;\n    coverage:adjudicationStatus \"completed\" ;\n    coverage:outcomeCode \"complete\" ;\n    coverage:totalBilled 450.00^^xsd:decimal ;\n    coverage:totalAllowed 320.00^^xsd:decimal ;\n    coverage:totalPaid 256.00^^xsd:decimal ;\n    coverage:patientResponsibility 64.00^^xsd:decimal ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:sourceRecordId \"ehr-eob-2026-0128-001\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "coverage", "ehr-import"],
+  "notes": "Tests BenefitStatement (EOB) serialization with four decimal monetary amounts and adjudication outcome."
+}
