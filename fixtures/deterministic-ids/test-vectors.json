@@ -1,0 +1,45 @@
+{
+  "description": "Cross-SDK test vectors for Cascade Protocol Deterministic UUID (CDP-UUID)",
+  "algorithm": "SHA-1 of input string, formatted as UUID5 layout — see deterministicUuid() in cascade-cli/src/lib/fhir-converter/types.ts",
+  "version": "1.0",
+  "date": "2026-03-27",
+  "primitiveVectors": [
+    {
+      "label": "sanity-check-hello",
+      "input": "hello",
+      "expectedUuid": "aaf4c61d-dcc5-58a2-9abe-de0f3b482cd9"
+    }
+  ],
+  "contentHashedUriVectors": [
+    {
+      "label": "patient-john-smith",
+      "identityString": "Patient::dob=1985-03-15|family=Smith|given=John|sex=male",
+      "expectedUri": "urn:uuid:aba8c9f5-fdc6-5187-a363-0d5a7cb72438"
+    },
+    {
+      "label": "patient-mary-jones",
+      "identityString": "Patient::dob=1972-11-08|family=Jones|given=Mary|sex=female",
+      "expectedUri": "urn:uuid:6b79f59e-5ad8-56a4-8050-7b46f3991221"
+    },
+    {
+      "label": "immunization-flu-2023",
+      "identityString": "Immunization::cvxCode=141|date=2023-10-15|patient=urn:uuid:patient-smith",
+      "expectedUri": "urn:uuid:2a12362a-48e4-5b9c-9d3b-62c24737923b"
+    },
+    {
+      "label": "observation-glucose",
+      "identityString": "Observation::date=2024-01-10|loincCode=2339-0|patient=urn:uuid:patient-smith",
+      "expectedUri": "urn:uuid:6514e8ed-e89f-5eef-83a4-cff337d824ae"
+    },
+    {
+      "label": "condition-hypertension",
+      "identityString": "Condition::icd10Code=I10|patient=urn:uuid:patient-smith|snomedCode=38341003",
+      "expectedUri": "urn:uuid:e7794fe1-1684-5095-a3d6-cb8c1d1f7c4b"
+    },
+    {
+      "label": "allergy-penicillin",
+      "identityString": "AllergyIntolerance::allergenCode=7980|allergenName=Penicillin|patient=urn:uuid:patient-smith",
+      "expectedUri": "urn:uuid:ab6796b2-3f95-5cbb-9bcb-f4270cdfec62"
+    }
+  ]
+}
