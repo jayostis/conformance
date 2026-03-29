@@ -3,9 +3,9 @@
 # Run scripts/check-downstream-versions.sh from spec/ to check all repos at once.
 # Update this file when adding new fixture categories for a vocabulary version.
 #
-core=2.8
+core=3.0
 health=2.3
-clinical=1.7
+clinical=1.8
 coverage=1.3
 checkup=3.2
 pots=1.4

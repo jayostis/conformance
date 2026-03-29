@@ -1,0 +1,12 @@
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+<urn:cascade:social-history:example-smoking>
+    a clinical:SocialHistoryRecord ;
+    clinical:socialHistoryCategory "smokingStatus" ;
+    health:smokingStatus "former" ;
+    clinical:packsPerYear "20"^^xsd:decimal ;
+    cascade:dataProvenance cascade:EHRVerified .
