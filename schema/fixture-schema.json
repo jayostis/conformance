@@ -78,7 +78,7 @@
     },
     "shaclConstraintViolated": {
       "type": "string",
-      "description": "For negative fixtures (shouldAccept=false): describes which SHACL constraint is violated, e.g., 'MedicationShape requires health:medicationName (sh:minCount 1)'"
+      "description": "For negative fixtures (shouldAccept=false): describes which SHACL constraint is violated, e.g., 'MedicationShape requires clinical:drugName (sh:minCount 1)'"
     },
     "notes": {
       "type": "string",

@@ -4,7 +4,7 @@
 @prefix prov: <http://www.w3.org/ns/prov#> .
 
 <urn:cascade:medication:example-ai>
-    a clinical:MedicationRecord ;
+    a clinical:Medication ;
     cascade:dataProvenance cascade:AIExtracted ;
     prov:wasGeneratedBy <urn:cascade:activity:extraction-1> .
 

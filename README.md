@@ -38,7 +38,7 @@ Each fixture is a JSON file conforming to `schema/fixture-schema.json`. Here is 
   "id": "med-001",
   "description": "Happy path: Active prescription medication (Lisinopril) with core required fields from EHR import",
   "dataType": "Medication",
-  "vocabulary": "health",
+  "vocabulary": "clinical",
   "input": {
     "id": "urn:uuid:med0-0001-aaaa-bbbb-ccccddddeeee",
     "type": "MedicationRecord",
@@ -80,7 +80,7 @@ Each fixture is a JSON file conforming to `schema/fixture-schema.json`. Here is 
 
 The `input` field represents data as a plain JSON object that an SDK would receive before serialization. Field names use camelCase mappings of the Turtle predicates:
 
-- `health:medicationName` becomes `medicationName`
+- `clinical:drugName` becomes `medicationName`
 - `cascade:dataProvenance` becomes `dataProvenance` (value is the local name, e.g., `"ClinicalGenerated"`)
 - `cascade:schemaVersion` becomes `schemaVersion`
 - `clinical:drugCode` (multiple values) becomes `drugCodes` (array of URIs)
@@ -267,14 +267,14 @@ Given two serializations of the same data:
 
 ```turtle
 # Serialization A
-<urn:uuid:abc> a health:MedicationRecord ;
-    health:medicationName "Aspirin" ;
-    health:isActive true .
+<urn:uuid:abc> a clinical:Medication ;
+    clinical:drugName "Aspirin" ;
+    clinical:status "active" .
 
 # Serialization B (different triple order, extra whitespace)
-<urn:uuid:abc> health:isActive true ;
-    a health:MedicationRecord ;
-    health:medicationName "Aspirin" .
+<urn:uuid:abc> clinical:status "active" ;
+    a clinical:Medication ;
+    clinical:drugName "Aspirin" .
 ```
 
 After normalization, both produce the same canonical form and the comparison passes.
@@ -288,7 +288,7 @@ Negative fixtures (`shouldAccept: false`) verify that an SDK correctly rejects i
 Negative test cases are systematically derived from the SHACL shapes files:
 
 1. **Required field violations:** For each `sh:minCount 1` constraint, create a fixture missing that field.
-   - Example: `med-008` omits `medicationName` (required by `MedicationShape`)
+   - Example: `med-008` omits `medicationName` (maps to `clinical:drugName`, required by `MedicationShape`)
 
 2. **Pattern violations:** For each `sh:pattern` constraint, create a fixture with an invalid format.
    - Example: `med-010` uses `schemaVersion: "1"` instead of `"1.3"` (violates `^[0-9]+\.[0-9]+$`)

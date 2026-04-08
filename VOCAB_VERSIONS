@@ -6,6 +6,7 @@
 core=3.0
 health=2.3
 clinical=1.8
+# clinical=1.8: Medication RDF type and predicates migrated from health: to clinical: namespace
 coverage=1.3
 checkup=3.2
 pots=1.4

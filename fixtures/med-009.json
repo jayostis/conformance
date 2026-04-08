@@ -2,7 +2,7 @@
   "id": "med-009",
   "description": "Negative: Medication missing required dataProvenance field",
   "dataType": "Medication",
-  "vocabulary": "health",
+  "vocabulary": "clinical",
   "input": {
     "id": "urn:uuid:neg0-0002-aaaa-bbbb-ccccddddeeee",
     "type": "MedicationRecord",
