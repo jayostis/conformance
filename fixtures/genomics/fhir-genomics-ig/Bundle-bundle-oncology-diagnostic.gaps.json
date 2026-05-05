@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "sourceField": "DiagnosticReport/Inline-Instance-for-oncology-diagnostic-7.code",
+    "reason": "Test type defaulted to GenePanelTest from LOINC 51969-4 (); a panel-name extension is recommended for precise type inference.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncology-diagnostic-7"
+  },
+  {
+    "sourceField": "DiagnosticReport/Inline-Instance-for-oncology-diagnostic-7.genePanel",
+    "reason": "No genePanel extension on DiagnosticReport and no region-studied scaffolding in the bundle; gene-panel scope cannot be inferred. Reports without explicit panel scope under-specify negative-result semantics.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncology-diagnostic-7"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncology-diagnostic-4",
+    "reason": "Observation has no FHIR Genomics IG profile; cannot dispatch to a parser.",
+    "severity": "warning",
+    "context": "Inline-Instance-for-oncology-diagnostic-4"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncology-diagnostic-5.component[62374-4]",
+    "reason": "LOINC component 62374-4 (Human reference sequence assembly version) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncology-diagnostic-5"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncology-diagnostic-6.component[81259-4].value",
+    "reason": "Associated-condition coding \"melanoma\" doesn't match a recognized vocabulary (MONDO/OMIM/Orphanet); cardinality 1..1 on genomics:condition not structurally satisfied.",
+    "severity": "warning",
+    "context": "Inline-Instance-for-oncology-diagnostic-6"
+  }
+]

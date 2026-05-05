@@ -1,1 +1,146 @@
-[]
+[
+  {
+    "sourceField": "DiagnosticReport/report.code",
+    "reason": "Test type defaulted to GenePanelTest from LOINC 51969-4 (); a panel-name extension is recommended for precise type inference.",
+    "severity": "info",
+    "context": "report"
+  },
+  {
+    "sourceField": "DiagnosticReport/report.genePanel",
+    "reason": "No genePanel extension on DiagnosticReport and no region-studied scaffolding in the bundle; gene-panel scope cannot be inferred. Reports without explicit panel scope under-specify negative-result semantics.",
+    "severity": "info",
+    "context": "report"
+  },
+  {
+    "sourceField": "DiagnosticReport/report.presentedForm",
+    "reason": "DiagnosticReport.presentedForm carries an inline rendered report (e.g. base64 PDF). Not preserved in genomics v1-draft.",
+    "severity": "info",
+    "context": "report"
+  },
+  {
+    "sourceField": "DiagnosticReport/report.result",
+    "reason": "Result reference Observation/efficacy could not be resolved; not all referenced Observations are parseable as genomics records.",
+    "severity": "info",
+    "context": "report"
+  },
+  {
+    "sourceField": "DiagnosticReport/report.result",
+    "reason": "Result reference Observation/metab could not be resolved; not all referenced Observations are parseable as genomics records.",
+    "severity": "info",
+    "context": "report"
+  },
+  {
+    "sourceField": "Observation/complex-component-D.component[48018-6]",
+    "reason": "No gene-studied component (LOINC 48018-6) found on Variant Observation; SHACL requires geneSymbol cardinality 1.",
+    "severity": "warning",
+    "context": "complex-component-D"
+  },
+  {
+    "sourceField": "Observation/complex-component-D.component[48019-4]",
+    "reason": "LOINC component 48019-4 (<no display>) recognized but no v1-draft term yet.",
+    "severity": "info",
+    "context": "complex-component-D"
+  },
+  {
+    "sourceField": "Observation/complex-component-E.component[48018-6]",
+    "reason": "No gene-studied component (LOINC 48018-6) found on Variant Observation; SHACL requires geneSymbol cardinality 1.",
+    "severity": "warning",
+    "context": "complex-component-E"
+  },
+  {
+    "sourceField": "Observation/complex-dis-path.component[81259-4].value",
+    "reason": "Associated-condition coding \"Debrisoquine adverse reaction (disorder)\" doesn't match a recognized vocabulary (MONDO/OMIM/Orphanet); cardinality 1..1 on genomics:condition not structurally satisfied.",
+    "severity": "warning",
+    "context": "complex-dis-path"
+  },
+  {
+    "sourceField": "Observation/complex-variant.component[48018-6]",
+    "reason": "No gene-studied component (LOINC 48018-6) found on Variant Observation; SHACL requires geneSymbol cardinality 1.",
+    "severity": "warning",
+    "context": "complex-variant"
+  },
+  {
+    "sourceField": "Observation/complex-variant.hasMember",
+    "reason": "Variant Observation uses hasMember to chain sub-Variants (complex variant pattern). The sub-Variants are imported individually, but no aggregate-Variant linking exists in genomics v1-draft yet.",
+    "severity": "info",
+    "context": "complex-variant"
+  },
+  {
+    "sourceField": "Observation/discrete-variant.component[48001-2]",
+    "reason": "LOINC component 48001-2 (<no display>) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "discrete-variant"
+  },
+  {
+    "sourceField": "Observation/discrete-variant.component[48002-0]",
+    "reason": "LOINC component 48002-0 (<no display>) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "discrete-variant"
+  },
+  {
+    "sourceField": "Observation/discrete-variant.component[48013-7]",
+    "reason": "LOINC component 48013-7 (<no display>) recognized but no v1-draft term yet.",
+    "severity": "info",
+    "context": "discrete-variant"
+  },
+  {
+    "sourceField": "Observation/discrete-variant.component[48019-4]",
+    "reason": "LOINC component 48019-4 (<no display>) recognized but no v1-draft term yet.",
+    "severity": "info",
+    "context": "discrete-variant"
+  },
+  {
+    "sourceField": "Observation/discrete-variant.component[69547-8]",
+    "reason": "LOINC component 69547-8 (<no display>) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "discrete-variant"
+  },
+  {
+    "sourceField": "Observation/discrete-variant.component[69551-0]",
+    "reason": "LOINC component 69551-0 (<no display>) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "discrete-variant"
+  },
+  {
+    "sourceField": "Observation/discrete-variant.component[81254-5]",
+    "reason": "LOINC component 81254-5 (<no display>) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "discrete-variant"
+  },
+  {
+    "sourceField": "Observation/efficacy",
+    "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
+    "severity": "info",
+    "context": "efficacy"
+  },
+  {
+    "sourceField": "Observation/genotype.component[48018-6]",
+    "reason": "Genotype Observation references 2 distinct genes; v1-draft Diplotype assumes a single gene. Only the first gene is materialized; others (VKORC1) are dropped.",
+    "severity": "warning",
+    "context": "genotype"
+  },
+  {
+    "sourceField": "Observation/highrisk",
+    "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
+    "severity": "info",
+    "context": "highrisk"
+  },
+  {
+    "sourceField": "Observation/metab",
+    "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
+    "severity": "info",
+    "context": "metab"
+  },
+  {
+    "sourceField": "ServiceRequest/ExampleServiceRequest.authoredOn",
+    "reason": "ServiceRequest has no authoredOn or occurrence date; orderedAt cannot be populated.",
+    "severity": "info",
+    "context": "ExampleServiceRequest"
+  },
+  {
+    "sourceField": "ServiceRequest/ExampleServiceRequest.reasonCode",
+    "reason": "Order reason \"Worried about family planning\" recognized but no genomics:GeneticTestOrder property in v1-draft to attach it. Stored as cascade:notes for now.",
+    "severity": "info",
+    "context": "ExampleServiceRequest"
+  }
+]

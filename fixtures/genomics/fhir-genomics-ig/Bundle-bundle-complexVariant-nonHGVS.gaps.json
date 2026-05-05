@@ -1,1 +1,56 @@
-[]
+[
+  {
+    "sourceField": "Observation/Inline-Instance-for-complexVariant-nonHGVS-1.component[48018-6]",
+    "reason": "No gene-studied component (LOINC 48018-6) found on Variant Observation; SHACL requires geneSymbol cardinality 1.",
+    "severity": "warning",
+    "context": "Inline-Instance-for-complexVariant-nonHGVS-1"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-complexVariant-nonHGVS-1.component[69547-8]",
+    "reason": "LOINC component 69547-8 (Genomic ref allele [ID]) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-complexVariant-nonHGVS-1"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-complexVariant-nonHGVS-1.component[69551-0]",
+    "reason": "LOINC component 69551-0 (Genomic alt allele [ID]) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-complexVariant-nonHGVS-1"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-complexVariant-nonHGVS-1.component[81254-5]",
+    "reason": "LOINC component 81254-5 (<no display>) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-complexVariant-nonHGVS-1"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-complexVariant-nonHGVS-2.component[48018-6]",
+    "reason": "No gene-studied component (LOINC 48018-6) found on Variant Observation; SHACL requires geneSymbol cardinality 1.",
+    "severity": "warning",
+    "context": "Inline-Instance-for-complexVariant-nonHGVS-2"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-complexVariant-nonHGVS-2.component[69547-8]",
+    "reason": "LOINC component 69547-8 (Genomic ref allele [ID]) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-complexVariant-nonHGVS-2"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-complexVariant-nonHGVS-2.component[69551-0]",
+    "reason": "LOINC component 69551-0 (Genomic alt allele [ID]) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-complexVariant-nonHGVS-2"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-complexVariant-nonHGVS-2.component[81254-5]",
+    "reason": "LOINC component 81254-5 (<no display>) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-complexVariant-nonHGVS-2"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-complexVariant-nonHGVS-3.value",
+    "reason": "ClinVar RCV accession RCV000664188.1 on genotype; v1-draft attaches RCV to VariantInterpretation, not Diplotype.",
+    "severity": "info",
+    "context": "Inline-Instance-for-complexVariant-nonHGVS-3"
+  }
+]
