@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "sourceField": "DiagnosticReport/Inline-Instance-for-oncologyexamples-r4-13.code",
+    "reason": "Test type defaulted to GenePanelTest from LOINC 51969-4 (); a panel-name extension is recommended for precise type inference.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-13"
+  },
+  {
+    "sourceField": "DiagnosticReport/Inline-Instance-for-oncologyexamples-r4-13.genePanel",
+    "reason": "No genePanel extension on DiagnosticReport and no region-studied scaffolding in the bundle; gene-panel scope cannot be inferred. Reports without explicit panel scope under-specify negative-result semantics.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-13"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-10",
+    "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-10"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-11",
+    "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-11"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-12",
+    "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-12"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-14",
+    "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-14"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-4",
+    "reason": "Observation has no FHIR Genomics IG profile; cannot dispatch to a parser.",
+    "severity": "warning",
+    "context": "Inline-Instance-for-oncologyexamples-r4-4"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-5",
+    "reason": "Observation has no FHIR Genomics IG profile; cannot dispatch to a parser.",
+    "severity": "warning",
+    "context": "Inline-Instance-for-oncologyexamples-r4-5"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-6.component[48002-0]",
+    "reason": "LOINC component 48002-0 (Genomic source class) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-6"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-7.component[48002-0]",
+    "reason": "LOINC component 48002-0 (Genomic source class) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-7"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-8.component[48002-0]",
+    "reason": "LOINC component 48002-0 (Genomic source class) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-8"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-9",
+    "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
+    "severity": "info",
+    "context": "Inline-Instance-for-oncologyexamples-r4-9"
+  }
+]

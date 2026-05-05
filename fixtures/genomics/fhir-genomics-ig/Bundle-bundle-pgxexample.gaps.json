@@ -1,1 +1,80 @@
-[]
+[
+  {
+    "sourceField": "DiagnosticReport/pgx-report.code",
+    "reason": "Test type defaulted to GenePanelTest from LOINC 51969-4 (); a panel-name extension is recommended for precise type inference.",
+    "severity": "info",
+    "context": "pgx-report"
+  },
+  {
+    "sourceField": "DiagnosticReport/pgx-report.genePanel",
+    "reason": "No genePanel extension on DiagnosticReport and no region-studied scaffolding in the bundle; gene-panel scope cannot be inferred. Reports without explicit panel scope under-specify negative-result semantics.",
+    "severity": "info",
+    "context": "pgx-report"
+  },
+  {
+    "sourceField": "DiagnosticReport/pgx-report.result",
+    "reason": "Result reference Observation/med-impact-pgx-example could not be resolved; not all referenced Observations are parseable as genomics records.",
+    "severity": "info",
+    "context": "pgx-report"
+  },
+  {
+    "sourceField": "Observation/med-impact-pgx-example",
+    "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
+    "severity": "info",
+    "context": "med-impact-pgx-example"
+  },
+  {
+    "sourceField": "Observation/variant-1-pgx-example.component[69547-8]",
+    "reason": "LOINC component 69547-8 (Ref nucleotide) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "variant-1-pgx-example"
+  },
+  {
+    "sourceField": "Observation/variant-1-pgx-example.component[69551-0]",
+    "reason": "LOINC component 69551-0 (Alt allele) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "variant-1-pgx-example"
+  },
+  {
+    "sourceField": "Observation/variant-1-pgx-example.component[81254-5]",
+    "reason": "LOINC component 81254-5 (<no display>) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "variant-1-pgx-example"
+  },
+  {
+    "sourceField": "Observation/variant-2-pgx-example.component[48013-7]",
+    "reason": "LOINC component 48013-7 (Genomic reference sequence ID) recognized but no v1-draft term yet.",
+    "severity": "info",
+    "context": "variant-2-pgx-example"
+  },
+  {
+    "sourceField": "Observation/variant-2-pgx-example.component[69547-8]",
+    "reason": "LOINC component 69547-8 (Ref nucleotide) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "variant-2-pgx-example"
+  },
+  {
+    "sourceField": "Observation/variant-2-pgx-example.component[69551-0]",
+    "reason": "LOINC component 69551-0 (Alt allele) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "variant-2-pgx-example"
+  },
+  {
+    "sourceField": "Observation/variant-2-pgx-example.component[81254-5]",
+    "reason": "LOINC component 81254-5 (<no display>) not mapped in genomics v1-draft.",
+    "severity": "info",
+    "context": "variant-2-pgx-example"
+  },
+  {
+    "sourceField": "ServiceRequest/pgx-request.authoredOn",
+    "reason": "ServiceRequest has no authoredOn or occurrence date; orderedAt cannot be populated.",
+    "severity": "info",
+    "context": "pgx-request"
+  },
+  {
+    "sourceField": "ServiceRequest/pgx-request.reasonCode",
+    "reason": "Order reason \"Worried about family planning\" recognized but no genomics:GeneticTestOrder property in v1-draft to attach it. Stored as cascade:notes for now.",
+    "severity": "info",
+    "context": "pgx-request"
+  }
+]

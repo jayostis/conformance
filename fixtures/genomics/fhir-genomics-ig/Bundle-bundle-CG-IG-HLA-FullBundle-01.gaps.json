@@ -1,1 +1,128 @@
-[]
+[
+  {
+    "sourceField": "DiagnosticReport/CG-IG-HLA-FullBundle-01-27.code",
+    "reason": "Test type defaulted to GenePanelTest from LOINC 51969-4 (Genetic analysis report); a panel-name extension is recommended for precise type inference.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-27"
+  },
+  {
+    "sourceField": "DiagnosticReport/CG-IG-HLA-FullBundle-01-27.genePanel",
+    "reason": "No genePanel extension on DiagnosticReport and no region-studied scaffolding in the bundle; gene-panel scope cannot be inferred. Reports without explicit panel scope under-specify negative-result semantics.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-27"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-10.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-10"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-10.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-10"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-10.method",
+    "reason": "Haplotype.method (typing methodology) has no genomics v1-draft term.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-10"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-11.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-11"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-11.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-11"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-11.method",
+    "reason": "Haplotype.method (typing methodology) has no genomics v1-draft term.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-11"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-17.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-17"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-17.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-17"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-17.method",
+    "reason": "Haplotype.method (typing methodology) has no genomics v1-draft term.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-17"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-18.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-18"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-18.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-18"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-18.method",
+    "reason": "Haplotype.method (typing methodology) has no genomics v1-draft term.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-18"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-24.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-24"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-24.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-24"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-24.method",
+    "reason": "Haplotype.method (typing methodology) has no genomics v1-draft term.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-24"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-25.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-25"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-25.derivedFrom",
+    "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-25"
+  },
+  {
+    "sourceField": "Observation/CG-IG-HLA-FullBundle-01-25.method",
+    "reason": "Haplotype.method (typing methodology) has no genomics v1-draft term.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-25"
+  },
+  {
+    "sourceField": "ServiceRequest/CG-IG-HLA-FullBundle-01-5.reasonCode",
+    "reason": "Order reason \"tissue typing for donor registry\" recognized but no genomics:GeneticTestOrder property in v1-draft to attach it. Stored as cascade:notes for now.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-5"
+  }
+]

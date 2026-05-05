@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "sourceField": "Observation/Inline-Instance-for-compound-heterozygote-1.component[48018-6]",
+    "reason": "No gene-studied component (LOINC 48018-6) found on Variant Observation; SHACL requires geneSymbol cardinality 1.",
+    "severity": "warning",
+    "context": "Inline-Instance-for-compound-heterozygote-1"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-compound-heterozygote-2.component[48018-6]",
+    "reason": "No gene-studied component (LOINC 48018-6) found on Variant Observation; SHACL requires geneSymbol cardinality 1.",
+    "severity": "warning",
+    "context": "Inline-Instance-for-compound-heterozygote-2"
+  },
+  {
+    "sourceField": "Observation/Inline-Instance-for-compound-heterozygote-3.value",
+    "reason": "ClinVar RCV accession RCV000664188.1 on genotype; v1-draft attaches RCV to VariantInterpretation, not Diplotype.",
+    "severity": "info",
+    "context": "Inline-Instance-for-compound-heterozygote-3"
+  }
+]
