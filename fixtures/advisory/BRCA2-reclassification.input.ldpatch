@@ -1,0 +1,52 @@
+# Example Cascade Advisory Patch (CAP v0.1)
+# Scenario: BRCA2 c.5946delT (CAid CA000123) reclassified VUS → Likely Pathogenic
+# Issuer: ClinGen Hereditary Breast / Ovarian / Pancreatic Cancer VCEP
+# Profile: Cascade Advisory Patch v0.1 (subset of W3C LDPatch)
+#
+# All identifiers are illustrative.
+
+@prefix ldp:      <http://www.w3.org/ns/ldp#> .
+@prefix advisory: <https://ns.cascadeprotocol.org/advisory/v1#> .
+@prefix genomics: <https://ns.cascadeprotocol.org/genomics/v1#> .
+@prefix prov:     <http://www.w3.org/ns/prov#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+
+# ── Envelope (required by CAP profile, C6) ──────────────────────────────────
+
+<> a advisory:CascadeAdvisoryPatch ;
+   advisory:profileVersion  "0.1" ;
+   advisory:advisoryClass   advisory:VariantReclassification ;
+   advisory:issuer          <https://clingen.org/affiliation/40016> ;
+   advisory:issuerName      "ClinGen HBOP-VCEP" ;
+   advisory:issuedAt        "2026-05-04T00:00:00Z"^^xsd:dateTime ;
+   advisory:advisoryId      <urn:advisory:clingen-hbop-2026-05-04-001> ;
+   advisory:supersedes      <urn:advisory:clingen-hbop-2024-08-12-007> ;
+   advisory:humanSummary    "BRCA2 c.5946delT, previously classified as Variant of Uncertain Significance, has been reclassified to Likely Pathogenic by the ClinGen HBOP Variant Curation Expert Panel based on additional segregation evidence and case data accumulated 2024-2026. Recommend re-engagement with a genetic counselor to discuss the implications for surveillance and family testing." ;
+   advisory:applicableUntil "2031-05-04T00:00:00Z"^^xsd:dateTime ;
+   advisory:evidenceUrl     <https://erepo.clinvar.gov/evrepo/ui/cv/CA000123> .
+
+# ── Bind (single-identifier match, profile constraint C2) ───────────────────
+# Match the user's pod for any genomics:Variant with this stable CAid.
+# The Bind binds ?v to the matched variant IRI for use in the Add block.
+
+Bind ?v <https://example.org/binding>
+   ?v genomics:caId "CA000123" .
+
+# ── Add (the only mutating operation, profile constraint C1) ────────────────
+# Insert a NEW genomics:VariantInterpretation linked to ?v.
+# The prior interpretation is NOT deleted — superseded via prov:wasRevisionOf.
+# Total: 11 triples per matched variant (well under C5's 64-triple limit).
+
+Add {
+  <urn:advisory:clingen-hbop-2026-05-04-001/interp> a genomics:VariantInterpretation ;
+      genomics:variantInterpreted ?v ;
+      genomics:acmgClassification genomics:LikelyPathogenic ;
+      genomics:acmgCriteria "PVS1 PM2_supporting PS4 PP1_strong" ;
+      genomics:condition <http://purl.obolibrary.org/obo/MONDO_0007254> ;
+      genomics:mondoId   "MONDO:0007254" ;
+      genomics:inheritanceMode genomics:AutosomalDominant ;
+      genomics:interpretedBy   "ClinGen HBOP-VCEP" ;
+      genomics:interpretedDate "2026-05-04"^^xsd:date ;
+      prov:wasGeneratedBy <urn:advisory:clingen-hbop-2026-05-04-001> ;
+      prov:wasRevisionOf  ?v .
+} .
