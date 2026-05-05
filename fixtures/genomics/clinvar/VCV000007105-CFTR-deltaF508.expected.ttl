@@ -1,0 +1,4 @@
+# placeholder — authored by importer agent at task 2A.x
+# input: VCV000007105-CFTR-deltaF508.input.xml
+# source vocabulary: genomics/v1-draft.0.1
+# status: not yet authored — replace with the canonical Cascade Turtle output once the corresponding importer ships

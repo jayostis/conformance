@@ -1,0 +1,55 @@
+# Example Cascade Advisory Patch (CAP v0.1)
+# Scenario: CPIC issues updated dosing guidance for warfarin in CYP2C19 *2/*2 carriers
+# Issuer: Clinical Pharmacogenetics Implementation Consortium (CPIC)
+# Profile: Cascade Advisory Patch v0.1
+#
+# This advisory targets users whose pod contains a PGx haplotype matching
+# the CYP2C19 *2 star allele as a homozygous diplotype. It does not modify
+# the variant itself — it adds a new pgx:DosingGuidance record.
+#
+# Identifiers are illustrative.
+
+@prefix advisory: <https://ns.cascadeprotocol.org/advisory/v1#> .
+@prefix pgx:      <https://ns.cascadeprotocol.org/pgx/v1#> .
+@prefix genomics: <https://ns.cascadeprotocol.org/genomics/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix prov:     <http://www.w3.org/ns/prov#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+
+# ── Envelope ────────────────────────────────────────────────────────────────
+
+<> a advisory:CascadeAdvisoryPatch ;
+   advisory:profileVersion  "0.1" ;
+   advisory:advisoryClass   advisory:DrugInteraction ;
+   advisory:issuer          <https://cpicpgx.org/> ;
+   advisory:issuerName      "CPIC" ;
+   advisory:issuedAt        "2026-05-04T00:00:00Z"^^xsd:dateTime ;
+   advisory:advisoryId      <urn:advisory:cpic-2026-05-04-warfarin-cyp2c19> ;
+   advisory:humanSummary    "Updated CPIC guidance: patients with the CYP2C19 poor-metabolizer diplotype (*2/*2) initiating warfarin should receive a 30 percent reduced starting dose with closer INR monitoring during the first two weeks of therapy. This guidance applies if you currently take warfarin or are scheduled to start. Discuss this update with your prescribing clinician before changing your dose." ;
+   advisory:applicableUntil "2029-05-04T00:00:00Z"^^xsd:dateTime ;
+   advisory:evidenceUrl     <https://cpicpgx.org/guidelines/cyp2c19-warfarin-2026/> ;
+   advisory:appliesToActiveOnly true .   # only fires if warfarin is in active medication list
+
+# ── Bind ────────────────────────────────────────────────────────────────────
+# Match by gene HGNC ID. Diplotype + zygosity gating is expressed as guard
+# triples in the Add block via the new genomics:matchesDiplotype assertion;
+# the applier evaluates these as part of selector validation, not as a graph
+# query (CAP profile constraint: single-Bind only).
+
+Bind ?gene <https://example.org/binding>
+   ?gene genomics:hgncId "HGNC:2621" .   # CYP2C19
+
+# ── Add ─────────────────────────────────────────────────────────────────────
+
+Add {
+  <urn:advisory:cpic-2026-05-04-warfarin-cyp2c19/guidance> a pgx:DosingGuidance ;
+      pgx:gene              ?gene ;
+      pgx:diplotypeRequired "*2/*2" ;
+      pgx:drugRxNorm        "11289" ;        # Warfarin
+      pgx:drugLabel         "warfarin" ;
+      pgx:recommendation    "Reduce starting dose by 30%; INR monitoring at days 3, 7, 14." ;
+      pgx:strengthOfEvidence pgx:Strong ;
+      pgx:guidelineSource   "CPIC 2026" ;
+      pgx:effectiveDate     "2026-05-04"^^xsd:date ;
+      prov:wasGeneratedBy   <urn:advisory:cpic-2026-05-04-warfarin-cyp2c19> .
+} .

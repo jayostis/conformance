@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+                        
+<ClinVarResult-Set><VariationArchive VariationID="208804" VariationName="NM_001017980.4(VMA21):c.164-6T&gt;G" VariationType="single nucleotide variant" Accession="VCV000208804" Version="2" RecordType="classified" NumberOfSubmissions="1" NumberOfSubmitters="1" DateLastUpdated="2025-08-23" DateCreated="2015-09-14" MostRecentSubmission="2015-09-14">
+  <RecordStatus>current</RecordStatus>
+  <Species>Homo sapiens</Species>
+  <ClassifiedRecord>
+    <SimpleAllele AlleleID="205365" VariationID="208804">
+      <GeneList>
+        <Gene Symbol="VMA21" FullName="vacuolar ATPase assembly factor VMA21" GeneID="203547" HGNC_ID="HGNC:22082" Source="submitted" RelationshipType="within single gene">
+          <Location>
+            <CytogeneticLocation>Xq28</CytogeneticLocation>
+            <SequenceLocation Assembly="GRCh38" AssemblyAccessionVersion="GCF_000001405.38" AssemblyStatus="current" Chr="X" Accession="NC_000023.11" start="151396595" stop="151409364" display_start="151396595" display_stop="151409364" Strand="+"/>
+            <SequenceLocation Assembly="GRCh37" AssemblyAccessionVersion="GCF_000001405.25" AssemblyStatus="previous" Chr="X" Accession="NC_000023.10" start="150565656" stop="150577835" display_start="150565656" display_stop="150577835" Strand="+"/>
+          </Location>
+          <OMIM>300913</OMIM>
+        </Gene>
+      </GeneList>
+      <Name>NM_001017980.4(VMA21):c.164-6T&gt;G</Name>
+      <CanonicalSPDI>NC_000023.11:151404909:T:G</CanonicalSPDI>
+      <VariantType>single nucleotide variant</VariantType>
+      <Location>
+        <CytogeneticLocation>Xq28</CytogeneticLocation>
+        <SequenceLocation Assembly="GRCh38" AssemblyAccessionVersion="GCF_000001405.38" forDisplay="true" AssemblyStatus="current" Chr="X" Accession="NC_000023.11" start="151404910" stop="151404910" display_start="151404910" display_stop="151404910" variantLength="1" positionVCF="151404910" referenceAlleleVCF="T" alternateAlleleVCF="G"/>
+        <SequenceLocation Assembly="GRCh37" AssemblyAccessionVersion="GCF_000001405.25" AssemblyStatus="previous" Chr="X" Accession="NC_000023.10" start="150573382" stop="150573382" display_start="150573382" display_stop="150573382" variantLength="1" positionVCF="150573382" referenceAlleleVCF="T" alternateAlleleVCF="G"/>
+      </Location>
+      <OtherNameList>
+        <Name>IVS2, T-G, -6</Name>
+      </OtherNameList>
+      <HGVSlist>
+        <HGVS Type="genomic">
+          <NucleotideExpression sequenceAccessionVersion="LRG_860" sequenceAccession="LRG_860">
+            <Expression>LRG_860:g.12726T&gt;G</Expression>
+          </NucleotideExpression>
+        </HGVS>
+        <HGVS Type="coding">
+          <NucleotideExpression sequenceAccessionVersion="LRG_860t1" sequenceAccession="LRG_860t1">
+            <Expression>LRG_860t1:c.164-6T&gt;G</Expression>
+          </NucleotideExpression>
+        </HGVS>
+        <HGVS Assembly="GRCh37" Type="genomic, top-level">
+          <NucleotideExpression sequenceAccessionVersion="NC_000023.10" sequenceAccession="NC_000023" sequenceVersion="10" change="g.150573382T&gt;G" Assembly="GRCh37">
+            <Expression>NC_000023.10:g.150573382T&gt;G</Expression>
+          </NucleotideExpression>
+        </HGVS>
+        <HGVS Assembly="GRCh38" Type="genomic, top-level">
+          <NucleotideExpression sequenceAccessionVersion="NC_000023.11" sequenceAccession="NC_000023" sequenceVersion="11" change="g.151404910T&gt;G" Assembly="GRCh38">
+            <Expression>NC_000023.11:g.151404910T&gt;G</Expression>
+          </NucleotideExpression>
+        </HGVS>
+        <HGVS Type="genomic">
+          <NucleotideExpression sequenceAccessionVersion="NG_016761.1" sequenceAccession="NG_016761" sequenceVersion="1" change="g.12726T&gt;G">
+            <Expression>NG_016761.1:g.12726T&gt;G</Expression>
+          </NucleotideExpression>
+        </HGVS>
+        <HGVS Type="coding">
+          <NucleotideExpression sequenceAccessionVersion="NM_001363810.1" sequenceAccession="NM_001363810" sequenceVersion="1" change="c.329-6T&gt;G">
+            <Expression>NM_001363810.1:c.329-6T&gt;G</Expression>
+          </NucleotideExpression>
+          <MolecularConsequence ID="SO:0001627" Type="intron variant" DB="SO"/>
+        </HGVS>
+        <HGVS Type="coding">
+          <NucleotideExpression sequenceAccessionVersion="NM_001017980.4" sequenceAccession="NM_001017980" sequenceVersion="4" change="c.164-6T&gt;G" MANESelect="true">
+            <Expression>NM_001017980.4:c.164-6T&gt;G</Expression>
+          </NucleotideExpression>
+          <MolecularConsequence ID="SO:0001627" Type="intron variant" DB="SO"/>
+        </HGVS>
+      </HGVSlist>
+      <XRefList>
+        <XRef ID="CA10575766" DB="ClinGen"/>
+        <XRef Type="Allelic variant" ID="300913.0007" DB="OMIM"/>
+        <XRef Type="rs" ID="878854356" DB="dbSNP"/>
+      </XRefList>
+    </SimpleAllele>
+    <RCVList>
+      <RCVAccession Title="NM_001017980.4(VMA21):c.164-6T&gt;G AND X-linked myopathy with excessive autophagy" Accession="RCV000190832" Version="3">
+        <ClassifiedConditionList TraitSetID="11804">
+          <ClassifiedCondition DB="MedGen" ID="C1839615">X-linked myopathy with excessive autophagy</ClassifiedCondition>
+        </ClassifiedConditionList>
+        <RCVClassifications>
+          <GermlineClassification>
+            <ReviewStatus>no assertion criteria provided</ReviewStatus>
+            <Description DateLastEvaluated="2015-04-21" SubmissionCount="1">Pathogenic</Description>
+          </GermlineClassification>
+        </RCVClassifications>
+      </RCVAccession>
+    </RCVList>
+    <Classifications>
+      <GermlineClassification DateLastEvaluated="2015-04-21" NumberOfSubmissions="1" NumberOfSubmitters="1" DateCreated="2015-09-14" MostRecentSubmission="2015-09-14">
+        <ReviewStatus>no assertion criteria provided</ReviewStatus>
+        <Description>Pathogenic</Description>
+        <Citation Type="general">
+          <ID Source="PubMed">16217076</ID>
+        </Citation>
+        <Citation Type="general">
+          <ID Source="PubMed">25817839</ID>
+        </Citation>
+        <ConditionList>
+          <TraitSet ID="11804" Type="Disease" ContributesToAggregateClassification="true">
+            <Trait ID="3011" Type="Disease">
+              <Name>
+                <ElementValue Type="Preferred">X-linked myopathy with excessive autophagy</ElementValue>
+                <XRef ID="MONDO:0010684" DB="MONDO"/>
+              </Name>
+              <Name>
+                <ElementValue Type="Alternate">Vacuolar myopathy</ElementValue>
+              </Name>
+              <Name>
+                <ElementValue Type="Alternate">Autophagic vacuolar myopathy</ElementValue>
+              </Name>
+              <Symbol>
+                <ElementValue Type="Alternate">MEAX</ElementValue>
+                <XRef Type="MIM" ID="310440" DB="OMIM"/>
+              </Symbol>
+              <Symbol>
+                <ElementValue Type="Alternate">XMEA</ElementValue>
+                <XRef Type="MIM" ID="310440" DB="OMIM"/>
+              </Symbol>
+              <Symbol>
+                <ElementValue Type="Preferred">AVM</ElementValue>
+              </Symbol>
+              <AttributeSet>
+                <Attribute Type="GARD id" integerValue="3892"/>
+                <XRef ID="3892" DB="Office of Rare Diseases"/>
+              </AttributeSet>
+              <XRef ID="25980" DB="Orphanet"/>
+              <XRef ID="C1839615" DB="MedGen"/>
+              <XRef ID="MONDO:0010684" DB="MONDO"/>
+              <XRef Type="MIM" ID="310440" DB="OMIM"/>
+            </Trait>
+          </TraitSet>
+        </ConditionList>
+      </GermlineClassification>
+    </Classifications>
+    <ClinicalAssertionList>
+      <ClinicalAssertion ID="454910" SubmissionDate="2015-09-10" ContributesToAggregateClassification="true" DateLastUpdated="2015-09-14" DateCreated="2015-09-14">
+        <ClinVarSubmissionID localKey="300913.0007_MYOPATHY, X-LINKED, WITH EXCESSIVE AUTOPHAGY" title="VMA21, IVS2, T-G, -6_MYOPATHY, X-LINKED, WITH EXCESSIVE AUTOPHAGY"/>
+        <ClinVarAccession Accession="SCV000245702" DateUpdated="2015-09-14" DateCreated="2015-09-14" Type="SCV" Version="1" SubmitterName="OMIM" OrgID="3" OrganizationCategory="resource"/>
+        <RecordStatus>current</RecordStatus>
+        <Classification DateLastEvaluated="2015-04-21">
+          <ReviewStatus>no assertion criteria provided</ReviewStatus>
+          <GermlineClassification>Pathogenic</GermlineClassification>
+        </Classification>
+        <Assertion>variation to disease</Assertion>
+        <ObservedInList>
+          <ObservedIn>
+            <Sample>
+              <Origin>germline</Origin>
+              <Species>human</Species>
+              <AffectedStatus>not provided</AffectedStatus>
+            </Sample>
+            <Method>
+              <MethodType>literature only</MethodType>
+            </Method>
+            <ObservedData>
+              <Attribute Type="Description">In 2 brothers with X-linked myopathy with excessive autophagy (XMEA; 310440) originally reported by Yan et al. (2005), Munteanu et al. (2015) identified a hemizygous c.164-6T-G transversion in intron 2 of the VMA21 gene, resulting in substitution of a purine within a conserved polypyrimidine tract. The mutation was not found in 949 control chromosomes and was not present in public or in-house sequence databases. Patient cells showed decreased VMA21 mRNA (22 to 25% of normal controls) and significantly decreased V-ATPase activity (13% of controls). The patients had a severe congenital form of the disorder, which Munteanu et al. (2015) attributed to the very low V-ATPase activity. The c.164-6T-G mutation is 1 nucleotide from the common XMEA mutation c.164-7T-G (300913.0004).</Attribute>
+              <Citation>
+                <ID Source="PubMed">16217076</ID>
+              </Citation>
+              <Citation>
+                <ID Source="PubMed">25817839</ID>
+              </Citation>
+              <XRef DB="OMIM" ID="310440" Type="MIM"/>
+            </ObservedData>
+          </ObservedIn>
+        </ObservedInList>
+        <SimpleAllele>
+          <GeneList>
+            <Gene Symbol="VMA21"/>
+          </GeneList>
+          <Name>VMA21, IVS2, T-G, -6</Name>
+          <VariantType>Variation</VariantType>
+          <OtherNameList>
+            <Name Type="NonHGVS">IVS2, T-G, -6</Name>
+          </OtherNameList>
+          <XRefList>
+            <XRef DB="OMIM" ID="300913.0007" Type="Allelic variant"/>
+          </XRefList>
+        </SimpleAllele>
+        <TraitSet Type="Disease">
+          <Trait Type="Disease">
+            <Name>
+              <ElementValue Type="Preferred">MYOPATHY, X-LINKED, WITH EXCESSIVE AUTOPHAGY</ElementValue>
+            </Name>
+          </Trait>
+        </TraitSet>
+      </ClinicalAssertion>
+    </ClinicalAssertionList>
+    <TraitMappingList>
+      <TraitMapping ClinicalAssertionID="454910" TraitType="Disease" MappingType="Name" MappingValue="MYOPATHY, X-LINKED, WITH EXCESSIVE AUTOPHAGY" MappingRef="Preferred">
+        <MedGen CUI="C1839615" Name="X-linked myopathy with excessive autophagy"/>
+      </TraitMapping>
+    </TraitMappingList>
+  </ClassifiedRecord>
+</VariationArchive>
+</ClinVarResult-Set>

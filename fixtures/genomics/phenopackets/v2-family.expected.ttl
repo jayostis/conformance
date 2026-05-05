@@ -1,0 +1,4 @@
+# placeholder — authored by importer agent at task 2B.x
+# input: v2-family.input.json
+# source vocabulary: genomics/v1-draft.0.1
+# status: not yet authored — replace with the canonical Cascade Turtle output once the corresponding importer ships
