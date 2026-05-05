@@ -12,6 +12,12 @@
     "context": "CG-IG-HLA-FullBundle-01-27"
   },
   {
+    "sourceField": "DiagnosticReport/CG-IG-HLA-FullBundle-01-27.result",
+    "reason": "Genomic report references 3 record(s) but none are true genomics:Variant instances (likely Diplotypes/Haplotypes/PGx implications). v1-draft has no direct GeneticTest-to-Diplotype/Haplotype linkage predicate; consider genomics:reportedRecord or type-specific predicates in v1.x.",
+    "severity": "info",
+    "context": "CG-IG-HLA-FullBundle-01-27"
+  },
+  {
     "sourceField": "Observation/CG-IG-HLA-FullBundle-01-10.derivedFrom",
     "reason": "Haplotype derivedFrom MolecularSequence — sequence-level evidence has no genomics v1-draft term yet (would require importing MolecularSequence as a separate genomics record).",
     "severity": "info",
