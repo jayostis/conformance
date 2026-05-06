@@ -36,7 +36,7 @@
     <https://ns.cascadeprotocol.org/genomics/v1#hpoTerm> "HP:0011463";
     <https://ns.cascadeprotocol.org/genomics/v1#phenotypeOnsetAge> 14;
     <https://ns.cascadeprotocol.org/genomics/v1#hpoTerm> "HP:0001270".
-<urn:uuid:77f59db3-f0bc-5e84-a211-8356f8630e53> a <https://ns.cascadeprotocol.org/genomics/v1#Variant>;
+<urn:uuid:bf2bdcc7-61b9-5cc2-9b85-b8bade42b105> a <https://ns.cascadeprotocol.org/genomics/v1#Variant>;
     cascade:dataProvenance cascade:ClinicalGenerated;
     cascade:schemaVersion "1.3";
     <https://ns.cascadeprotocol.org/genomics/v1#dataQualityTier> <https://ns.cascadeprotocol.org/genomics/v1#ResearchGrade>;
@@ -47,7 +47,7 @@
 <urn:uuid:ffb6a316-4376-57dd-a6be-43f54effd082> a <https://ns.cascadeprotocol.org/genomics/v1#VariantInterpretation>;
     cascade:dataProvenance cascade:ClinicalGenerated;
     cascade:schemaVersion "1.3";
-    <https://ns.cascadeprotocol.org/genomics/v1#variantInterpreted> <urn:uuid:77f59db3-f0bc-5e84-a211-8356f8630e53>;
+    <https://ns.cascadeprotocol.org/genomics/v1#variantInterpreted> <urn:uuid:bf2bdcc7-61b9-5cc2-9b85-b8bade42b105>;
     <https://ns.cascadeprotocol.org/genomics/v1#interpretationStatus> <https://ns.cascadeprotocol.org/genomics/v1#Causative>;
     <https://ns.cascadeprotocol.org/genomics/v1#condition> <https://omim.org/entry/101600>;
     <https://ns.cascadeprotocol.org/genomics/v1#omimId> "101600";
