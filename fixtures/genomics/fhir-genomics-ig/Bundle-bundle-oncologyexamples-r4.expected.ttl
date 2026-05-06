@@ -18,6 +18,7 @@
     <https://ns.cascadeprotocol.org/genomics/v1#hgvsPDot> "NP_004963.1:p.Val617Phe";
     <https://ns.cascadeprotocol.org/genomics/v1#hgvsGDot> "NC_000009.12:g.5073770G>T";
     <https://ns.cascadeprotocol.org/genomics/v1#geneSymbol> "JAK2";
+    <https://ns.cascadeprotocol.org/genomics/v1#somaticStatus> <https://ns.cascadeprotocol.org/genomics/v1#Germline>;
     cascade:sourceFhirId "Inline-Instance-for-oncologyexamples-r4-6".
 <urn:uuid:151ecb49-e405-565c-bcdd-7bf9f06cceab> a <https://ns.cascadeprotocol.org/genomics/v1#Variant>;
     cascade:dataProvenance cascade:ClinicalGenerated;
@@ -27,6 +28,7 @@
     <https://ns.cascadeprotocol.org/genomics/v1#hgvsPDot> "NP_002244.1:p.Gln472His";
     <https://ns.cascadeprotocol.org/genomics/v1#hgvsGDot> "NC_000004.11:g.55972974T>A";
     <https://ns.cascadeprotocol.org/genomics/v1#geneSymbol> "KDR";
+    <https://ns.cascadeprotocol.org/genomics/v1#somaticStatus> <https://ns.cascadeprotocol.org/genomics/v1#Germline>;
     cascade:sourceFhirId "Inline-Instance-for-oncologyexamples-r4-7".
 <urn:uuid:8875c5ac-95aa-592e-9abe-2e1afaa528ae> a <https://ns.cascadeprotocol.org/genomics/v1#Variant>;
     cascade:dataProvenance cascade:ClinicalGenerated;
@@ -35,11 +37,13 @@
     <https://ns.cascadeprotocol.org/genomics/v1#dataProvenance> <https://ns.cascadeprotocol.org/genomics/v1#ClinicalSequencing>;
     <https://ns.cascadeprotocol.org/genomics/v1#hgvsGDot> "NC_000002.12:g.211713666_211713668del";
     <https://ns.cascadeprotocol.org/genomics/v1#geneSymbol> "ERBB4";
+    <https://ns.cascadeprotocol.org/genomics/v1#somaticStatus> <https://ns.cascadeprotocol.org/genomics/v1#Germline>;
     cascade:sourceFhirId "Inline-Instance-for-oncologyexamples-r4-8".
 <urn:uuid:fda28868-6ffa-581b-8098-0452fee40a3b> a <https://ns.cascadeprotocol.org/genomics/v1#GeneticTest>;
     cascade:dataProvenance cascade:ClinicalGenerated;
     cascade:schemaVersion "1.3";
     <https://ns.cascadeprotocol.org/genomics/v1#testType> <https://ns.cascadeprotocol.org/genomics/v1#GenePanelTest>;
     <https://ns.cascadeprotocol.org/genomics/v1#variantsObserved> <urn:uuid:f4fae3b9-da3f-5108-9249-7efa193feb07>, <urn:uuid:151ecb49-e405-565c-bcdd-7bf9f06cceab>, <urn:uuid:8875c5ac-95aa-592e-9abe-2e1afaa528ae>;
+    <https://ns.cascadeprotocol.org/genomics/v1#reportedRecord> <urn:uuid:40e85eda-4d31-4bd2-a5a0-c39d63f9824f>, <urn:uuid:64b91716-6431-41bd-8fd4-7ac99bebdee9>, <urn:uuid:1bf9642d-fd1c-4819-8c5d-44fae4bad524>, <urn:uuid:1301943b-55db-4adf-8355-3635f7268a1b>, <urn:uuid:05713d1c-0df5-46d5-a5a9-2085eef56c20>, <urn:uuid:294f1401-e2eb-4df1-b6d2-09e1b7a6eca4>;
     <https://ns.cascadeprotocol.org/genomics/v1#performingLab> "urn:uuid:a48256f8-db37-44e0-a0f6-d7af16c7c9ef";
     cascade:sourceFhirId "Inline-Instance-for-oncologyexamples-r4-13".

@@ -13,7 +13,7 @@
   },
   {
     "sourceField": "DiagnosticReport/CG-IG-HLA-FullBundle-01-27.result",
-    "reason": "Genomic report references 3 record(s) but none are true genomics:Variant instances (likely Diplotypes/Haplotypes/PGx implications). v1-draft has no direct GeneticTest-to-Diplotype/Haplotype linkage predicate; consider genomics:reportedRecord or type-specific predicates in v1.x.",
+    "reason": "Genomic report references only non-Variant records (Diplotypes/Haplotypes/PGx implications) — emitted via genomics:reportedRecord. Type-specific predicates (genomics:diplotypesObserved / haplotypesObserved) remain a v1.x evolution candidate.",
     "severity": "info",
     "context": "CG-IG-HLA-FullBundle-01-27"
   },

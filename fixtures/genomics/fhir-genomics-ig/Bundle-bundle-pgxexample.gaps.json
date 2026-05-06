@@ -24,44 +24,8 @@
     "context": "med-impact-pgx-example"
   },
   {
-    "sourceField": "Observation/variant-1-pgx-example.component[69547-8]",
-    "reason": "LOINC component 69547-8 (Ref nucleotide) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "variant-1-pgx-example"
-  },
-  {
-    "sourceField": "Observation/variant-1-pgx-example.component[69551-0]",
-    "reason": "LOINC component 69551-0 (Alt allele) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "variant-1-pgx-example"
-  },
-  {
-    "sourceField": "Observation/variant-1-pgx-example.component[81254-5]",
-    "reason": "LOINC component 81254-5 (<no display>) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "variant-1-pgx-example"
-  },
-  {
     "sourceField": "Observation/variant-2-pgx-example.component[48013-7]",
     "reason": "LOINC component 48013-7 (Genomic reference sequence ID) recognized but no v1-draft term yet.",
-    "severity": "info",
-    "context": "variant-2-pgx-example"
-  },
-  {
-    "sourceField": "Observation/variant-2-pgx-example.component[69547-8]",
-    "reason": "LOINC component 69547-8 (Ref nucleotide) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "variant-2-pgx-example"
-  },
-  {
-    "sourceField": "Observation/variant-2-pgx-example.component[69551-0]",
-    "reason": "LOINC component 69551-0 (Alt allele) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "variant-2-pgx-example"
-  },
-  {
-    "sourceField": "Observation/variant-2-pgx-example.component[81254-5]",
-    "reason": "LOINC component 81254-5 (<no display>) not mapped in genomics v1-draft.",
     "severity": "info",
     "context": "variant-2-pgx-example"
   },

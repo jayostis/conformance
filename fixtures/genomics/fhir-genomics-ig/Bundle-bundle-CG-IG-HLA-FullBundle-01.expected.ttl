@@ -90,6 +90,7 @@
     cascade:dataProvenance cascade:ClinicalGenerated;
     cascade:schemaVersion "1.3";
     <https://ns.cascadeprotocol.org/genomics/v1#testType> <https://ns.cascadeprotocol.org/genomics/v1#GenePanelTest>;
+    <https://ns.cascadeprotocol.org/genomics/v1#reportedRecord> <urn:uuid:117338c3-59dd-5d64-9437-cf9474745e4f>, <urn:uuid:186472d1-4863-53a6-9a89-4407d63a5c83>, <urn:uuid:c09f8654-5d6c-5e29-8508-1d3de6a4a764>;
     <https://ns.cascadeprotocol.org/genomics/v1#testDate> "2016-12-15"^^xsd:date;
     <https://ns.cascadeprotocol.org/genomics/v1#performingLab> "aTypingLab Inc".
 <urn:uuid:99c56277-2f32-5ee9-b7b4-ceae263b7364> <https://ns.cascadeprotocol.org/genomics/v1#resultedIn> <urn:uuid:9e59499e-67d9-521c-a01f-09214c15b33c>.

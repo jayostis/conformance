@@ -24,6 +24,9 @@
     <https://ns.cascadeprotocol.org/genomics/v1#geneSymbol> "CYP2C9";
     <https://ns.cascadeprotocol.org/genomics/v1#hgncId> "HGNC:2623";
     <https://ns.cascadeprotocol.org/genomics/v1#dbsnpRsId> "rs12345";
+    <https://ns.cascadeprotocol.org/genomics/v1#refAllele> "T";
+    <https://ns.cascadeprotocol.org/genomics/v1#altAllele> "G";
+    <https://ns.cascadeprotocol.org/genomics/v1#genomicStartEnd> "55227976-55227977";
     cascade:sourceFhirId "variant-1-pgx-example".
 <urn:uuid:cfc3764e-6402-57be-b248-14f59968a823> a <https://ns.cascadeprotocol.org/genomics/v1#Variant>;
     cascade:dataProvenance cascade:ClinicalGenerated;
@@ -33,6 +36,9 @@
     <https://ns.cascadeprotocol.org/genomics/v1#geneSymbol> "CYP2C9";
     <https://ns.cascadeprotocol.org/genomics/v1#hgncId> "HGNC:2623";
     <https://ns.cascadeprotocol.org/genomics/v1#dbsnpRsId> "rs233455";
+    <https://ns.cascadeprotocol.org/genomics/v1#refAllele> "T";
+    <https://ns.cascadeprotocol.org/genomics/v1#altAllele> "G";
+    <https://ns.cascadeprotocol.org/genomics/v1#genomicStartEnd> "55227978-55227979";
     cascade:sourceFhirId "variant-2-pgx-example".
 <urn:uuid:68d88d62-3065-55aa-a063-a2a476501042> a <https://ns.cascadeprotocol.org/genomics/v1#Haplotype>;
     cascade:dataProvenance cascade:ClinicalGenerated;
@@ -63,6 +69,7 @@
     cascade:dataProvenance cascade:ClinicalGenerated;
     cascade:schemaVersion "1.3";
     <https://ns.cascadeprotocol.org/genomics/v1#testType> <https://ns.cascadeprotocol.org/genomics/v1#GenePanelTest>;
+    <https://ns.cascadeprotocol.org/genomics/v1#reportedRecord> <urn:uuid:d5343328-63ef-5fc6-8f93-a74d2c983a9c>, <urn:uuid:68d88d62-3065-55aa-a063-a2a476501042>, <urn:uuid:56ed7339-f61a-513c-aaa9-946f69f9bed3>;
     <https://ns.cascadeprotocol.org/genomics/v1#variantsObserved> <urn:uuid:3689e917-bdb3-5665-8791-aeaae66ff60e>, <urn:uuid:cfc3764e-6402-57be-b248-14f59968a823>;
     <https://ns.cascadeprotocol.org/genomics/v1#testDate> "2018-03-06"^^xsd:date;
     <https://ns.cascadeprotocol.org/genomics/v1#performingLab> "Organization/ExampleLab".
