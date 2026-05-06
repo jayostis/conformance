@@ -72,12 +72,6 @@
     "context": "discrete-variant"
   },
   {
-    "sourceField": "Observation/discrete-variant.component[48002-0]",
-    "reason": "LOINC component 48002-0 (<no display>) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "discrete-variant"
-  },
-  {
     "sourceField": "Observation/discrete-variant.component[48013-7]",
     "reason": "LOINC component 48013-7 (<no display>) recognized but no v1-draft term yet.",
     "severity": "info",
@@ -86,24 +80,6 @@
   {
     "sourceField": "Observation/discrete-variant.component[48019-4]",
     "reason": "LOINC component 48019-4 (<no display>) recognized but no v1-draft term yet.",
-    "severity": "info",
-    "context": "discrete-variant"
-  },
-  {
-    "sourceField": "Observation/discrete-variant.component[69547-8]",
-    "reason": "LOINC component 69547-8 (<no display>) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "discrete-variant"
-  },
-  {
-    "sourceField": "Observation/discrete-variant.component[69551-0]",
-    "reason": "LOINC component 69551-0 (<no display>) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "discrete-variant"
-  },
-  {
-    "sourceField": "Observation/discrete-variant.component[81254-5]",
-    "reason": "LOINC component 81254-5 (<no display>) not mapped in genomics v1-draft.",
     "severity": "info",
     "context": "discrete-variant"
   },

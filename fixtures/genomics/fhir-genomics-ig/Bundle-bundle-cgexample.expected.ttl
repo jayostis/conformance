@@ -30,7 +30,11 @@
     <https://ns.cascadeprotocol.org/genomics/v1#zygosity> <https://ns.cascadeprotocol.org/genomics/v1#Heterozygous>;
     <https://ns.cascadeprotocol.org/genomics/v1#clinvarVariationId> "30880";
     <https://ns.cascadeprotocol.org/genomics/v1#dbsnpRsId> "rs368949613";
-    <https://ns.cascadeprotocol.org/genomics/v1#mosaicismFraction> 0.47;
+    <https://ns.cascadeprotocol.org/genomics/v1#variantAlleleFrequency> 0.47;
+    <https://ns.cascadeprotocol.org/genomics/v1#refAllele> "C";
+    <https://ns.cascadeprotocol.org/genomics/v1#altAllele> "T";
+    <https://ns.cascadeprotocol.org/genomics/v1#genomicStartEnd> "31731-31731";
+    <https://ns.cascadeprotocol.org/genomics/v1#somaticStatus> <https://ns.cascadeprotocol.org/genomics/v1#Germline>;
     cascade:sourceFhirId "discrete-variant".
 <urn:uuid:7dc72dff-a635-5de6-8e54-59b6d23a0d5c> a <https://ns.cascadeprotocol.org/genomics/v1#Variant>;
     cascade:dataProvenance cascade:ClinicalGenerated;
@@ -93,7 +97,10 @@
     cascade:dataProvenance cascade:ClinicalGenerated;
     cascade:schemaVersion "1.3";
     <https://ns.cascadeprotocol.org/genomics/v1#testType> <https://ns.cascadeprotocol.org/genomics/v1#GenePanelTest>;
-    <https://ns.cascadeprotocol.org/genomics/v1#variantsObserved> <urn:uuid:d1eb2571-20e9-5369-b086-2fc00e192235>, <urn:uuid:7dc72dff-a635-5de6-8e54-59b6d23a0d5c>;
+    <https://ns.cascadeprotocol.org/genomics/v1#variantsObserved> <urn:uuid:d1eb2571-20e9-5369-b086-2fc00e192235>;
+    <https://ns.cascadeprotocol.org/genomics/v1#reportedRecord> <urn:uuid:4da4bfb4-a472-5f28-a758-06bdd916e259>;
+    <https://ns.cascadeprotocol.org/genomics/v1#variantsObserved> <urn:uuid:7dc72dff-a635-5de6-8e54-59b6d23a0d5c>;
+    <https://ns.cascadeprotocol.org/genomics/v1#reportedRecord> <urn:uuid:7099dd80-45d8-5e77-8ac3-6f1f80524a17>, <urn:uuid:a812b1b9-8431-55a0-9edc-4b467b30cfe2>, <urn:uuid:4073bc31-419e-5990-ba3f-6c130b3d9cd6>;
     <https://ns.cascadeprotocol.org/genomics/v1#testDate> "2016-09-06"^^xsd:date;
     <https://ns.cascadeprotocol.org/genomics/v1#performingLab> "Organization/ExampleLab".
 <urn:uuid:b7ede15c-f7b5-5e3e-a9b9-b3ead3257291> <https://ns.cascadeprotocol.org/genomics/v1#resultedIn> <urn:uuid:1b56699f-f954-5fa1-a2f8-3180809435c5>.

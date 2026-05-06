@@ -48,24 +48,6 @@
     "context": "Inline-Instance-for-oncologyexamples-r4-5"
   },
   {
-    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-6.component[48002-0]",
-    "reason": "LOINC component 48002-0 (Genomic source class) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "Inline-Instance-for-oncologyexamples-r4-6"
-  },
-  {
-    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-7.component[48002-0]",
-    "reason": "LOINC component 48002-0 (Genomic source class) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "Inline-Instance-for-oncologyexamples-r4-7"
-  },
-  {
-    "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-8.component[48002-0]",
-    "reason": "LOINC component 48002-0 (Genomic source class) not mapped in genomics v1-draft.",
-    "severity": "info",
-    "context": "Inline-Instance-for-oncologyexamples-r4-8"
-  },
-  {
     "sourceField": "Observation/Inline-Instance-for-oncologyexamples-r4-9",
     "reason": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/therapeutic-implication not in Phase 1 scope — PGx and region-studied profiles deferred.",
     "severity": "info",

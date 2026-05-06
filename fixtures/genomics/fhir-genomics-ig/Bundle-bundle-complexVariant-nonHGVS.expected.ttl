@@ -17,6 +17,9 @@
     <https://ns.cascadeprotocol.org/genomics/v1#dataProvenance> <https://ns.cascadeprotocol.org/genomics/v1#ClinicalSequencing>;
     <https://ns.cascadeprotocol.org/genomics/v1#transcriptRef> "NM_022787.3";
     <https://ns.cascadeprotocol.org/genomics/v1#zygosity> <https://ns.cascadeprotocol.org/genomics/v1#Heterozygous>;
+    <https://ns.cascadeprotocol.org/genomics/v1#refAllele> "G";
+    <https://ns.cascadeprotocol.org/genomics/v1#altAllele> "A";
+    <https://ns.cascadeprotocol.org/genomics/v1#genomicStartEnd> "769-769";
     cascade:sourceFhirId "Inline-Instance-for-complexVariant-nonHGVS-1".
 <urn:uuid:a8aa2bc5-1984-56b0-a178-2f30cae6cb08> a <https://ns.cascadeprotocol.org/genomics/v1#Variant>;
     cascade:dataProvenance cascade:ClinicalGenerated;
@@ -25,6 +28,9 @@
     <https://ns.cascadeprotocol.org/genomics/v1#dataProvenance> <https://ns.cascadeprotocol.org/genomics/v1#ClinicalSequencing>;
     <https://ns.cascadeprotocol.org/genomics/v1#transcriptRef> "NM_022787.3";
     <https://ns.cascadeprotocol.org/genomics/v1#zygosity> <https://ns.cascadeprotocol.org/genomics/v1#Heterozygous>;
+    <https://ns.cascadeprotocol.org/genomics/v1#refAllele> "A";
+    <https://ns.cascadeprotocol.org/genomics/v1#altAllele> "G";
+    <https://ns.cascadeprotocol.org/genomics/v1#genomicStartEnd> "53-53";
     cascade:sourceFhirId "Inline-Instance-for-complexVariant-nonHGVS-2".
 <urn:uuid:131bd293-d913-541d-ae10-72d95b3ab8a1> a <https://ns.cascadeprotocol.org/genomics/v1#Diplotype>;
     cascade:dataProvenance cascade:ClinicalGenerated;
