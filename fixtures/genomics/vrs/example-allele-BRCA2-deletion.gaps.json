@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "sourceField": "VRS.Allele.id",
+    "reason": "Declared id ga4gh:VA.S3LWLZ-vfWfvxtOdT_BcsoMaP1mLfuNS does not match cascade-cli's simple canonical-form hash ga4gh:VA.XPneyPm78lymBC_vC96vEBSHURxTRVA2. Allele was produced by an upstream tool (e.g. vrs-python) that uses recursive-digest canonicalization. Preserving as-is per D-Q6 preserve-only — VRS digest computation requires seqrepo for sequence-id collapsing, which cascade-cli deliberately does not bundle.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "VRS.Allele.location/state",
+    "reason": "VRS Allele location + state preserved as opaque vrsObject literal per D-Q6. cascade-cli does not decompose into refAllele / altAllele / coordinates — those map through Phase 3A (VCF) for variant coordinates.",
+    "severity": "info",
+    "context": "urn:uuid:2891324f-aabe-54dc-aff1-91023bc9dcdc"
+  }
+]
