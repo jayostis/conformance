@@ -1,1 +1,86 @@
-[]
+[
+  {
+    "sourceField": "ClinicalAssertion[454910]/@SubmissionDate|@DateCreated|@DateLastUpdated",
+    "reason": "Submission lifecycle dates have no v1-draft.0.1 predicate. Useful for chronology and audit; candidates for v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000245702"
+  },
+  {
+    "sourceField": "ClinicalAssertion[454910]/Classification@DateLastEvaluated",
+    "reason": "Per-SCV DateLastEvaluated \"2015-04-21\" has no v1-draft.0.1 predicate. Candidate: genomics:assertionDate (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000245702"
+  },
+  {
+    "sourceField": "ClinicalAssertion[454910]/Classification/ReviewStatus",
+    "reason": "Per-SCV ReviewStatus \"no assertion criteria provided\" has no v1-draft.0.1 predicate. Aggregate-level reviewStatus is on the parent VariantInterpretation. Candidate: genomics:assertionReviewStatus (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000245702"
+  },
+  {
+    "sourceField": "ClinicalAssertion[454910]/ObservedInList/ObservedIn/Method",
+    "reason": "Method types [\"literature only\"] have no v1-draft predicate. Candidates: genomics:methodType (literature only / clinical testing / curation / research).",
+    "severity": "info",
+    "context": "SCV000245702"
+  },
+  {
+    "sourceField": "ClinicalAssertion[454910]/ObservedInList/ObservedIn/ObservedData",
+    "reason": "ObservedData carries free-text case descriptions, segregation evidence, and population frequencies. No v1-draft predicate; would map to genomics:observationNarrative or be split into structured evidence types in v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000245702"
+  },
+  {
+    "sourceField": "ClinicalAssertion[454910]/ObservedInList/ObservedIn/Sample/AffectedStatus",
+    "reason": "AffectedStatus \"not provided\" (yes / no / not provided / unknown) describes the sample's affection state. No v1-draft predicate; relevant to causality. Candidate: genomics:affectedStatus.",
+    "severity": "info",
+    "context": "SCV000245702"
+  },
+  {
+    "sourceField": "RCVAccession[RCV000190832]/ClassifiedCondition[0]@DB='MedGen'",
+    "reason": "MedGen CUI carries the original ClinVar trait identifier; no v1-draft genomics:medgenId predicate (could be added in v1-draft.0.2 alongside mondoId).",
+    "severity": "info",
+    "context": "RCV000190832"
+  },
+  {
+    "sourceField": "RCVAccession[RCV000190832]/Description@SubmissionCount",
+    "reason": "RCV submission count carries the per-condition aggregate count; v1-draft has no genomics:submissionCount predicate. Star rating is computed via genomics:reviewStatus instead.",
+    "severity": "info",
+    "context": "RCV000190832"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000208804]/Classifications/GermlineClassification/@NumberOfSubmissions|@NumberOfSubmitters",
+    "reason": "Aggregate counts (NumberOfSubmissions, NumberOfSubmitters) drive the ClinGen star-rating UI. No v1-draft predicate; candidate genomics:numberOfSubmitters.",
+    "severity": "info",
+    "context": "VCV000208804"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000208804]/Classifications/GermlineClassification/Citation",
+    "reason": "Aggregate-level Classifications block carries 2 curated citations (PubMed, DOI). No v1-draft predicate at the Variant level; candidate genomics:supportingEvidence (v1-draft.0.2).",
+    "severity": "info",
+    "context": "VCV000208804"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000208804]/SimpleAllele/OtherNameList",
+    "reason": "OtherNameList carries legacy / alias variant names (\"p.C61G:TGT>GGT\", \"300T>G\") that pre-date current HGVS conventions. No v1-draft alias-list predicate; could be added as genomics:variantAlias.",
+    "severity": "info",
+    "context": "VCV000208804"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000208804]/SimpleAllele/VariantType",
+    "reason": "VariantType \"single nucleotide variant\" (structural kind: SNV, indel, deletion, etc.) has no v1-draft genomics: predicate. Captured in consequenceTerm only when SO mapping is present.",
+    "severity": "info",
+    "context": "VCV000208804"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000208804]/SimpleAllele/XRefList/XRef[DB='OMIM']",
+    "reason": "OMIM allelic variant identifier (e.g., 113705.0002) has no v1-draft genomics: predicate; preserved only in source XML.",
+    "severity": "info",
+    "context": "VCV000208804"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000208804]/TraitMappingList",
+    "reason": "TraitMappingList connects each ClinicalAssertion to a normalized condition (MedGen / MONDO / OMIM). The mapping is consumed during SCV → SubmitterAssertion aggregation, but the per-mapping evidence (MappingType, MappingValue) is not preserved on the resulting graph.",
+    "severity": "info",
+    "context": "VCV000208804"
+  }
+]
