@@ -1,4 +1,54 @@
-# placeholder — authored by importer agent at task 2A.x
-# input: VCV000208804-MLH1-LynchSyndrome.input.xml
-# source vocabulary: genomics/v1-draft.0.1
-# status: not yet authored — replace with the canonical Cascade Turtle output once the corresponding importer ships
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#>.
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#>.
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#>.
+@prefix coverage: <https://ns.cascadeprotocol.org/coverage/v1#>.
+@prefix fhir: <http://hl7.org/fhir/>.
+@prefix sct: <http://snomed.info/sct/>.
+@prefix loinc: <http://loinc.org/rdf#>.
+@prefix rxnorm: <http://www.nlm.nih.gov/research/umls/rxnorm/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+
+<urn:uuid:4794aa0e-a073-50ae-9555-e5bb8c47134d> a <https://ns.cascadeprotocol.org/genomics/v1#Variant>;
+    cascade:dataProvenance cascade:ClinicalGenerated;
+    cascade:schemaVersion "1.3";
+    <https://ns.cascadeprotocol.org/genomics/v1#dataQualityTier> <https://ns.cascadeprotocol.org/genomics/v1#ClinicalGrade>;
+    <https://ns.cascadeprotocol.org/genomics/v1#dataProvenance> <https://ns.cascadeprotocol.org/genomics/v1#ClinicalSequencing>;
+    <https://ns.cascadeprotocol.org/genomics/v1#clinvarVariationId> "208804";
+    <https://ns.cascadeprotocol.org/genomics/v1#hgvsCDot> "NM_001017980.4:c.164-6T>G";
+    <https://ns.cascadeprotocol.org/genomics/v1#hgvsGDot> "NC_000023.11:g.151404910T>G";
+    <https://ns.cascadeprotocol.org/genomics/v1#geneSymbol> "VMA21";
+    <https://ns.cascadeprotocol.org/genomics/v1#hgncId> "HGNC:22082";
+    <https://ns.cascadeprotocol.org/genomics/v1#caId> "CA10575766";
+    <https://ns.cascadeprotocol.org/genomics/v1#dbsnpRsId> "rs878854356";
+    <https://ns.cascadeprotocol.org/genomics/v1#vrsObject> "{\"canonicalSPDI\":\"NC_000023.11:151404909:T:G\"}";
+    <https://ns.cascadeprotocol.org/genomics/v1#consequenceTerm> <http://purl.obolibrary.org/obo/SO_0001627>;
+    <https://ns.cascadeprotocol.org/genomics/v1#consequenceLabel> "intron variant";
+    <https://ns.cascadeprotocol.org/genomics/v1#refAllele> "T";
+    <https://ns.cascadeprotocol.org/genomics/v1#altAllele> "G";
+    <https://ns.cascadeprotocol.org/genomics/v1#genomicStartEnd> "chrX:151404910-151404910";
+    cascade:sourceFhirId "VCV000208804";
+    <https://ns.cascadeprotocol.org/genomics/v1#somaticStatus> <https://ns.cascadeprotocol.org/genomics/v1#Germline>.
+<urn:uuid:a9929bc2-1945-55fb-880c-f7ad1505ae7d> a <https://ns.cascadeprotocol.org/genomics/v1#VariantInterpretation>;
+    cascade:dataProvenance cascade:ClinicalGenerated;
+    cascade:schemaVersion "1.3";
+    <https://ns.cascadeprotocol.org/genomics/v1#variantInterpreted> <urn:uuid:4794aa0e-a073-50ae-9555-e5bb8c47134d>;
+    <https://ns.cascadeprotocol.org/genomics/v1#condition> <http://purl.obolibrary.org/obo/MONDO_0010684>;
+    <https://ns.cascadeprotocol.org/genomics/v1#mondoId> "MONDO:0010684";
+    <https://ns.cascadeprotocol.org/genomics/v1#acmgClassification> <https://ns.cascadeprotocol.org/genomics/v1#Pathogenic>;
+    <https://ns.cascadeprotocol.org/genomics/v1#reviewStatus> <https://ns.cascadeprotocol.org/genomics/v1#CriteriaNotProvided>;
+    <https://ns.cascadeprotocol.org/genomics/v1#interpretedDate> "2015-04-21"^^xsd:date;
+    <https://ns.cascadeprotocol.org/genomics/v1#clinvarRcvId> "RCV000190832";
+    cascade:sourceFhirId "VCV000208804:RCV000190832:0".
+<urn:uuid:5743fa04-f6aa-5652-8e8d-81d98f65fc87> a <https://ns.cascadeprotocol.org/genomics/v1#SubmitterAssertion>;
+    cascade:dataProvenance cascade:ClinicalGenerated;
+    cascade:schemaVersion "1.3";
+    <https://ns.cascadeprotocol.org/genomics/v1#scvAccession> "SCV000245702";
+    <https://ns.cascadeprotocol.org/genomics/v1#submitter> "OMIM";
+    <https://ns.cascadeprotocol.org/genomics/v1#submitterOrgId> "3";
+    <https://ns.cascadeprotocol.org/genomics/v1#submitterCategory> <https://ns.cascadeprotocol.org/genomics/v1#SubmitterLaboratory>;
+    <https://ns.cascadeprotocol.org/genomics/v1#assertedClassification> <https://ns.cascadeprotocol.org/genomics/v1#Pathogenic>;
+    <https://ns.cascadeprotocol.org/genomics/v1#contributesToAggregate> true;
+    cascade:sourceFhirId "VCV000208804:SCV000245702".
+<urn:uuid:a9929bc2-1945-55fb-880c-f7ad1505ae7d> <https://ns.cascadeprotocol.org/genomics/v1#aggregatedFrom> <urn:uuid:5743fa04-f6aa-5652-8e8d-81d98f65fc87>.

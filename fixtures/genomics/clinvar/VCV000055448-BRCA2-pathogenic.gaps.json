@@ -1,1 +1,350 @@
-[]
+[
+  {
+    "sourceField": "ClinicalAssertion[1103504]/@SubmissionDate|@DateCreated|@DateLastUpdated",
+    "reason": "Submission lifecycle dates have no v1-draft.0.1 predicate. Useful for chronology and audit; candidates for v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000568397"
+  },
+  {
+    "sourceField": "ClinicalAssertion[1103504]/Classification@DateLastEvaluated",
+    "reason": "Per-SCV DateLastEvaluated \"2021-03-11\" has no v1-draft.0.1 predicate. Candidate: genomics:assertionDate (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000568397"
+  },
+  {
+    "sourceField": "ClinicalAssertion[1103504]/Classification/Comment",
+    "reason": "ClinicalAssertion Comment carries human-readable notes from the submitter. No v1-draft predicate; candidate genomics:assertionComment (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000568397"
+  },
+  {
+    "sourceField": "ClinicalAssertion[1103504]/Classification/ReviewStatus",
+    "reason": "Per-SCV ReviewStatus \"criteria provided, single submitter\" has no v1-draft.0.1 predicate. Aggregate-level reviewStatus is on the parent VariantInterpretation. Candidate: genomics:assertionReviewStatus (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000568397"
+  },
+  {
+    "sourceField": "ClinicalAssertion[1103504]/ObservedInList/ObservedIn/Method",
+    "reason": "Method types [\"clinical testing\"] have no v1-draft predicate. Candidates: genomics:methodType (literature only / clinical testing / curation / research).",
+    "severity": "info",
+    "context": "SCV000568397"
+  },
+  {
+    "sourceField": "ClinicalAssertion[1103504]/ObservedInList/ObservedIn/ObservedData",
+    "reason": "ObservedData carries free-text case descriptions, segregation evidence, and population frequencies. No v1-draft predicate; would map to genomics:observationNarrative or be split into structured evidence types in v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000568397"
+  },
+  {
+    "sourceField": "ClinicalAssertion[1103504]/ObservedInList/ObservedIn/Sample/AffectedStatus",
+    "reason": "AffectedStatus \"yes\" (yes / no / not provided / unknown) describes the sample's affection state. No v1-draft predicate; relevant to causality. Candidate: genomics:affectedStatus.",
+    "severity": "info",
+    "context": "SCV000568397"
+  },
+  {
+    "sourceField": "ClinicalAssertion[11376414]/@SubmissionDate|@DateCreated|@DateLastUpdated",
+    "reason": "Submission lifecycle dates have no v1-draft.0.1 predicate. Useful for chronology and audit; candidates for v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV005915327"
+  },
+  {
+    "sourceField": "ClinicalAssertion[11376414]/Citation",
+    "reason": "Citations carry 1 PMID/DOI references for the assertion's evidence. No v1-draft predicate; candidate genomics:supportingCitation (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV005915327"
+  },
+  {
+    "sourceField": "ClinicalAssertion[11376414]/Classification@DateLastEvaluated",
+    "reason": "Per-SCV DateLastEvaluated \"2020-05-28\" has no v1-draft.0.1 predicate. Candidate: genomics:assertionDate (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV005915327"
+  },
+  {
+    "sourceField": "ClinicalAssertion[11376414]/Classification/ReviewStatus",
+    "reason": "Per-SCV ReviewStatus \"criteria provided, single submitter\" has no v1-draft.0.1 predicate. Aggregate-level reviewStatus is on the parent VariantInterpretation. Candidate: genomics:assertionReviewStatus (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV005915327"
+  },
+  {
+    "sourceField": "ClinicalAssertion[11376414]/ObservedInList/ObservedIn/Method",
+    "reason": "Method types [\"clinical testing\"] have no v1-draft predicate. Candidates: genomics:methodType (literature only / clinical testing / curation / research).",
+    "severity": "info",
+    "context": "SCV005915327"
+  },
+  {
+    "sourceField": "ClinicalAssertion[11376414]/ObservedInList/ObservedIn/ObservedData",
+    "reason": "ObservedData carries free-text case descriptions, segregation evidence, and population frequencies. No v1-draft predicate; would map to genomics:observationNarrative or be split into structured evidence types in v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV005915327"
+  },
+  {
+    "sourceField": "ClinicalAssertion[11376414]/ObservedInList/ObservedIn/Sample/AffectedStatus",
+    "reason": "AffectedStatus \"yes\" (yes / no / not provided / unknown) describes the sample's affection state. No v1-draft predicate; relevant to causality. Candidate: genomics:affectedStatus.",
+    "severity": "info",
+    "context": "SCV005915327"
+  },
+  {
+    "sourceField": "ClinicalAssertion[262277]/@SubmissionDate|@DateCreated|@DateLastUpdated",
+    "reason": "Submission lifecycle dates have no v1-draft.0.1 predicate. Useful for chronology and audit; candidates for v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000145379"
+  },
+  {
+    "sourceField": "ClinicalAssertion[262277]/Classification@DateLastEvaluated",
+    "reason": "Per-SCV DateLastEvaluated \"2013-02-20\" has no v1-draft.0.1 predicate. Candidate: genomics:assertionDate (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000145379"
+  },
+  {
+    "sourceField": "ClinicalAssertion[262277]/Classification/ReviewStatus",
+    "reason": "Per-SCV ReviewStatus \"no assertion criteria provided\" has no v1-draft.0.1 predicate. Aggregate-level reviewStatus is on the parent VariantInterpretation. Candidate: genomics:assertionReviewStatus (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000145379"
+  },
+  {
+    "sourceField": "ClinicalAssertion[262277]/ClinVarAccession@OrganizationCategory",
+    "reason": "OrganizationCategory \"locus-specific database (LSDB)\" has no SubmitterCategory mapping; v1-draft enum covers laboratory, consortium, expert-panel, research, single-clinician.",
+    "severity": "info",
+    "context": "SCV000145379"
+  },
+  {
+    "sourceField": "ClinicalAssertion[262277]/ObservedInList/ObservedIn/Method",
+    "reason": "Method types [\"clinical testing\"] have no v1-draft predicate. Candidates: genomics:methodType (literature only / clinical testing / curation / research).",
+    "severity": "info",
+    "context": "SCV000145379"
+  },
+  {
+    "sourceField": "ClinicalAssertion[262277]/ObservedInList/ObservedIn/ObservedData",
+    "reason": "ObservedData carries free-text case descriptions, segregation evidence, and population frequencies. No v1-draft predicate; would map to genomics:observationNarrative or be split into structured evidence types in v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000145379"
+  },
+  {
+    "sourceField": "ClinicalAssertion[262277]/ObservedInList/ObservedIn/Sample/AffectedStatus",
+    "reason": "AffectedStatus \"yes\" (yes / no / not provided / unknown) describes the sample's affection state. No v1-draft predicate; relevant to causality. Candidate: genomics:affectedStatus.",
+    "severity": "info",
+    "context": "SCV000145379"
+  },
+  {
+    "sourceField": "ClinicalAssertion[304632]/@SubmissionDate|@DateCreated|@DateLastUpdated",
+    "reason": "Submission lifecycle dates have no v1-draft.0.1 predicate. Useful for chronology and audit; candidates for v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000186117"
+  },
+  {
+    "sourceField": "ClinicalAssertion[304632]/Classification@DateLastEvaluated",
+    "reason": "Per-SCV DateLastEvaluated \"2013-01-08\" has no v1-draft.0.1 predicate. Candidate: genomics:assertionDate (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000186117"
+  },
+  {
+    "sourceField": "ClinicalAssertion[304632]/Classification/Comment",
+    "reason": "ClinicalAssertion Comment carries human-readable notes from the submitter. No v1-draft predicate; candidate genomics:assertionComment (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000186117"
+  },
+  {
+    "sourceField": "ClinicalAssertion[304632]/Classification/ReviewStatus",
+    "reason": "Per-SCV ReviewStatus \"criteria provided, single submitter\" has no v1-draft.0.1 predicate. Aggregate-level reviewStatus is on the parent VariantInterpretation. Candidate: genomics:assertionReviewStatus (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000186117"
+  },
+  {
+    "sourceField": "ClinicalAssertion[304632]/ObservedInList/ObservedIn/Method",
+    "reason": "Method types [\"clinical testing\"] have no v1-draft predicate. Candidates: genomics:methodType (literature only / clinical testing / curation / research).",
+    "severity": "info",
+    "context": "SCV000186117"
+  },
+  {
+    "sourceField": "ClinicalAssertion[304632]/ObservedInList/ObservedIn/ObservedData",
+    "reason": "ObservedData carries free-text case descriptions, segregation evidence, and population frequencies. No v1-draft predicate; would map to genomics:observationNarrative or be split into structured evidence types in v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000186117"
+  },
+  {
+    "sourceField": "ClinicalAssertion[304632]/ObservedInList/ObservedIn/Sample/AffectedStatus",
+    "reason": "AffectedStatus \"unknown\" (yes / no / not provided / unknown) describes the sample's affection state. No v1-draft predicate; relevant to causality. Candidate: genomics:affectedStatus.",
+    "severity": "info",
+    "context": "SCV000186117"
+  },
+  {
+    "sourceField": "ClinicalAssertion[625307]/@SubmissionDate|@DateCreated|@DateLastUpdated",
+    "reason": "Submission lifecycle dates have no v1-draft.0.1 predicate. Useful for chronology and audit; candidates for v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000326199"
+  },
+  {
+    "sourceField": "ClinicalAssertion[625307]/Classification@DateLastEvaluated",
+    "reason": "Per-SCV DateLastEvaluated \"2015-10-02\" has no v1-draft.0.1 predicate. Candidate: genomics:assertionDate (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000326199"
+  },
+  {
+    "sourceField": "ClinicalAssertion[625307]/Classification/ReviewStatus",
+    "reason": "Per-SCV ReviewStatus \"criteria provided, single submitter\" has no v1-draft.0.1 predicate. Aggregate-level reviewStatus is on the parent VariantInterpretation. Candidate: genomics:assertionReviewStatus (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV000326199"
+  },
+  {
+    "sourceField": "ClinicalAssertion[625307]/ObservedInList/ObservedIn/Method",
+    "reason": "Method types [\"clinical testing\"] have no v1-draft predicate. Candidates: genomics:methodType (literature only / clinical testing / curation / research).",
+    "severity": "info",
+    "context": "SCV000326199"
+  },
+  {
+    "sourceField": "ClinicalAssertion[625307]/ObservedInList/ObservedIn/ObservedData",
+    "reason": "ObservedData carries free-text case descriptions, segregation evidence, and population frequencies. No v1-draft predicate; would map to genomics:observationNarrative or be split into structured evidence types in v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV000326199"
+  },
+  {
+    "sourceField": "ClinicalAssertion[625307]/ObservedInList/ObservedIn/Sample/AffectedStatus",
+    "reason": "AffectedStatus \"unknown\" (yes / no / not provided / unknown) describes the sample's affection state. No v1-draft predicate; relevant to causality. Candidate: genomics:affectedStatus.",
+    "severity": "info",
+    "context": "SCV000326199"
+  },
+  {
+    "sourceField": "ClinicalAssertion[7982987]/@SubmissionDate|@DateCreated|@DateLastUpdated",
+    "reason": "Submission lifecycle dates have no v1-draft.0.1 predicate. Useful for chronology and audit; candidates for v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV004297793"
+  },
+  {
+    "sourceField": "ClinicalAssertion[7982987]/Citation",
+    "reason": "Citations carry 8 PMID/DOI references for the assertion's evidence. No v1-draft predicate; candidate genomics:supportingCitation (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV004297793"
+  },
+  {
+    "sourceField": "ClinicalAssertion[7982987]/Classification@DateLastEvaluated",
+    "reason": "Per-SCV DateLastEvaluated \"2024-03-15\" has no v1-draft.0.1 predicate. Candidate: genomics:assertionDate (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV004297793"
+  },
+  {
+    "sourceField": "ClinicalAssertion[7982987]/Classification/Comment",
+    "reason": "ClinicalAssertion Comment carries human-readable notes from the submitter. No v1-draft predicate; candidate genomics:assertionComment (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV004297793"
+  },
+  {
+    "sourceField": "ClinicalAssertion[7982987]/Classification/ReviewStatus",
+    "reason": "Per-SCV ReviewStatus \"criteria provided, single submitter\" has no v1-draft.0.1 predicate. Aggregate-level reviewStatus is on the parent VariantInterpretation. Candidate: genomics:assertionReviewStatus (v1-draft.0.2).",
+    "severity": "info",
+    "context": "SCV004297793"
+  },
+  {
+    "sourceField": "ClinicalAssertion[7982987]/ObservedInList/ObservedIn/Method",
+    "reason": "Method types [\"clinical testing\"] have no v1-draft predicate. Candidates: genomics:methodType (literature only / clinical testing / curation / research).",
+    "severity": "info",
+    "context": "SCV004297793"
+  },
+  {
+    "sourceField": "ClinicalAssertion[7982987]/ObservedInList/ObservedIn/ObservedData",
+    "reason": "ObservedData carries free-text case descriptions, segregation evidence, and population frequencies. No v1-draft predicate; would map to genomics:observationNarrative or be split into structured evidence types in v1-draft.0.2.",
+    "severity": "info",
+    "context": "SCV004297793"
+  },
+  {
+    "sourceField": "ClinicalAssertion[7982987]/ObservedInList/ObservedIn/Sample/AffectedStatus",
+    "reason": "AffectedStatus \"unknown\" (yes / no / not provided / unknown) describes the sample's affection state. No v1-draft predicate; relevant to causality. Candidate: genomics:affectedStatus.",
+    "severity": "info",
+    "context": "SCV004297793"
+  },
+  {
+    "sourceField": "RCVAccession[RCV000112550]/ClassifiedCondition[0]@DB='MedGen'",
+    "reason": "MedGen CUI carries the original ClinVar trait identifier; no v1-draft genomics:medgenId predicate (could be added in v1-draft.0.2 alongside mondoId).",
+    "severity": "info",
+    "context": "RCV000112550"
+  },
+  {
+    "sourceField": "RCVAccession[RCV000112550]/Description@SubmissionCount",
+    "reason": "RCV submission count carries the per-condition aggregate count; v1-draft has no genomics:submissionCount predicate. Star rating is computed via genomics:reviewStatus instead.",
+    "severity": "info",
+    "context": "RCV000112550"
+  },
+  {
+    "sourceField": "RCVAccession[RCV000131171]/ClassifiedCondition[0]@DB='MedGen'",
+    "reason": "MedGen CUI carries the original ClinVar trait identifier; no v1-draft genomics:medgenId predicate (could be added in v1-draft.0.2 alongside mondoId).",
+    "severity": "info",
+    "context": "RCV000131171"
+  },
+  {
+    "sourceField": "RCVAccession[RCV000131171]/Description@SubmissionCount",
+    "reason": "RCV submission count carries the per-condition aggregate count; v1-draft has no genomics:submissionCount predicate. Star rating is computed via genomics:reviewStatus instead.",
+    "severity": "info",
+    "context": "RCV000131171"
+  },
+  {
+    "sourceField": "RCVAccession[RCV000486220]/ClassifiedCondition[0]@DB='MedGen'",
+    "reason": "MedGen CUI carries the original ClinVar trait identifier; no v1-draft genomics:medgenId predicate (could be added in v1-draft.0.2 alongside mondoId).",
+    "severity": "info",
+    "context": "RCV000486220"
+  },
+  {
+    "sourceField": "RCVAccession[RCV000486220]/Description@SubmissionCount",
+    "reason": "RCV submission count carries the per-condition aggregate count; v1-draft has no genomics:submissionCount predicate. Star rating is computed via genomics:reviewStatus instead.",
+    "severity": "info",
+    "context": "RCV000486220"
+  },
+  {
+    "sourceField": "RCVAccession[RCV003529968]/ClassifiedCondition[0]@DB='MedGen'",
+    "reason": "MedGen CUI carries the original ClinVar trait identifier; no v1-draft genomics:medgenId predicate (could be added in v1-draft.0.2 alongside mondoId).",
+    "severity": "info",
+    "context": "RCV003529968"
+  },
+  {
+    "sourceField": "RCVAccession[RCV003529968]/Description@SubmissionCount",
+    "reason": "RCV submission count carries the per-condition aggregate count; v1-draft has no genomics:submissionCount predicate. Star rating is computed via genomics:reviewStatus instead.",
+    "severity": "info",
+    "context": "RCV003529968"
+  },
+  {
+    "sourceField": "RCVAccession[RCV005357413]/ClassifiedCondition[0]@DB='MedGen'",
+    "reason": "MedGen CUI carries the original ClinVar trait identifier; no v1-draft genomics:medgenId predicate (could be added in v1-draft.0.2 alongside mondoId).",
+    "severity": "info",
+    "context": "RCV005357413"
+  },
+  {
+    "sourceField": "RCVAccession[RCV005357413]/Description@SubmissionCount",
+    "reason": "RCV submission count carries the per-condition aggregate count; v1-draft has no genomics:submissionCount predicate. Star rating is computed via genomics:reviewStatus instead.",
+    "severity": "info",
+    "context": "RCV005357413"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000055448]/Classifications/GermlineClassification/@NumberOfSubmissions|@NumberOfSubmitters",
+    "reason": "Aggregate counts (NumberOfSubmissions, NumberOfSubmitters) drive the ClinGen star-rating UI. No v1-draft predicate; candidate genomics:numberOfSubmitters.",
+    "severity": "info",
+    "context": "VCV000055448"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000055448]/Classifications/GermlineClassification/Citation",
+    "reason": "Aggregate-level Classifications block carries 8 curated citations (PubMed, DOI). No v1-draft predicate at the Variant level; candidate genomics:supportingEvidence (v1-draft.0.2).",
+    "severity": "info",
+    "context": "VCV000055448"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000055448]/SimpleAllele/GeneList/Gene/Haploinsufficiency|Triplosensitivity",
+    "reason": "ClinGen dosage-sensitivity annotations on the Gene (Haploinsufficiency / Triplosensitivity) carry the dosage-pathogenicity evidence — not variant-level. No v1-draft Gene predicate; candidate genomics:haploinsufficiency / genomics:triplosensitivity at the Gene class level.",
+    "severity": "info",
+    "context": "VCV000055448"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000055448]/SimpleAllele/OtherNameList",
+    "reason": "OtherNameList carries legacy / alias variant names (\"p.C61G:TGT>GGT\", \"300T>G\") that pre-date current HGVS conventions. No v1-draft alias-list predicate; could be added as genomics:variantAlias.",
+    "severity": "info",
+    "context": "VCV000055448"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000055448]/SimpleAllele/VariantType",
+    "reason": "VariantType \"single nucleotide variant\" (structural kind: SNV, indel, deletion, etc.) has no v1-draft genomics: predicate. Captured in consequenceTerm only when SO mapping is present.",
+    "severity": "info",
+    "context": "VCV000055448"
+  },
+  {
+    "sourceField": "VariationArchive[VCV000055448]/TraitMappingList",
+    "reason": "TraitMappingList connects each ClinicalAssertion to a normalized condition (MedGen / MONDO / OMIM). The mapping is consumed during SCV → SubmitterAssertion aggregation, but the per-mapping evidence (MappingType, MappingValue) is not preserved on the resulting graph.",
+    "severity": "info",
+    "context": "VCV000055448"
+  }
+]
