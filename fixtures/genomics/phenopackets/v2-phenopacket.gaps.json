@@ -1,1 +1,138 @@
-[]
+[
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).biosamples[biosample-id]",
+    "reason": "Biosample anchored on fhir:Specimen (Layer 1) — v1-draft has no Layer-2 specimen class. Tissue / taxonomy / collection-age stored under cascade-prefixed predicates as a stop-gap.",
+    "severity": "info",
+    "context": "biosample-id"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).biosamples[biosample-id].diagnosticMarkers",
+    "reason": "Biosample field \"diagnosticMarkers\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample-id"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).biosamples[biosample-id].histologicalDiagnosis",
+    "reason": "Biosample field \"histologicalDiagnosis\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample-id"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).biosamples[biosample-id].materialSample",
+    "reason": "Biosample field \"materialSample\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample-id"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).biosamples[biosample-id].tumorGrade",
+    "reason": "Biosample field \"tumorGrade\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample-id"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).biosamples[biosample-id].tumorProgression",
+    "reason": "Biosample field \"tumorProgression\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample-id"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).diseases",
+    "reason": "1 top-level disease entry(ies) dropped — Phenopackets carry diseases both at the top level (patient-level diagnoses) and inside interpretations.diagnosis (variant-linked). The variant-linked path is mapped via VariantInterpretation; the top-level list has no v1-draft slot.",
+    "severity": "info",
+    "context": "comprehensive-phenopacket-id"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).files.files",
+    "reason": "RawFile file://data/genomes/P000001C carries no SHA-256 hash — phenopackets do not track file-content integrity. fileSizeBytes also unavailable.",
+    "severity": "info",
+    "context": "file://data/genomes/P000001C"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).interpretations[0].progressStatus",
+    "reason": "progressStatus (SOLVED) dropped — no v1-draft slot for diagnostic-progress state.",
+    "severity": "info",
+    "context": "comprehensive-phenopacket-id"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).metaData.externalReferences",
+    "reason": "1 external reference(s) (PMIDs, DOIs) dropped — no v1-draft slot for top-level provenance citations.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).metaData.submittedBy",
+    "reason": "submittedBy (PhenopacketLab) dropped — no v1-draft slot for submitter provenance.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).phenotypicFeatures[0].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(comprehensive-phenopacket-id)"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).phenotypicFeatures[0].onset.ontologyClass",
+    "reason": "Onset HPO class HP:0011461 (Fetal onset) dropped — v1-draft has no per-feature onset-term slot.",
+    "severity": "info",
+    "context": "phenopacket(comprehensive-phenopacket-id)"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).phenotypicFeatures[1].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(comprehensive-phenopacket-id)"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).phenotypicFeatures[1].excluded",
+    "reason": "Excluded HPO term HP:0031910 (Abnormal cranial nerve physiology) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(comprehensive-phenopacket-id)"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).phenotypicFeatures[2].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(comprehensive-phenopacket-id)"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).phenotypicFeatures[2].modifiers",
+    "reason": "1 modifier term(s) dropped — v1-draft has no per-feature modifiers slot.",
+    "severity": "info",
+    "context": "phenopacket(comprehensive-phenopacket-id)"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).phenotypicFeatures[3].onset.ontologyClass",
+    "reason": "Onset HPO class HP:0011463 (Childhood onset) dropped — v1-draft has no per-feature onset-term slot.",
+    "severity": "info",
+    "context": "phenopacket(comprehensive-phenopacket-id)"
+  },
+  {
+    "sourceField": "phenopacket(comprehensive-phenopacket-id).phenotypicFeatures[3].severity",
+    "reason": "Severity HP:0012825 (Mild) dropped — v1-draft has no per-feature severity slot.",
+    "severity": "info",
+    "context": "phenopacket(comprehensive-phenopacket-id)"
+  },
+  {
+    "sourceField": "subject.alternateIds",
+    "reason": "3 alternate identifiers (boy, patient, proband) dropped — no PatientProfile alternateId slot in v1-draft.",
+    "severity": "info",
+    "context": "14 year-old boy"
+  },
+  {
+    "sourceField": "subject.karyotypicSex",
+    "reason": "karyotypicSex (XY) dropped — no PatientProfile karyotypic-sex slot in v1-draft (distinct from biologicalSex).",
+    "severity": "info",
+    "context": "14 year-old boy"
+  },
+  {
+    "sourceField": "subject.taxonomy",
+    "reason": "Species taxonomy stored under cascade:speciesTaxon (string) — no first-class species slot in v1-draft.",
+    "severity": "info",
+    "context": "14 year-old boy"
+  },
+  {
+    "sourceField": "subject.timeAtLastEncounter.age.iso8601duration",
+    "reason": "Phenopacket age stored under cascade:ageAtLastEncounter as ISO 8601 duration string; no native cascade slot in v1-draft.",
+    "severity": "info",
+    "context": "14 year-old boy"
+  }
+]
