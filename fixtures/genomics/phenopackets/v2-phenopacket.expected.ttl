@@ -1,4 +1,63 @@
-# placeholder — authored by importer agent at task 2B.x
-# input: v2-phenopacket.input.json
-# source vocabulary: genomics/v1-draft.0.1
-# status: not yet authored — replace with the canonical Cascade Turtle output once the corresponding importer ships
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#>.
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#>.
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#>.
+@prefix coverage: <https://ns.cascadeprotocol.org/coverage/v1#>.
+@prefix fhir: <http://hl7.org/fhir/>.
+@prefix sct: <http://snomed.info/sct/>.
+@prefix loinc: <http://loinc.org/rdf#>.
+@prefix rxnorm: <http://www.nlm.nih.gov/research/umls/rxnorm/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+
+<urn:uuid:219f0f04-d06c-5804-9773-909fa85bd83b> a cascade:PatientProfile;
+    cascade:dataProvenance cascade:ClinicalGenerated;
+    cascade:schemaVersion "1.3";
+    cascade:profileId "14 year-old boy";
+    cascade:biologicalSex "male";
+    cascade:dateOfBirth "1970-01-02"^^xsd:date;
+    cascade:ageAtLastEncounter "P14Y";
+    cascade:speciesTaxon "NCBITaxon:9606";
+    cascade:speciesLabel "homo sapiens";
+    <https://ns.cascadeprotocol.org/genomics/v1#hpoTerm> "HP:0001558";
+    <https://ns.cascadeprotocol.org/genomics/v1#negatedHpoTerm> "HP:0031910";
+    <https://ns.cascadeprotocol.org/genomics/v1#hpoTerm> "HP:0011463";
+    <https://ns.cascadeprotocol.org/genomics/v1#phenotypeOnsetAge> 14;
+    <https://ns.cascadeprotocol.org/genomics/v1#hpoTerm> "HP:0001270".
+<urn:uuid:f583f3ec-d8b6-508d-99ad-6414b92eb4e9> a <https://ns.cascadeprotocol.org/genomics/v1#Variant>;
+    cascade:dataProvenance cascade:ClinicalGenerated;
+    cascade:schemaVersion "1.3";
+    <https://ns.cascadeprotocol.org/genomics/v1#dataQualityTier> <https://ns.cascadeprotocol.org/genomics/v1#ResearchGrade>;
+    <https://ns.cascadeprotocol.org/genomics/v1#dataProvenance> <https://ns.cascadeprotocol.org/genomics/v1#ResearchSequencing>;
+    <https://ns.cascadeprotocol.org/genomics/v1#hgvsCDot> "NM_001848.2:c.877G>A";
+    <https://ns.cascadeprotocol.org/genomics/v1#zygosity> <https://ns.cascadeprotocol.org/genomics/v1#Heterozygous>;
+    cascade:sourceFhirId "<anon>".
+<urn:uuid:ffb6a316-4376-57dd-a6be-43f54effd082> a <https://ns.cascadeprotocol.org/genomics/v1#VariantInterpretation>;
+    cascade:dataProvenance cascade:ClinicalGenerated;
+    cascade:schemaVersion "1.3";
+    <https://ns.cascadeprotocol.org/genomics/v1#variantInterpreted> <urn:uuid:f583f3ec-d8b6-508d-99ad-6414b92eb4e9>;
+    <https://ns.cascadeprotocol.org/genomics/v1#interpretationStatus> <https://ns.cascadeprotocol.org/genomics/v1#Causative>;
+    <https://ns.cascadeprotocol.org/genomics/v1#condition> <https://omim.org/entry/101600>;
+    <https://ns.cascadeprotocol.org/genomics/v1#omimId> "101600";
+    cascade:displayName "PFEIFFER SYNDROME";
+    cascade:aboutPatient <urn:uuid:219f0f04-d06c-5804-9773-909fa85bd83b>;
+    cascade:sourceFhirId "comprehensive-phenopacket-id".
+<urn:uuid:86a43dc1-38ce-5def-8edd-131feab4e2f9> a fhir:Specimen;
+    cascade:dataProvenance cascade:ClinicalGenerated;
+    cascade:schemaVersion "1.3";
+    cascade:sourceFhirId "biosample-id";
+    cascade:aboutPatient <urn:uuid:219f0f04-d06c-5804-9773-909fa85bd83b>;
+    cascade:displayName "Muscle biopsy of 14 year-old boy";
+    cascade:sampledTissueId "UBERON:0003403";
+    cascade:sampledTissueLabel "skin of forearm";
+    cascade:speciesTaxon "NCBITaxon:9606";
+    cascade:speciesLabel "homo sapiens";
+    cascade:ageAtCollection "P14Y".
+<urn:uuid:4baabffc-b697-594b-ae07-b9bb0b83d718> a <https://ns.cascadeprotocol.org/genomics/v1#RawFile>;
+    cascade:dataProvenance cascade:ClinicalGenerated;
+    cascade:schemaVersion "1.3";
+    <https://ns.cascadeprotocol.org/genomics/v1#fileLocation> "file://data/genomes/P000001C";
+    <https://ns.cascadeprotocol.org/genomics/v1#fileFormat> <https://ns.cascadeprotocol.org/genomics/v1#VCF>;
+    <https://ns.cascadeprotocol.org/genomics/v1#referenceGenome> "GRCh38.p13";
+    cascade:displayName "Whole genome sequencing VCF output".
+<urn:uuid:219f0f04-d06c-5804-9773-909fa85bd83b> cascade:hasRawFile <urn:uuid:4baabffc-b697-594b-ae07-b9bb0b83d718>.

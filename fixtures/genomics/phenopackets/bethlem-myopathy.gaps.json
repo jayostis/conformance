@@ -1,1 +1,54 @@
-[]
+[
+  {
+    "sourceField": "phenopacket(kindred 1A).files.files",
+    "reason": "RawFile file://data/file.vcf.gz carries no SHA-256 hash — phenopackets do not track file-content integrity. fileSizeBytes also unavailable.",
+    "severity": "info",
+    "context": "file://data/file.vcf.gz"
+  },
+  {
+    "sourceField": "phenopacket(kindred 1A).metaData.externalReferences",
+    "reason": "1 external reference(s) (PMIDs, DOIs) dropped — no v1-draft slot for top-level provenance citations.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(kindred 1A).metaData.submittedBy",
+    "reason": "submittedBy (HPO:probinson) dropped — no v1-draft slot for submitter provenance.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(kindred 1A).phenotypicFeatures[0].onset.ontologyClass",
+    "reason": "Onset HPO class HP:0003577 (Congenital onset) dropped — v1-draft has no per-feature onset-term slot.",
+    "severity": "info",
+    "context": "phenopacket(kindred 1A)"
+  },
+  {
+    "sourceField": "phenopacket(kindred 1A).phenotypicFeatures[1].onset.ontologyClass",
+    "reason": "Onset HPO class HP:0011463 (Childhood onset) dropped — v1-draft has no per-feature onset-term slot.",
+    "severity": "info",
+    "context": "phenopacket(kindred 1A)"
+  },
+  {
+    "sourceField": "phenopacket(kindred 1A).phenotypicFeatures[2].onset.ontologyClass",
+    "reason": "Onset HPO class HP:0003577 (Congenital onset) dropped — v1-draft has no per-feature onset-term slot.",
+    "severity": "info",
+    "context": "phenopacket(kindred 1A)"
+  },
+  {
+    "sourceField": "phenopacket(kindred 1A).phenotypicFeatures[3].onset.ontologyClass",
+    "reason": "Onset HPO class HP:0003581 (Adult onset) dropped — v1-draft has no per-feature onset-term slot.",
+    "severity": "info",
+    "context": "phenopacket(kindred 1A)"
+  },
+  {
+    "sourceField": "phenopacket(kindred 1A).phenotypicFeatures[3].severity",
+    "reason": "Severity HP:0012828 (Severe) dropped — v1-draft has no per-feature severity slot.",
+    "severity": "info",
+    "context": "phenopacket(kindred 1A)"
+  },
+  {
+    "sourceField": "subject.timeAtLastEncounter.age.iso8601duration",
+    "reason": "Phenopacket age stored under cascade:ageAtLastEncounter as ISO 8601 duration string; no native cascade slot in v1-draft.",
+    "severity": "info",
+    "context": "kindred 1A"
+  }
+]

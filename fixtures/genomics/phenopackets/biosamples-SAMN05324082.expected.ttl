@@ -1,4 +1,4 @@
-# placeholder — authored by importer agent at task 2B.x
-# input: biosamples-SAMN05324082.input.json
-# source vocabulary: genomics/v1-draft.0.1
-# status: not yet authored — replace with the canonical Cascade Turtle output once the corresponding importer ships
+# This fixture is an NCBI BioSample SRA-style record (no phenopacket markers).
+# detectPhenopacket() correctly returns false. The phenopacket conformance test
+# asserts detect()===false for this file rather than a byte-equal turtle round-trip.
+# Source corpus included it for completeness; not a phenopacket per GA4GH spec.

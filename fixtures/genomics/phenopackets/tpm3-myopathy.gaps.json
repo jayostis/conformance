@@ -1,1 +1,210 @@
-[]
+[
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).diseases",
+    "reason": "1 top-level disease entry(ies) dropped — Phenopackets carry diseases both at the top level (patient-level diagnoses) and inside interpretations.diagnosis (variant-linked). The variant-linked path is mapped via VariantInterpretation; the top-level list has no v1-draft slot.",
+    "severity": "info",
+    "context": "PMID:24239060-Schreckenbach-2014-TPM3-II.2"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).genes",
+    "reason": "1 v1-style top-level gene(s) dropped — Phenopackets v1.0 carried genes/variants directly; v2 moved them under interpretations.diagnosis.genomicInterpretations[]. The v1 corpus path has no Variant emission yet.",
+    "severity": "warning",
+    "context": "PMID:24239060-Schreckenbach-2014-TPM3-II.2"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).metaData.externalReferences",
+    "reason": "1 external reference(s) (PMIDs, DOIs) dropped — no v1-draft slot for top-level provenance citations.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).metaData.submittedBy",
+    "reason": "submittedBy (HPO:probinson) dropped — no v1-draft slot for submitter provenance.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[0].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[1].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[1].excluded",
+    "reason": "Excluded HPO term HP:0001260 (Dysarthria) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[10].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[10].excluded",
+    "reason": "Excluded HPO term HP:0000651 (Diplopia) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[11].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[12].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[12].excluded",
+    "reason": "Excluded HPO term HP:0002495 (Impaired vibratory sensation) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[13].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[13].excluded",
+    "reason": "Excluded HPO term HP:0010830 (Impaired tactile sensation) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[14].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[15].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[16].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[16].excluded",
+    "reason": "Excluded HPO term HP:0003326 (Myalgia) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[17].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[17].excluded",
+    "reason": "Excluded HPO term HP:0040129 (Abnormal nerve conduction velocity) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[18].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[19].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[19].excluded",
+    "reason": "Excluded HPO term HP:0000508 (Ptosis) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[2].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[2].excluded",
+    "reason": "Excluded HPO term HP:0003391 (Gowers sign) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[3].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[4].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[5].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[6].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[6].excluded",
+    "reason": "Excluded HPO term HP:0002913 (Myoglobinuria) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[7].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[8].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).phenotypicFeatures[9].evidence",
+    "reason": "1 evidence reference(s) dropped — v1-draft has no per-feature evidence slot.",
+    "severity": "info",
+    "context": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2)"
+  },
+  {
+    "sourceField": "phenopacket(PMID:24239060-Schreckenbach-2014-TPM3-II.2).variants",
+    "reason": "1 v1-style top-level variant(s) dropped — Phenopackets v1.0 used 'variants[]' with vcfAllele/zygosity, replaced in v2 by variationDescriptor inside interpretations. v1-shaped variants are not currently emitted as genomics:Variant records.",
+    "severity": "warning",
+    "context": "PMID:24239060-Schreckenbach-2014-TPM3-II.2"
+  },
+  {
+    "sourceField": "subject.taxonomy",
+    "reason": "Species taxonomy stored under cascade:speciesTaxon (string) — no first-class species slot in v1-draft.",
+    "severity": "info",
+    "context": "II.2"
+  }
+]

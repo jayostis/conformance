@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "sourceField": "phenopacket(id-C).phenotypicFeatures[1].excluded",
+    "reason": "Excluded HPO term HP:0002616 (Aortic root aneurysm) stored under genomics:negatedHpoTerm — v1-draft has no first-class negation slot.",
+    "severity": "info",
+    "context": "phenopacket(id-C)"
+  },
+  {
+    "sourceField": "subject",
+    "reason": "Phenopacket has no subject — phenotypic features attach to a synthesized anonymous patient IRI.",
+    "severity": "warning",
+    "context": "id-C"
+  }
+]

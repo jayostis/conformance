@@ -1,1 +1,81 @@
-[]
+[
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).diseases",
+    "reason": "3 top-level disease entry(ies) dropped — Phenopackets carry diseases both at the top level (patient-level diagnoses) and inside interpretations.diagnosis (variant-linked). The variant-linked path is mapped via VariantInterpretation; the top-level list has no v1-draft slot.",
+    "severity": "info",
+    "context": "arbitrary.phenopacket.id"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).measurements",
+    "reason": "2 top-level measurement(s) dropped — lab values and vital-sign measurements have no genomics-importer routing; would need a separate observation-converter pass.",
+    "severity": "info",
+    "context": "arbitrary.phenopacket.id"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[0]",
+    "reason": "Medical action of kind \"procedure\" stringified into checkup:recommendedActions — v1-draft has no structured medical-action vocabulary (procedure / treatment / radiation / regimen). Treatment dosing, agents, intent, target, and adverse events all flatten into free text.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[1]",
+    "reason": "Medical action of kind \"treatment\" stringified into checkup:recommendedActions — v1-draft has no structured medical-action vocabulary (procedure / treatment / radiation / regimen). Treatment dosing, agents, intent, target, and adverse events all flatten into free text.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[1].treatment.doseIntervals",
+    "reason": "2 dose-interval entries flattened to text — no v1-draft slot for structured dosing.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[2]",
+    "reason": "Medical action of kind \"treatment\" stringified into checkup:recommendedActions — v1-draft has no structured medical-action vocabulary (procedure / treatment / radiation / regimen). Treatment dosing, agents, intent, target, and adverse events all flatten into free text.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[2].treatment.doseIntervals",
+    "reason": "1 dose-interval entries flattened to text — no v1-draft slot for structured dosing.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[3]",
+    "reason": "Medical action of kind \"procedure\" stringified into checkup:recommendedActions — v1-draft has no structured medical-action vocabulary (procedure / treatment / radiation / regimen). Treatment dosing, agents, intent, target, and adverse events all flatten into free text.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[4]",
+    "reason": "Medical action of kind \"treatment\" stringified into checkup:recommendedActions — v1-draft has no structured medical-action vocabulary (procedure / treatment / radiation / regimen). Treatment dosing, agents, intent, target, and adverse events all flatten into free text.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[4].treatment.doseIntervals",
+    "reason": "1 dose-interval entries flattened to text — no v1-draft slot for structured dosing.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[5]",
+    "reason": "Medical action of kind \"treatment\" stringified into checkup:recommendedActions — v1-draft has no structured medical-action vocabulary (procedure / treatment / radiation / regimen). Treatment dosing, agents, intent, target, and adverse events all flatten into free text.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).medicalActions[5].treatment.doseIntervals",
+    "reason": "1 dose-interval entries flattened to text — no v1-draft slot for structured dosing.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.phenopacket.id).metaData.externalReferences",
+    "reason": "1 external reference(s) (PMIDs, DOIs) dropped — no v1-draft slot for top-level provenance citations.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "subject.timeAtLastEncounter.age.iso8601duration",
+    "reason": "Phenopacket age stored under cascade:ageAtLastEncounter as ISO 8601 duration string; no native cascade slot in v1-draft.",
+    "severity": "info",
+    "context": "P123542"
+  },
+  {
+    "sourceField": "subject.vitalStatus",
+    "reason": "Phenopacket vitalStatus (status, timeOfDeath, causeOfDeath) dropped — no v1-draft PatientProfile death slot.",
+    "severity": "info",
+    "context": "P123542"
+  }
+]

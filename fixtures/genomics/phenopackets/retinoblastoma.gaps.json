@@ -1,1 +1,207 @@
-[]
+[
+  {
+    "sourceField": "phenopacket(arbitrary.id).biosamples[biosample.1]",
+    "reason": "Biosample anchored on fhir:Specimen (Layer 1) — v1-draft has no Layer-2 specimen class. Tissue / taxonomy / collection-age stored under cascade-prefixed predicates as a stop-gap.",
+    "severity": "info",
+    "context": "biosample.1"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).biosamples[biosample.1].files",
+    "reason": "RawFile file://data/fileSomaticWgs.vcf.gz carries no SHA-256 hash — phenopackets do not track file-content integrity. fileSizeBytes also unavailable.",
+    "severity": "info",
+    "context": "file://data/fileSomaticWgs.vcf.gz"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).biosamples[biosample.1].measurements",
+    "reason": "Biosample field \"measurements\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample.1"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).biosamples[biosample.1].pathologicalTnmFinding",
+    "reason": "Biosample field \"pathologicalTnmFinding\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample.1"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).biosamples[biosample.1].phenotypicFeatures",
+    "reason": "Biosample field \"phenotypicFeatures\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample.1"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).biosamples[biosample.1].procedure",
+    "reason": "Biosample field \"procedure\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample.1"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).biosamples[biosample.1].tumorProgression",
+    "reason": "Biosample field \"tumorProgression\" dropped — v1-draft has no Specimen-level slot for tumor / histopathology / measurement detail.",
+    "severity": "info",
+    "context": "biosample.1"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).diseases",
+    "reason": "1 top-level disease entry(ies) dropped — Phenopackets carry diseases both at the top level (patient-level diagnoses) and inside interpretations.diagnosis (variant-linked). The variant-linked path is mapped via VariantInterpretation; the top-level list has no v1-draft slot.",
+    "severity": "info",
+    "context": "arbitrary.id"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).files.files",
+    "reason": "RawFile file://data/germlineWgs.vcf.gz carries no SHA-256 hash — phenopackets do not track file-content integrity. fileSizeBytes also unavailable.",
+    "severity": "info",
+    "context": "file://data/germlineWgs.vcf.gz"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).interpretations[0].genomicInterpretations[0].variantInterpretation.therapeuticActionability",
+    "reason": "therapeuticActionability (ACTIONABLE) dropped — v1-draft has no slot.",
+    "severity": "info",
+    "context": "interpretation.id"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).interpretations[0].genomicInterpretations[0].variationDescriptor.moleculeContext",
+    "reason": "moleculeContext (genomic) dropped — v1-draft has no slot for this distinction (genomic vs transcript vs protein).",
+    "severity": "info",
+    "context": "cnv-1"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).interpretations[0].genomicInterpretations[1].variantInterpretation.therapeuticActionability",
+    "reason": "therapeuticActionability (ACTIONABLE) dropped — v1-draft has no slot.",
+    "severity": "info",
+    "context": "interpretation.id"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).interpretations[0].genomicInterpretations[1].variationDescriptor.moleculeContext",
+    "reason": "moleculeContext (genomic) dropped — v1-draft has no slot for this distinction (genomic vs transcript vs protein).",
+    "severity": "info",
+    "context": "rs121913300"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).interpretations[0].progressStatus",
+    "reason": "progressStatus (SOLVED) dropped — no v1-draft slot for diagnostic-progress state.",
+    "severity": "info",
+    "context": "interpretation.id"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).measurements",
+    "reason": "2 top-level measurement(s) dropped — lab values and vital-sign measurements have no genomics-importer routing; would need a separate observation-converter pass.",
+    "severity": "info",
+    "context": "arbitrary.id"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[0]",
+    "reason": "Medical action of kind \"treatment\" stringified into checkup:recommendedActions — v1-draft has no structured medical-action vocabulary (procedure / treatment / radiation / regimen). Treatment dosing, agents, intent, target, and adverse events all flatten into free text.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[0].adverseEvents",
+    "reason": "1 adverse-event term(s) dropped — no v1-draft slot.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[0].treatment.doseIntervals",
+    "reason": "1 dose-interval entries flattened to text — no v1-draft slot for structured dosing.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[0].treatmentIntent",
+    "reason": "treatmentIntent (Cure) dropped — no v1-draft slot.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[0].treatmentTarget",
+    "reason": "treatmentTarget (Retinoblastoma) dropped — no v1-draft slot.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[1]",
+    "reason": "Medical action of kind \"therapeuticRegimen\" stringified into checkup:recommendedActions — v1-draft has no structured medical-action vocabulary (procedure / treatment / radiation / regimen). Treatment dosing, agents, intent, target, and adverse events all flatten into free text.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[1].treatmentIntent",
+    "reason": "treatmentIntent (Cure) dropped — no v1-draft slot.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[1].treatmentTarget",
+    "reason": "treatmentTarget (Retinoblastoma) dropped — no v1-draft slot.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[2]",
+    "reason": "Medical action of kind \"procedure\" stringified into checkup:recommendedActions — v1-draft has no structured medical-action vocabulary (procedure / treatment / radiation / regimen). Treatment dosing, agents, intent, target, and adverse events all flatten into free text.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[2].treatmentIntent",
+    "reason": "treatmentIntent (Cure) dropped — no v1-draft slot.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).medicalActions[2].treatmentTarget",
+    "reason": "treatmentTarget (Retinoblastoma) dropped — no v1-draft slot.",
+    "severity": "info"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).phenotypicFeatures[0].modifiers",
+    "reason": "1 modifier term(s) dropped — v1-draft has no per-feature modifiers slot.",
+    "severity": "info",
+    "context": "phenopacket(arbitrary.id)"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).phenotypicFeatures[0].onset.age.iso8601duration",
+    "reason": "Sub-year onset duration P3M dropped — v1-draft phenotypeOnsetAge is xsd:integer (years).",
+    "severity": "info",
+    "context": "phenopacket(arbitrary.id)"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).phenotypicFeatures[1].modifiers",
+    "reason": "1 modifier term(s) dropped — v1-draft has no per-feature modifiers slot.",
+    "severity": "info",
+    "context": "phenopacket(arbitrary.id)"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).phenotypicFeatures[1].onset.age.iso8601duration",
+    "reason": "Sub-year onset duration P4M dropped — v1-draft phenotypeOnsetAge is xsd:integer (years).",
+    "severity": "info",
+    "context": "phenopacket(arbitrary.id)"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).phenotypicFeatures[2].modifiers",
+    "reason": "1 modifier term(s) dropped — v1-draft has no per-feature modifiers slot.",
+    "severity": "info",
+    "context": "phenopacket(arbitrary.id)"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).phenotypicFeatures[2].onset.age.iso8601duration",
+    "reason": "Sub-year onset duration P5M15D dropped — v1-draft phenotypeOnsetAge is xsd:integer (years).",
+    "severity": "info",
+    "context": "phenopacket(arbitrary.id)"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).phenotypicFeatures[3].modifiers",
+    "reason": "1 modifier term(s) dropped — v1-draft has no per-feature modifiers slot.",
+    "severity": "info",
+    "context": "phenopacket(arbitrary.id)"
+  },
+  {
+    "sourceField": "phenopacket(arbitrary.id).phenotypicFeatures[3].onset.age.iso8601duration",
+    "reason": "Sub-year onset duration P6M dropped — v1-draft phenotypeOnsetAge is xsd:integer (years).",
+    "severity": "info",
+    "context": "phenopacket(arbitrary.id)"
+  },
+  {
+    "sourceField": "subject.karyotypicSex",
+    "reason": "karyotypicSex (XX) dropped — no PatientProfile karyotypic-sex slot in v1-draft (distinct from biologicalSex).",
+    "severity": "info",
+    "context": "proband A"
+  },
+  {
+    "sourceField": "subject.timeAtLastEncounter.age.iso8601duration",
+    "reason": "Phenopacket age stored under cascade:ageAtLastEncounter as ISO 8601 duration string; no native cascade slot in v1-draft.",
+    "severity": "info",
+    "context": "proband A"
+  }
+]
