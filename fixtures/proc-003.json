@@ -1,7 +1,7 @@
 {
   "id": "proc-003",
   "description": "Negative: Procedure missing required procedureName field",
-  "dataType": "ProcedureRecord",
+  "dataType": "Procedure",
   "vocabulary": "health",
   "input": {
     "id": "urn:uuid:neg0-proc-aaaa-bbbb-ccccddddeeee",

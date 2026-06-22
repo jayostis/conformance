@@ -1,7 +1,7 @@
 {
   "id": "proc-001",
   "description": "Happy path: Completed cardiac catheterization with SNOMED code from EHR import",
-  "dataType": "ProcedureRecord",
+  "dataType": "Procedure",
   "vocabulary": "health",
   "input": {
     "id": "urn:uuid:proc-0001-aaaa-bbbb-ccccddddeeee",

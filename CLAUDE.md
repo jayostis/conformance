@@ -52,7 +52,7 @@ See `VOCAB_VERSIONS` comments. Missing fixture categories:
 - `benefit-statement` (Coverage v1.3)
 - `denial-notice` (Coverage v1.3)
 - FHIR passthrough properties on existing records (Core v2.8)
-- Pre-existing: `proc-001/002/003` use `dataType: "ProcedureRecord"` which is not in the fixture-schema enum (`Procedure`); these three fail `schema/fixture-schema.json` validation and predate this change.
+- (Resolved 2026-06-22) `proc-001/002/003` previously used `dataType: "ProcedureRecord"` (not in the fixture-schema enum) and failed `schema/fixture-schema.json` validation; corrected to `dataType: "Procedure"` (input `type` stays `ProcedureRecord`, matching the cond/lab convention). All fixtures now validate against the schema.
 
 ## Fixture Format
 
