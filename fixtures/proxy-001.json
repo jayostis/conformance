@@ -1,0 +1,21 @@
+{
+  "id": "proxy-001",
+  "description": "Happy path: cascade:ProxyAgent (a parent operating a minor's Pod) with actsForPatient, proxyRelationship, proxyScope, and proxyGrantedAt (core v3.3)",
+  "dataType": "ProxyAgent",
+  "vocabulary": "core",
+  "input": {
+    "id": "urn:uuid:prox-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "ProxyAgent",
+    "actsForPatient": "https://pod.example.org/patients/alex-rivera#me",
+    "proxyRelationship": "parent",
+    "proxyScope": "full",
+    "proxyGrantedAt": "2026-01-15T09:30:00Z"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:prox-0001-aaaa-bbbb-ccccddddeeee> a cascade:ProxyAgent ;\n    cascade:actsForPatient <https://pod.example.org/patients/alex-rivera#me> ;\n    cascade:proxyRelationship \"parent\" ;\n    cascade:proxyScope \"full\" ;\n    cascade:proxyGrantedAt \"2026-01-15T09:30:00Z\"^^xsd:dateTime .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "caregiver", "proxy"],
+  "notes": "core v3.3 added cascade:ProxyAgent to close the caregiver-proxy gap. ProxyAgentShape requires cascade:actsForPatient (sh:minCount 1), cascade:proxyRelationship (xsd:string, sh:minCount 1), and cascade:proxyGrantedAt (xsd:dateTime, sh:minCount 1). proxyScope is optional."
+}

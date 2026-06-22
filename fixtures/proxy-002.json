@@ -1,0 +1,21 @@
+{
+  "id": "proxy-002",
+  "description": "Negative: cascade:ProxyAgent missing the required cascade:proxyRelationship property (core v3.3)",
+  "dataType": "ProxyAgent",
+  "vocabulary": "core",
+  "input": {
+    "id": "urn:uuid:prox-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "ProxyAgent",
+    "actsForPatient": "https://pod.example.org/patients/alex-rivera#me",
+    "proxyScope": "read-only",
+    "proxyGrantedAt": "2026-01-15T09:30:00Z"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:prox-0002-aaaa-bbbb-ccccddddeeee> a cascade:ProxyAgent ;\n    cascade:actsForPatient <https://pod.example.org/patients/alex-rivera#me> ;\n    cascade:proxyScope \"read-only\" ;\n    cascade:proxyGrantedAt \"2026-01-15T09:30:00Z\"^^xsd:dateTime .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "required-field", "proxy", "caregiver"],
+  "shaclConstraintViolated": "ProxyAgentShape requires cascade:proxyRelationship (sh:minCount 1, sh:datatype xsd:string). A ProxyAgent that does not declare its relationship to the patient (e.g. parent, guardian, caregiver) violates the minCount constraint and is rejected.",
+  "notes": "Derived from cascade:ProxyAgentShape (core v3.3), which mandates cascade:actsForPatient, cascade:proxyRelationship, and cascade:proxyGrantedAt. This fixture supplies actsForPatient and proxyGrantedAt but omits proxyRelationship."
+}

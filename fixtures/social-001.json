@@ -1,0 +1,23 @@
+{
+  "id": "social-001",
+  "description": "Happy path: Consumer-reported health:SocialHistoryRecord with all four v2.4 properties (smoking, alcohol, exercise, occupational exposure)",
+  "dataType": "SocialHistoryRecord",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:soc0-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "SocialHistoryRecord",
+    "smokingStatus": "former-smoker",
+    "alcoholUse": "2-3 drinks per week",
+    "exerciseFrequency": "3 times per week",
+    "occupationalExposure": "none reported",
+    "dataProvenance": "SelfReported",
+    "schemaVersion": "2.4"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:soc0-0001-aaaa-bbbb-ccccddddeeee> a health:SocialHistoryRecord ;\n    health:smokingStatus \"former-smoker\" ;\n    health:alcoholUse \"2-3 drinks per week\" ;\n    health:exerciseFrequency \"3 times per week\" ;\n    health:occupationalExposure \"none reported\" ;\n    cascade:dataProvenance cascade:SelfReported ;\n    cascade:schemaVersion \"2.4\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "full-fields", "social-history"],
+  "notes": "health v2.4 added health:SocialHistoryRecord plus health:smokingStatus, health:alcoholUse, health:exerciseFrequency, health:occupationalExposure. This is the consumer-reported variant (distinct from clinical:SocialHistoryRecord, the EHR-extracted one). health:SocialHistoryRecordShape has no required fields and does not enumerate dataProvenance."
+}

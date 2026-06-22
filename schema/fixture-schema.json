@@ -16,7 +16,7 @@
     },
     "dataType": {
       "type": "string",
-      "enum": ["Medication", "Condition", "Allergy", "LabResult", "VitalSign", "PatientProfile", "Immunization", "Coverage", "PodStructure", "Procedure", "FamilyHistory", "ActivitySnapshot", "SleepSnapshot", "Encounter", "MedicationAdministration", "ImplantedDevice", "ImagingStudy", "ClaimRecord", "BenefitStatement", "DenialNotice", "AppealRecord"],
+      "enum": ["Medication", "Condition", "Allergy", "LabResult", "VitalSign", "PatientProfile", "Immunization", "Coverage", "PodStructure", "Procedure", "FamilyHistory", "ActivitySnapshot", "SleepSnapshot", "Encounter", "MedicationAdministration", "ImplantedDevice", "ImagingStudy", "ClaimRecord", "BenefitStatement", "DenialNotice", "AppealRecord", "SocialHistoryRecord", "ProxyAgent"],
       "description": "The Cascade Protocol data type under test"
     },
     "vocabulary": {
@@ -71,7 +71,12 @@
           "manifest",
           "container",
           "denial",
-          "coverage"
+          "coverage",
+          "social-history",
+          "proxy",
+          "caregiver",
+          "ai-extracted",
+          "ai-asserted"
         ]
       },
       "description": "Tags classifying the fixture for filtering and coverage reporting"

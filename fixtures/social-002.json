@@ -1,0 +1,20 @@
+{
+  "id": "social-002",
+  "description": "Provenance: record carrying cascade:AIAsserted, content surfaced by a general-purpose AI assistant and not grounded in clinical sources (core v3.3)",
+  "dataType": "SocialHistoryRecord",
+  "vocabulary": "cascade",
+  "input": {
+    "id": "urn:uuid:soc0-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "SocialHistoryRecord",
+    "exerciseFrequency": "patient mentioned daily walks during ChatGPT conversation",
+    "dataProvenance": "AIAsserted",
+    "schemaVersion": "2.4"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:soc0-0002-aaaa-bbbb-ccccddddeeee> a health:SocialHistoryRecord ;\n    health:exerciseFrequency \"patient mentioned daily walks during ChatGPT conversation\" ;\n    cascade:dataProvenance cascade:AIAsserted ;\n    cascade:schemaVersion \"2.4\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["provenance", "ai-asserted"],
+  "notes": "core v3.3 added cascade:AIAsserted (subClassOf cascade:ConsumerGenerated) for ungrounded general-AI content that must be evidence-checked before any reliance. It must never be confused with cascade:AIExtracted (clinically extracted) or cascade:EHRVerified. Carried here by a health:SocialHistoryRecord, whose shape does not constrain dataProvenance with an sh:in enum, so the AIAsserted leaf validates. Clinical record shapes (e.g. MedicationShape) deliberately exclude AIAsserted from their enum."
+}

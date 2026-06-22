@@ -27,7 +27,11 @@ The suite covers all Phase 1 data types:
 | Claim Record | `claim-` | 2 | Insurance claim records |
 | Benefit Statement | `benefit-` | 1 | Explanation of benefits |
 | Denial Notice | `denial-` | 1 | Coverage denial notices |
-| **Total** | | **66** | |
+| Social History | `social-` | 2 | Consumer-reported social/behavioral history (health v2.4) |
+| Proxy Agent | `proxy-` | 2 | Caregiver-proxy actor operating a patient's Pod (core v3.3) |
+| **Total** | | **70** | |
+
+> Note: counts above reflect the core Phase 1 prefixes plus the v3.3/v2.4/v1.9 additions. `med-` is now 11 (added `med-011`, an AIExtracted medication valid as of clinical v1.9).
 
 ## Fixture Format
 
@@ -66,7 +70,7 @@ Each fixture is a JSON file conforming to `schema/fixture-schema.json`. Here is 
 |---|---|---|
 | `id` | Yes | Unique fixture ID in format `{prefix}-{number}` (e.g., `med-001`) |
 | `description` | Yes | Human-readable description of what this fixture tests |
-| `dataType` | Yes | One of: `Medication`, `Condition`, `Allergy`, `LabResult`, `VitalSign`, `PatientProfile`, `Immunization`, `Coverage`, `PodStructure` |
+| `dataType` | Yes | One of: `Medication`, `Condition`, `Allergy`, `LabResult`, `VitalSign`, `PatientProfile`, `Immunization`, `Coverage`, `PodStructure`, `SocialHistoryRecord`, `ProxyAgent`, ... (full enum in `schema/fixture-schema.json`) |
 | `vocabulary` | Yes | Primary namespace: `health`, `clinical`, `core`, `coverage`, `cascade` |
 | `input` | Yes | Plain JSON object representing the data an SDK would receive before serialization |
 | `expectedOutput.turtle` | Yes | Expected RDF/Turtle output with namespace prefix declarations |
@@ -324,7 +328,7 @@ The fixture suite covers these test categories per data type:
 
 | Data Type | Happy Path | Full Fields | Multi-Code | Provenance | Negative | Total |
 |---|---|---|---|---|---|---|
-| Medication | 2 | 1 | 2 | 2 | 3 | 10 |
+| Medication | 2 | 1 | 2 | 3 | 3 | 11 |
 | Condition | 2 | 1 | 1 | 1 | 2 | 7 |
 | Allergy | 2 | 1 | -- | 1 | 2 | 6 |
 | Lab Result | 2 | 1 | 1 | 1 | 2 | 7 |
@@ -340,7 +344,9 @@ The fixture suite covers these test categories per data type:
 | Claim Record | 1 | 1 | -- | -- | -- | 2 |
 | Benefit Statement | 1 | -- | -- | -- | -- | 1 |
 | Denial Notice | 1 | -- | -- | -- | -- | 1 |
-| **Total** | **23** | **12** | **5** | **8** | **18** | **66** |
+| Social History | 1 | 1 | -- | 1 | -- | 2 |
+| Proxy Agent | 1 | -- | -- | -- | 1 | 2 |
+| **Total** | **25** | **12** | **5** | **10** | **19** | **70** |
 
 ### Tag Descriptions
 

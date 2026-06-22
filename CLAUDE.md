@@ -34,7 +34,14 @@ spec tag → conformance fixtures added → SDK releases
 
 Check `VOCAB_VERSIONS` at the repo root. Compare against `spec/VOCAB_VERSIONS` to see what's missing.
 
-### Known gaps (as of 2026-03-20)
+### Vocabulary coverage (as of 2026-06-22)
+
+Covered up to core=3.3, health=2.4, clinical=1.9 (matches `spec/VOCAB_VERSIONS`). Recent additions:
+- core v3.3: `cascade:AIAsserted` provenance leaf (fixture `social-002`); `cascade:ProxyAgent` caregiver-proxy with ProxyAgentShape required-field coverage (fixtures `proxy-001` valid, `proxy-002` missing `proxyRelationship`).
+- health v2.4: `health:SocialHistoryRecord` + `smokingStatus`/`alcoholUse`/`exerciseFrequency`/`occupationalExposure` (fixture `social-001`).
+- clinical v1.9: `cascade:AIExtracted` now valid in every clinical record's `dataProvenance` enum (fixture `med-011`, an AIExtracted Medication).
+
+### Known gaps
 
 See `VOCAB_VERSIONS` comments. Missing fixture categories:
 - `encounter` (Clinical v1.7)
@@ -45,6 +52,7 @@ See `VOCAB_VERSIONS` comments. Missing fixture categories:
 - `benefit-statement` (Coverage v1.3)
 - `denial-notice` (Coverage v1.3)
 - FHIR passthrough properties on existing records (Core v2.8)
+- Pre-existing: `proc-001/002/003` use `dataType: "ProcedureRecord"` which is not in the fixture-schema enum (`Procedure`); these three fail `schema/fixture-schema.json` validation and predate this change.
 
 ## Fixture Format
 

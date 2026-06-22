@@ -1,0 +1,33 @@
+{
+  "id": "med-011",
+  "description": "Provenance: Medication extracted from unstructured narrative by a local LLM, marked cascade:AIExtracted (valid as of clinical v1.9)",
+  "dataType": "Medication",
+  "vocabulary": "clinical",
+  "input": {
+    "id": "urn:uuid:med0-0011-aaaa-bbbb-ccccddddeeee",
+    "type": "MedicationRecord",
+    "medicationName": "Metformin",
+    "isActive": true,
+    "dataProvenance": "AIExtracted",
+    "schemaVersion": "1.9",
+    "dose": "500 mg",
+    "frequency": "twice daily",
+    "route": "oral",
+    "generatedBy": "urn:uuid:extract-0001-aaaa-bbbb-ccccddddeeee",
+    "extractionActivity": {
+      "id": "urn:uuid:extract-0001-aaaa-bbbb-ccccddddeeee",
+      "type": "AIExtractionActivity",
+      "extractionConfidence": 0.94,
+      "extractionModel": "qwen3.5-4b-q4_k_m",
+      "sourceNarrativeSection": "medications",
+      "requiresUserReview": false
+    }
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix prov: <http://www.w3.org/ns/prov#> .\n\n<urn:uuid:med0-0011-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;\n    clinical:drugName \"Metformin\" ;\n    clinical:status \"active\" ;\n    clinical:dosage \"500 mg\" ;\n    clinical:frequency \"twice daily\" ;\n    clinical:route \"oral\" ;\n    cascade:dataProvenance cascade:AIExtracted ;\n    cascade:schemaVersion \"1.9\" ;\n    prov:wasGeneratedBy <urn:uuid:extract-0001-aaaa-bbbb-ccccddddeeee> .\n\n<urn:uuid:extract-0001-aaaa-bbbb-ccccddddeeee> a cascade:AIExtractionActivity ;\n    cascade:extractionConfidence \"0.94\"^^xsd:decimal ;\n    cascade:extractionModel \"qwen3.5-4b-q4_k_m\" ;\n    cascade:sourceNarrativeSection \"medications\" ;\n    cascade:requiresUserReview \"false\"^^xsd:boolean .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["provenance", "clinical", "ai-extracted"],
+  "notes": "clinical v1.9 added cascade:AIExtracted to the dataProvenance sh:in enum on MedicationShape (and every clinical record shape). Before v1.9 an AIExtracted medication failed SHACL validation. Mirrors fixtures/core/ai-extracted-medication.ttl; the record links to its cascade:AIExtractionActivity via prov:wasGeneratedBy."
+}
