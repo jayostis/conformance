@@ -40,6 +40,18 @@
       "label": "allergy-penicillin",
       "identityString": "AllergyIntolerance::allergenCode=7980|allergenName=Penicillin|patient=urn:uuid:patient-smith",
       "expectedUri": "urn:uuid:ab6796b2-3f95-5cbb-9bcb-f4270cdfec62"
+    },
+    {
+      "label": "medication-lisinopril-rxnorm",
+      "comment": "Medication identity: RxNorm + normalized name + startDate + patient (dose is intentionally excluded; a dose change is a conflict on the same identity, not a new record).",
+      "identityString": "MedicationRequest::normalizedName=lisinopril|patient=urn:uuid:patient-smith|rxNormCode=29046|startDate=2020-04-01",
+      "expectedUri": "urn:uuid:f181c773-4c66-5cd3-96d7-5ff69c472fea"
+    },
+    {
+      "label": "medication-metformin-no-rxnorm",
+      "comment": "Medication identity without an RxNorm code: normalized name + startDate + patient.",
+      "identityString": "MedicationRequest::normalizedName=metformin|patient=urn:uuid:patient-smith|startDate=2019-06-01",
+      "expectedUri": "urn:uuid:d4db9260-e8d8-59ab-aea9-ee09974cd9fd"
     }
   ]
 }
