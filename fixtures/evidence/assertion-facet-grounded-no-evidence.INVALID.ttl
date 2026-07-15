@@ -1,0 +1,18 @@
+# GROUNDING-GATE NEGATIVE FIXTURE: this file MUST fail `cascade validate`.
+#
+# Facet form of the North Star violation: a grounded result (settled Settled,
+# direction Supports, basis Record) with ZERO evidence links violates the
+# generalized grounding invariant (evidence:AssertionShape, SHACL Core sh:or).
+# If this file ever validates clean, the facet-model teeth have fallen out.
+
+@prefix evidence: <https://ns.cascadeprotocol.org/evidence/v1#> .
+@prefix ex:       <https://example.org/workbench/> .
+
+ex:assertion-facet-neg a evidence:Assertion ;
+    evidence:assertionText "Low blood pressure on standing suggests POTS." ;
+    evidence:settled evidence:Settled ;
+    evidence:direction evidence:Supports ;
+    evidence:basis evidence:Record ;
+    evidence:strength evidence:Strong ;
+    evidence:confidence 1.0 .
+    # No evidence:hasEvidenceLink -> MUST violate the grounding invariant.

@@ -1,0 +1,19 @@
+# NOTES-SUBSTRATE POSITIVE FIXTURE: this file MUST pass `cascade validate`.
+#
+# A research flag (oa:motivatedBy oa:questioning) anchored to a passage inside a
+# transcript via an oa:SpecificResource + oa:TextQuoteSelector (the same
+# byte-verified-span idea the Claims Ledger uses). A questioning note needs no
+# body. Exercises WebAnnotationShape with a selector-anchored target.
+# workbench v1-draft.0.5.
+
+@prefix oa:   <http://www.w3.org/ns/oa#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+<urn:cascade:note-3> a oa:Annotation ;
+    oa:motivatedBy oa:questioning ;
+    oa:hasTarget [ a oa:SpecificResource ;
+        oa:hasSource <urn:cascade:conversation-gemini-jul7> ;
+        oa:hasSelector [ a oa:TextQuoteSelector ; oa:exact "statin myalgia" ] ] ;
+    prov:wasAttributedTo <urn:cascade:agent-caregiver> ;
+    prov:generatedAtTime "2026-07-12T11:00:00Z"^^xsd:dateTime .

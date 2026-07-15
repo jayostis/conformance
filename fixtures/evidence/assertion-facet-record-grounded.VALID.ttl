@@ -1,0 +1,21 @@
+# GROUNDING-GATE POSITIVE FIXTURE: this file MUST pass `cascade validate`.
+#
+# The canonical facet form of a record-grounded assertion: settled Settled,
+# direction Supports, basis Record, one record-citing evidence link. Pairs with
+# the facet INVALID fixtures to prove the generalized invariant discriminates.
+
+@prefix evidence: <https://ns.cascadeprotocol.org/evidence/v1#> .
+@prefix ex:       <https://example.org/workbench/> .
+
+ex:assertion-facet-pos a evidence:Assertion ;
+    evidence:assertionText "Low blood pressure on standing suggests POTS." ;
+    evidence:settled evidence:Settled ;
+    evidence:direction evidence:Supports ;
+    evidence:basis evidence:Record ;
+    evidence:strength evidence:Strong ;
+    evidence:confidence 1.0 ;
+    evidence:hasEvidenceLink ex:link-1 .
+
+ex:link-1 a evidence:EvidenceLink ;
+    evidence:evidenceStance evidence:Supports ;
+    evidence:citesRecord <https://example.org/pod/records/tilt-table-2026-03> .

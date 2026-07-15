@@ -1,0 +1,26 @@
+# GROUNDING-GATE POSITIVE FIXTURE: this file MUST pass `cascade validate`.
+#
+# The generalized invariant covers EITHER basis: a literature-grounded result
+# (settled Settled, direction Contradicts, basis Literature) with one verified
+# citation link passes. The Citation satisfies CitationShape (title + pmid).
+
+@prefix evidence: <https://ns.cascadeprotocol.org/evidence/v1#> .
+@prefix ex:       <https://example.org/workbench/> .
+
+ex:assertion-lit-pos a evidence:Assertion ;
+    evidence:assertionText "Creatine supplementation is unsafe for healthy kidneys." ;
+    evidence:settled evidence:Settled ;
+    evidence:direction evidence:Contradicts ;
+    evidence:basis evidence:Literature ;
+    evidence:strength evidence:Moderate ;
+    evidence:confidence 0.8 ;
+    evidence:hasEvidenceLink ex:link-lit .
+
+ex:link-lit a evidence:EvidenceLink ;
+    evidence:evidenceStance evidence:Contradicts ;
+    evidence:citesSource ex:citation-1 .
+
+ex:citation-1 a evidence:Citation ;
+    evidence:citationTitle "Effects of creatine supplementation on renal function: a systematic review" ;
+    evidence:pmid "31375416" ;
+    evidence:citationSourceName "Europe PMC" .

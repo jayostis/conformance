@@ -1,0 +1,17 @@
+# GROUNDING-GATE POSITIVE FIXTURE: this file MUST pass `cascade validate`.
+#
+# The honest unresolved form: settled NeedsEvidence with direction None, basis
+# None, and a reason, no evidence links required. This is what a grounded
+# verdict is COERCED to when its evidence does not resolve.
+
+@prefix evidence: <https://ns.cascadeprotocol.org/evidence/v1#> .
+@prefix ex:       <https://example.org/workbench/> .
+
+ex:assertion-needs-evidence a evidence:Assertion ;
+    evidence:assertionText "Magnesium glycinate improves sleep quality." ;
+    evidence:settled evidence:NeedsEvidence ;
+    evidence:reason evidence:NoRecord ;
+    evidence:direction evidence:None ;
+    evidence:basis evidence:None ;
+    evidence:strength evidence:Weak ;
+    evidence:confidence 0.0 .

@@ -1,0 +1,23 @@
+# GROUNDING-GATE NEGATIVE FIXTURE: this file MUST fail `cascade validate`.
+#
+# Facet inconsistency: settled NeedsEvidence carrying a grounded direction
+# (Supports). An unresolved claim must carry direction None. This fixture even
+# carries an evidence link so the ONLY violation is the consistency constraint,
+# proving that constraint fires on its own.
+
+@prefix evidence: <https://ns.cascadeprotocol.org/evidence/v1#> .
+@prefix ex:       <https://example.org/workbench/> .
+
+ex:assertion-inconsistent a evidence:Assertion ;
+    evidence:assertionText "Vitamin D deficiency causes fatigue." ;
+    evidence:settled evidence:NeedsEvidence ;
+    evidence:reason evidence:NeedsLiterature ;
+    evidence:direction evidence:Supports ;
+    evidence:basis evidence:Record ;
+    evidence:strength evidence:Weak ;
+    evidence:confidence 0.2 ;
+    evidence:hasEvidenceLink ex:link-x .
+
+ex:link-x a evidence:EvidenceLink ;
+    evidence:evidenceStance evidence:Supports ;
+    evidence:citesRecord <https://example.org/pod/records/vitamin-d-2026-01> .
