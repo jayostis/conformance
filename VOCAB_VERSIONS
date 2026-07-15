@@ -13,3 +13,16 @@ clinical=1.9
 coverage=1.3
 checkup=3.2
 pots=1.4
+#
+# 2026-07-15 batched draft sync (spec PENDING_DOWNSTREAM_SYNC rows 1-3). Per
+# D-PATH, pre-stable draft vocabs are NOT registered here (no version row) until
+# v1.0 graduation; SHACL-validation fixtures are covered as comments only:
+# - evidence/v1-draft.0.2: verdict-taxonomy-v2 facet model + generalized
+#   grounding invariant. Fixtures: fixtures/evidence/ (assertion-facet-*: three
+#   VALID, three INVALID). See fixtures/evidence/INVENTORY.md.
+# - workbench/v1-draft.0.5: notes / flags / follow-ups as W3C Web Annotations
+#   (WebAnnotationShape / CommentingBodyShape / FollowUpShape). Fixtures:
+#   fixtures/workbench/note-* (three VALID, three INVALID).
+# - workbench/v1-draft.0.4: workbench:userSourceLabel filing overlay (reuses the
+#   Annotation string predicates, no new shape). Fixture:
+#   fixtures/workbench/filing-label-refile.VALID.ttl. See fixtures/workbench/INVENTORY.md.

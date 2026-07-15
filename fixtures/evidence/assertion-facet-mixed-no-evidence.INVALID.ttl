@@ -1,0 +1,17 @@
+# GROUNDING-GATE NEGATIVE FIXTURE: this file MUST fail `cascade validate`.
+#
+# direction Mixed IS a grounded direction: conflicting evidence exists and must
+# be shown, so a Mixed result with zero evidence links violates the generalized
+# grounding invariant exactly as Supports/Contradicts do.
+
+@prefix evidence: <https://ns.cascadeprotocol.org/evidence/v1#> .
+@prefix ex:       <https://example.org/workbench/> .
+
+ex:assertion-mixed-neg a evidence:Assertion ;
+    evidence:assertionText "Creatine supplementation worsens statin myopathy." ;
+    evidence:settled evidence:Settled ;
+    evidence:direction evidence:Mixed ;
+    evidence:basis evidence:RecordAndLiterature ;
+    evidence:strength evidence:Moderate ;
+    evidence:confidence 0.6 .
+    # No evidence:hasEvidenceLink -> MUST violate the grounding invariant.

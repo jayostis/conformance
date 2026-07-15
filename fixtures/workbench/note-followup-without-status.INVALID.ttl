@@ -1,0 +1,16 @@
+# NOTES-SUBSTRATE NEGATIVE FIXTURE: this file MUST fail `cascade validate`.
+#
+# A follow-up (oa:motivatedBy workbench:followUp) with NO ical:status. A
+# follow-up is a to-do; FollowUpShape requires an ical:status in the RFC 5545
+# VTODO enum. This file MUST violate FollowUpShape. workbench v1-draft.0.5.
+
+@prefix oa:   <http://www.w3.org/ns/oa#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix workbench: <https://ns.cascadeprotocol.org/workbench/v1#> .
+
+<urn:cascade:bad-followup> a oa:Annotation ;
+    oa:motivatedBy workbench:followUp ;
+    oa:hasTarget <urn:cascade:observation-tsh> ;
+    prov:wasAttributedTo <urn:cascade:agent-caregiver> ;
+    prov:generatedAtTime "2026-07-15T09:00:00Z"^^xsd:dateTime .

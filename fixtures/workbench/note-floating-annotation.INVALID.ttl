@@ -1,0 +1,15 @@
+# NOTES-SUBSTRATE NEGATIVE FIXTURE: this file MUST fail `cascade validate`.
+#
+# A floating annotation: NO oa:hasTarget and NO prov:wasAttributedTo. A note
+# floats on nothing and its authorship is load-bearing (caregiver vs patient vs
+# agent), so WebAnnotationShape requires >= 1 target and required attribution.
+# This file MUST violate WebAnnotationShape (missing hasTarget + missing
+# wasAttributedTo). workbench v1-draft.0.5.
+
+@prefix oa:   <http://www.w3.org/ns/oa#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+<urn:cascade:bad-floating> a oa:Annotation ;
+    oa:motivatedBy oa:questioning ;
+    prov:generatedAtTime "2026-07-15T09:00:00Z"^^xsd:dateTime .

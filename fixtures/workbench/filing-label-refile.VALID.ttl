@@ -1,0 +1,24 @@
+# FILING-LABEL POSITIVE FIXTURE: this file MUST pass `cascade validate`.
+#
+# workbench:userSourceLabel (v1-draft.0.4): the user's chosen filing label for a
+# record's SOURCE (the "file under source" action), folded by the app as a
+# workbench:Annotation overlay (annotationProperty "workbench:userSourceLabel" +
+# annotationValue = the chosen label), bearing cascade:SelfReported provenance.
+# It does NOT overwrite the objective imported origin clinical:sourceEHR. Reuses
+# the already-shaped Annotation string predicates, so AnnotationShape
+# (annotatesRecord + at least one of annotationText / annotationValue) is
+# satisfied with no new shape.
+
+@prefix workbench: <https://ns.cascadeprotocol.org/workbench/v1#> .
+@prefix cascade:   <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix prov:      <http://www.w3.org/ns/prov#> .
+@prefix dct:       <http://purl.org/dc/terms/> .
+@prefix xsd:       <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:cascade:annotation-refile-1> a workbench:Annotation ;
+    workbench:annotatesRecord <urn:cascade:observation-lipid-panel-2026-02> ;
+    workbench:annotationProperty "workbench:userSourceLabel" ;
+    workbench:annotationValue "Dr. Chen (cardiology)" ;
+    cascade:dataProvenance cascade:SelfReported ;
+    prov:wasAttributedTo <urn:cascade:profile-card-me> ;
+    dct:created "2026-06-28T10:15:00Z"^^xsd:dateTime .

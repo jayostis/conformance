@@ -1,0 +1,18 @@
+# GROUNDING-GATE NEGATIVE FIXTURE: this file MUST fail `cascade validate`.
+#
+# Facet inconsistency: a grounded direction (Supports) with basis None. The
+# generalized grounding invariant treats basis None as not-grounded, so without
+# this separate consistency constraint the assertion would slip past the
+# evidence-link requirement while still DISPLAYING as supported. A non-None
+# direction requires a real basis.
+
+@prefix evidence: <https://ns.cascadeprotocol.org/evidence/v1#> .
+@prefix ex:       <https://example.org/workbench/> .
+
+ex:assertion-no-basis a evidence:Assertion ;
+    evidence:assertionText "Beta blockers lower resting heart rate." ;
+    evidence:settled evidence:Settled ;
+    evidence:direction evidence:Supports ;
+    evidence:basis evidence:None ;
+    evidence:strength evidence:Weak ;
+    evidence:confidence 0.4 .
