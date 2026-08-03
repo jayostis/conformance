@@ -62,6 +62,8 @@ GA4GH Phenopacket Schema v2 reference cases. Importer ships in **Phase 2B** (`ph
 |------------|-------|
 | `sample-clinvar` | First 64 KB of the weekly ClinVar GRCh38 VCF. Header + ~hundred records. Adequate for header-parsing tests; full-record importer needs a larger sample. Importer ships in **Phase 3**. |
 
+`sample-clinvar.expected.ttl` is reproducible on any machine. Its `genomics:SequencingRun` IRI is derived from a SHA-256 over the DECOMPRESSED input bytes, and every `genomics:Variant` IRI derives from the run IRI, so the oracle reproduces wherever the fixture is checked out and whether the input is read plain or gzipped. It was previously derived from the importer's absolute input path, which meant the oracle only reproduced in one directory on one machine; regenerated 2026-08-02 against the content-addressed scheme, verified isomorphic to the prior oracle modulo IRI renaming (21,891 triples, 1725 Variants, identical predicates and literals on both sides).
+
 ### `vrs/` — 1 hand-built example
 
 | Fixture id | Notes |
