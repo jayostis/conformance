@@ -1,0 +1,14 @@
+{
+  "resourceType": "Patient",
+  "id": "pat-conformance-1",
+  "name": [
+    {
+      "family": "Rivera",
+      "given": [
+        "Alex"
+      ]
+    }
+  ],
+  "gender": "female",
+  "birthDate": "1985-03-15"
+}

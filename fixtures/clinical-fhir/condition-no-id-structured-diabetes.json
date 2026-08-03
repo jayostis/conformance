@@ -1,0 +1,17 @@
+{
+  "resourceType": "Condition",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "44054006",
+        "display": "Type 2 diabetes mellitus"
+      }
+    ],
+    "text": "Type 2 diabetes mellitus"
+  },
+  "subject": {
+    "reference": "Patient/pat-conformance-1"
+  },
+  "onsetDateTime": "2021-04-02"
+}

@@ -1,0 +1,19 @@
+{
+  "resourceType": "Procedure",
+  "status": "completed",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "73761001",
+        "display": "Colonoscopy"
+      }
+    ],
+    "text": "Colonoscopy"
+  },
+  "subject": {
+    "reference": "Patient/pat-conformance-1"
+  },
+  "performedDateTime": "2025-02-18",
+  "id": "proc-colonoscopy-1"
+}

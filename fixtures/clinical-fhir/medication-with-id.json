@@ -1,0 +1,19 @@
+{
+  "resourceType": "MedicationStatement",
+  "status": "active",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "29046",
+        "display": "Lisinopril"
+      }
+    ],
+    "text": "Lisinopril 10 mg"
+  },
+  "subject": {
+    "reference": "Patient/pat-conformance-1"
+  },
+  "effectiveDateTime": "2020-04-01",
+  "id": "med-lisinopril-1"
+}

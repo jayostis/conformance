@@ -1,0 +1,13 @@
+{
+  "resourceType": "Patient",
+  "name": [
+    {
+      "family": "Okonkwo",
+      "given": [
+        "Ngozi"
+      ]
+    }
+  ],
+  "gender": "female",
+  "birthDate": "1972-11-08"
+}
