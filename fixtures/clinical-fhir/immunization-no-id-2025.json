@@ -1,0 +1,18 @@
+{
+  "resourceType": "Immunization",
+  "status": "completed",
+  "vaccineCode": {
+    "coding": [
+      {
+        "system": "http://hl7.org/fhir/sid/cvx",
+        "code": "141",
+        "display": "Influenza, seasonal"
+      }
+    ],
+    "text": "Influenza, seasonal"
+  },
+  "patient": {
+    "reference": "Patient/pat-conformance-1"
+  },
+  "occurrenceDateTime": "2025-10-15"
+}

@@ -1,0 +1,8 @@
+{
+  "resourceType": "MedicationStatement",
+  "note": [
+    {
+      "text": "Patient reports taking an over-the-counter antihistamine most evenings."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "code": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "10180",
+        "display": "Sulfamethoxazole"
+      }
+    ],
+    "text": "Sulfamethoxazole"
+  },
+  "patient": {
+    "reference": "Patient/pat-conformance-1"
+  },
+  "criticality": "high"
+}

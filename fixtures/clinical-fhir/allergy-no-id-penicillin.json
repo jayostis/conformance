@@ -1,0 +1,17 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "code": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "7980",
+        "display": "Penicillin G"
+      }
+    ],
+    "text": "Penicillin G"
+  },
+  "patient": {
+    "reference": "Patient/pat-conformance-1"
+  },
+  "criticality": "high"
+}

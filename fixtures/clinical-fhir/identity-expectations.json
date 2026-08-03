@@ -1,0 +1,139 @@
+{
+  "description": "Identity expectations for the general clinical FHIR corpus. Each entry states a RELATION between the subject IRIs an importer mints for two fixtures, not a literal IRI. A relation is what actually has to hold for the data to survive, it is the same claim in every SDK, and unlike a pinned IRI it does not have to be regenerated every time an identity key is widened. Literal cross-SDK IRI vectors live in fixtures/deterministic-ids/test-vectors.json and cover the hash function, not the importer's choice of key.",
+  "version": "1.0",
+  "date": "2026-08-03",
+  "howToRead": "For each entry, convert every named fixture on its own, take the subject IRI of the clinical record it produces, and assert the relation. `distinct` means merging them would destroy data. `same` means splitting them would duplicate a record on every sync. `status` is `satisfied` when a shipped implementation is known to meet the entry and `not-yet-satisfied` when it is a contract nothing meets yet; a consumer should assert a `not-yet-satisfied` entry in its CURRENT direction so that satisfying it turns the suite red and forces this file to be updated, rather than letting the corpus drift quietly out of date. An implementation is expected to satisfy every entry regardless of what `status` says.",
+  "expectations": [
+    {
+      "id": "lab-same-day-same-code-different-value",
+      "relation": "distinct",
+      "fixtures": [
+        "lab-glucose-fasting.json",
+        "lab-glucose-postprandial.json"
+      ],
+      "why": "A fasting glucose of 95 mg/dL and a post-prandial of 310 mg/dL, same patient, same LOINC code, same calendar day, each carrying its own server-assigned id. Serial same-day results are ordinary clinical practice (glucose curves, troponin series, repeat potassium, pre- and post-dialysis). An identity key of {patient, code, date} collapses them onto one IRI, and because only one record can then be written, one of the two values is destroyed - a normal result and a critical one being interchangeable outputs of the same input.",
+      "status": "satisfied"
+    },
+    {
+      "id": "lab-same-day-same-code-different-value-id-less",
+      "relation": "distinct",
+      "fixtures": [
+        "lab-glucose-no-id-fasting.json",
+        "lab-glucose-no-id-postprandial.json"
+      ],
+      "why": "The same pair with no server-assigned id, so the content hash is the only thing standing between the two records. If the measured value is not in the key, nothing is.",
+      "status": "satisfied"
+    },
+    {
+      "id": "medication-no-id-differs-only-in-narrative",
+      "relation": "distinct",
+      "fixtures": [
+        "medication-no-id-bare.json",
+        "medication-no-id-note-only.json"
+      ],
+      "why": "One MedicationStatement carries nothing at all; the other carries a note naming what the patient is taking. An importer that substitutes a placeholder drug name ('Unknown Medication') before minting turns 'we do not know' into 'these are the same record': the content hash then succeeds with a CONSTANT, which is indistinguishable from the hash failing except that it merges instead of splitting.",
+      "status": "satisfied"
+    },
+    {
+      "id": "condition-no-id-differs-only-in-narrative",
+      "relation": "distinct",
+      "fixtures": [
+        "condition-no-id-narrative-diabetes.json",
+        "condition-no-id-narrative-breast-cancer.json"
+      ],
+      "why": "Two Conditions with no code, no onset and no subject - only a narrative reading 'Type 2 diabetes mellitus' and 'Metastatic breast cancer'. Trivially different to any reader. An importer that strips narrative from the content hash while leaving the resourceType in it makes both look non-empty, hashes both to {\"resourceType\":\"Condition\"}, and merges two unrelated diagnoses. No id-bearing fixture can surface this.",
+      "status": "satisfied"
+    },
+    {
+      "id": "condition-no-id-different-structured-content",
+      "relation": "distinct",
+      "fixtures": [
+        "condition-no-id-structured-hypertension.json",
+        "condition-no-id-structured-diabetes.json"
+      ],
+      "why": "Two id-less Conditions differing in their SNOMED code, hypertension against type 2 diabetes. The baseline case for the content-hash path, and the one that fails first: if this does not hold then identity is not reading the resource at all, and every other expectation below is failing for the same reason rather than for its own.",
+      "status": "satisfied"
+    },
+    {
+      "id": "allergy-no-id-different-allergen",
+      "relation": "distinct",
+      "fixtures": [
+        "allergy-no-id-penicillin.json",
+        "allergy-no-id-sulfa.json"
+      ],
+      "why": "Two id-less allergies to different drugs. Merging them would tell a clinician a patient is safe to receive something they react to.",
+      "status": "satisfied"
+    },
+    {
+      "id": "immunization-no-id-different-dates",
+      "relation": "distinct",
+      "fixtures": [
+        "immunization-no-id-2024.json",
+        "immunization-no-id-2025.json"
+      ],
+      "why": "The same vaccine given in two different years, id-less. Merging them erases a dose from the immunization history.",
+      "status": "satisfied"
+    },
+    {
+      "id": "vital-no-id-different-time-and-value",
+      "relation": "distinct",
+      "fixtures": [
+        "vital-heartrate-no-id-morning.json",
+        "vital-heartrate-no-id-evening.json"
+      ],
+      "why": "Repeat vital-sign readings inside one day are a genuine clinical series, not duplicates. A day-resolution identity key destroys the series.",
+      "status": "satisfied"
+    },
+    {
+      "id": "encounter-no-id-different-dates",
+      "relation": "distinct",
+      "fixtures": [
+        "encounter-no-id-may.json",
+        "encounter-no-id-june.json"
+      ],
+      "why": "Two id-less ambulatory encounters on different dates. Encounters are what most other clinical records hang off, so merging two of them does not lose one visit: it re-parents every lab, note and procedure recorded at the second visit onto the first, and the resulting timeline is wrong in a way no single record looks wrong in.",
+      "status": "satisfied"
+    },
+    {
+      "id": "procedure-no-id-different-procedures",
+      "relation": "distinct",
+      "fixtures": [
+        "procedure-no-id-colonoscopy.json",
+        "procedure-no-id-echocardiogram.json"
+      ],
+      "why": "Two id-less procedures with different SNOMED codes and different dates. Merging them would report that one of the two was never performed, which for a screening procedure such as a colonoscopy also silently resets the interval to the next one that is due.",
+      "status": "satisfied"
+    },
+    {
+      "id": "patient-no-id-different-people",
+      "relation": "distinct",
+      "fixtures": [
+        "patient-with-id.json",
+        "patient-no-id.json"
+      ],
+      "why": "Two different people, one identified and one not. An id-less patient must never collapse onto an identified one - the tier that mints an anonymous seed has to be structurally incapable of producing something a source could have assigned.",
+      "status": "satisfied"
+    },
+    {
+      "id": "condition-same-record-two-server-fetches",
+      "relation": "same",
+      "fixtures": [
+        "condition-with-id-meta-fetch-a.json",
+        "condition-with-id-meta-fetch-b.json"
+      ],
+      "why": "One Condition as returned by two reads of the same FHIR server: identical content, different meta.versionId, meta.lastUpdated and meta.source. Server-assigned metadata changes on every re-fetch of an unchanged resource, so hashing it mints a fresh IRI on every sync and the pod grows a duplicate of every record, silently. This is the opposite failure to the `distinct` entries above and it is equally disqualifying.",
+      "status": "satisfied"
+    }
+  ],
+  "additionalRequirements": [
+    {
+      "id": "stable-across-runs",
+      "requirement": "Converting any fixture in this directory twice, in two processes, from two working directories, must produce identical IRIs. Identity may depend on the resource and on nothing else - not on a clock, not on a random value, not on the path the file was read from, not on its position in a bundle."
+    },
+    {
+      "id": "no-constant-identity",
+      "requirement": "No two fixtures named together in a `distinct` expectation may share an IRI, and no implementation may satisfy `stable-across-runs` by returning a constant. Determinism must always be checked together with distinctness: a constant is perfectly deterministic and carries no identity at all. This is scoped to the declared pairs rather than to every pair in the directory, because some fixtures here differ ONLY in whether they carry an `id` and whether that should change identity is a design question, not a correctness one -- see INVENTORY.md."
+    }
+  ],
+  "measuredAgainst": "cascade-cli with the FHIR/C-CDA lab identity key and the reconciler collision split both present (2026-08-03). All 12 expectations hold against that build. Against the previously published importer, 9 held: the two lab entries and the medication entry did not, and the fixtures were written to make those three failures visible."
+}

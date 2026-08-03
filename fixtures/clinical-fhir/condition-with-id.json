@@ -1,0 +1,18 @@
+{
+  "resourceType": "Condition",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "38341003",
+        "display": "Essential hypertension"
+      }
+    ],
+    "text": "Essential hypertension"
+  },
+  "subject": {
+    "reference": "Patient/pat-conformance-1"
+  },
+  "onsetDateTime": "2021-04-02",
+  "id": "cond-htn-1"
+}
