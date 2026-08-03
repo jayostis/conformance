@@ -123,6 +123,56 @@
       ],
       "why": "One Condition as returned by two reads of the same FHIR server: identical content, different meta.versionId, meta.lastUpdated and meta.source. Server-assigned metadata changes on every re-fetch of an unchanged resource, so hashing it mints a fresh IRI on every sync and the pod grows a duplicate of every record, silently. This is the opposite failure to the `distinct` entries above and it is equally disqualifying.",
       "status": "satisfied"
+    },
+    {
+      "id": "condition-id-bearing-differs-from-id-less",
+      "relation": "distinct",
+      "fixtures": [
+        "condition-with-id.json",
+        "condition-no-id-structured-hypertension.json"
+      ],
+      "why": "The same hypertension, once with the server-assigned id `cond-htn-1` and once without. An importer that identifies a Condition by a content hash and consults the id only as a fallback discards the id on every record that has one, because the fallback fires only when the content is empty and a real Condition is never empty. The two then share an IRI, and so does every OTHER record whose few key fields happen to agree - which is how an ACTIVE, CONFIRMED problem and a RESOLVED, REFUTED one became one record, with the survivor chosen by file read order. Whether an id should win used to be recorded here as an open design question; it is now decided, in the same direction for every type in this directory: the source's identifier decides, and merging two records that are the same THING belongs to a reconciler that can see both and leave a trail.",
+      "status": "satisfied"
+    },
+    {
+      "id": "allergy-id-bearing-differs-from-id-less",
+      "relation": "distinct",
+      "fixtures": [
+        "allergy-with-id.json",
+        "allergy-no-id-penicillin.json"
+      ],
+      "why": "The same penicillin allergy with and without its server-assigned id. Same mechanism as the Condition entry above, and the consequence is sharper here: nothing about the REACTION was in the old key, so a mild rash and an anaphylaxis to one allergen were also one record. An allergy's severity is the part a clinician acts on, so a merge in this type can report a life-threatening allergy as mild.",
+      "status": "satisfied"
+    },
+    {
+      "id": "immunization-id-bearing-differs-from-id-less",
+      "relation": "distinct",
+      "fixtures": [
+        "immunization-with-id.json",
+        "immunization-no-id-2025.json"
+      ],
+      "why": "The same influenza dose with and without its server-assigned id. The old key was patient, a system-blind vaccine code and a calendar day, defended on the grounds that two flu shots recorded on one day really are one dose. That is true of two RECORDS OF one dose and false of two doses, and the key could tell neither from the other: lot number, dose quantity, body site, route and status were all outside it, so a left-arm and a right-arm injection given in one visit were one record, and so were a dose that was given and an entry saying one was not done.",
+      "status": "satisfied"
+    },
+    {
+      "id": "vital-id-bearing-differs-from-id-less",
+      "relation": "distinct",
+      "fixtures": [
+        "vital-heartrate-with-id.json",
+        "vital-heartrate-no-id-morning.json"
+      ],
+      "why": "The same heart-rate reading with and without its server-assigned id. This pair has always been distinct, because the vital-sign path has always honoured the id, and it is stated here so that the rule is asserted uniformly across the directory rather than being a property three types happen to share. Its value is as a regression pin in the opposite direction: it fails if a future change makes the vital path content-only to match the others, which is the wrong way to make them agree.",
+      "status": "satisfied"
+    },
+    {
+      "id": "lab-id-bearing-differs-from-id-less",
+      "relation": "distinct",
+      "fixtures": [
+        "lab-glucose-fasting.json",
+        "lab-glucose-no-id-fasting.json"
+      ],
+      "why": "The same fasting glucose with and without its server-assigned id. Completes the set: every clinical type in this directory is now held to the same rule, so an implementer reading the corpus finds one answer to `does an id win` rather than having to infer it per type from which fixtures happen to be asserted.",
+      "status": "satisfied"
     }
   ],
   "additionalRequirements": [
@@ -135,5 +185,5 @@
       "requirement": "No two fixtures named together in a `distinct` expectation may share an IRI, and no implementation may satisfy `stable-across-runs` by returning a constant. Determinism must always be checked together with distinctness: a constant is perfectly deterministic and carries no identity at all. This is scoped to the declared pairs rather than to every pair in the directory, because some fixtures here differ ONLY in whether they carry an `id` and whether that should change identity is a design question, not a correctness one -- see INVENTORY.md."
     }
   ],
-  "measuredAgainst": "cascade-cli with the FHIR/C-CDA lab identity key and the reconciler collision split both present (2026-08-03). All 12 expectations hold against that build. Against the previously published importer, 9 held: the two lab entries and the medication entry did not, and the fixtures were written to make those three failures visible."
+  "measuredAgainst": "cascade-cli with the FHIR/C-CDA lab identity key, the reconciler collision split, and the Condition / AllergyIntolerance / Immunization / Patient id-honouring change all present (2026-08-03). All 17 expectations hold against that build. Against the build that carried only the first two, 12 of 17 held: the five `*-id-bearing-differs-from-id-less` entries for Condition, allergy and immunization did not, and the vital and lab ones did. Against the importer published before any of it, 9 of 12 held: the two lab entries and the medication entry did not, and the fixtures were written to make those three failures visible."
 }

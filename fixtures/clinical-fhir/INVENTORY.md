@@ -86,12 +86,13 @@ placeholder drug name before minting turns "we do not know" into "these are the 
 record". Its content hash then succeeds with a **constant**, which is indistinguishable
 from the hash failing except that it merges instead of splitting.
 
-## Measured, twice
+## Measured, three times
 
-Every expectation was evaluated against a real build rather than reasoned about, both
-before and after the identity fixes that were in flight when these fixtures were written.
+Every expectation was evaluated against a real build rather than reasoned about, at each
+stage of the identity work that was in flight while these fixtures were written.
 
-**Against the previously published importer: 9 of 12 held.** The three that did not:
+**Against the previously published importer: 9 of the first 12 held.** The three that did
+not:
 
 | Expectation | Result |
 |---|---|
@@ -102,8 +103,14 @@ before and after the identity fixes that were in flight when these fixtures were
 All three were the same shape: an identity key narrower than the records it was
 identifying. These fixtures were written to make exactly those three visible.
 
-**Against a build carrying the lab identity key and the reconciler collision split: 12 of
-12 hold**, which is why every entry now reads `status: "satisfied"`.
+**Against a build carrying the lab identity key and the reconciler collision split: those 12
+of 12 hold.**
+
+**Against a build that also honours `resource.id` for Condition, AllergyIntolerance,
+Immunization and Patient: all 17 hold**, including the five
+`*-id-bearing-differs-from-id-less` entries added with that change — of which three
+(Condition, allergy, immunization) fail against the build before it, and two (vital, lab)
+held already. That is why every entry reads `status: "satisfied"`.
 
 That is the intended lifecycle of the `status` field, and it is worth stating because it
 is the only part of this corpus that can rot. A consumer should assert a
@@ -111,11 +118,11 @@ is the only part of this corpus that can rot. A consumer should assert a
 satisfying it turns the suite red and forces this file to be updated. The field is a
 tripwire in both directions, never a reason to skip an assertion.
 
-### A second thing the measurement showed
+### A second thing the measurement showed — and the correction it needed
 
-Four clinical types **discard a resource's own server-assigned `id`** and identify it by a
-content hash instead, so an id-bearing resource and an id-less one with the same content
-land on one IRI:
+**Recorded first, as it stood.** Several clinical types **discarded a resource's own
+server-assigned `id`** and identified it by a content hash instead, so an id-bearing
+resource and an id-less one with the same content landed on one IRI:
 
 ```
 urn:uuid:13bac2c5-…  condition-with-id, condition-no-id-structured-hypertension,
@@ -124,16 +131,46 @@ urn:uuid:76ac6e1a-…  allergy-with-id, allergy-no-id-penicillin
 urn:uuid:bc5a8514-…  immunization-with-id, immunization-no-id-2025
 ```
 
-Vital signs do the opposite: `vital-heartrate-with-id` and
-`vital-heartrate-no-id-morning` carry identical content and mint **different** IRIs,
-because that path honours the `id`.
+Vital signs did the opposite: `vital-heartrate-with-id` and
+`vital-heartrate-no-id-morning` carry identical content and minted **different** IRIs,
+because that path honoured the `id`.
 
-That asymmetry is not asserted either way here, because whether an id should win is a
-design question rather than a correctness one — for Condition, Allergy and Immunization
-the merged pairs really are the same clinical fact, and no data is lost. It is recorded
-because it is the same mechanism that produced the glucose failure above, where the two
-records are **not** the same fact, and because a corpus is the right place for it to be
-visible rather than rediscovered.
+**The reasoning attached to that measurement was half wrong, and the wrong half is the one
+worth reading.** It said the asymmetry could not be asserted either way, because whether an
+id should win is a design question rather than a correctness one — "for Condition, Allergy
+and Immunization the merged pairs really are the same clinical fact, and no data is lost".
+The IDENTITY fields did agree. The NON-identity fields did not have to, and that is the
+whole defect:
+
+- Two Conditions sharing patient, code and onset can disagree on `clinicalStatus` and
+  `verificationStatus`. An **active, confirmed** problem and a **resolved, refuted** one
+  merged, and which survived was decided by the order the files were read in.
+- Nothing about an allergy's REACTION was in its key, so a **mild rash** and an
+  **anaphylaxis** to one allergen were one record. Severity is the part a clinician acts on.
+- Nothing about an immunization's lot, dose, site, route or status was in its key, so a
+  **left-arm** and a **right-arm** injection given in one visit were one record, and so were
+  a dose that was **given** and an entry saying one was **not done**.
+
+So these were the same defect as the glucose pair, not a benign variant of it. What kept
+them from being an emergency is that a differing-content collision is split and raised as a
+conflict rather than silently overwritten: **visible, not safe.**
+
+**The design question is now decided, and asserted.** The id wins, for every clinical type,
+and merging two records that are the same *thing* belongs to a reconciler that can see both
+records and leave a trail. The five `*-id-bearing-differs-from-id-less` entries in
+`identity-expectations.json` state that as a relation, so a new SDK finds one answer in the
+corpus instead of inferring it per type. Measured after the change, over the 121 FHIR
+resources in this repository: groups of records sharing an IRI with a record they differ
+from fell from 9 covering 21 records to 6 covering 13, and all 6 that remain are the same
+record appearing in two fixture files, which is correct.
+
+**One type still identifies by content alone, on purpose:** `MedicationStatement` /
+`MedicationRequest`. Medication identity is a single field set shared by every importer and
+every SDK, pinned by a literal cross-SDK vector in `fixtures/deterministic-ids/`, and
+deliberately built so that the same drug arriving from two sources unifies. Changing it is a
+cross-SDK decision rather than a per-importer one, so no expectation here asserts an id rule
+for medications; `medication-with-id` and the two id-less medication fixtures are distinct
+for content reasons, not because an id decided.
 
 ## Status
 
