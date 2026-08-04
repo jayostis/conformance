@@ -20,7 +20,15 @@ python3 -m pip install -r scripts/requirements.txt
 python3 scripts/run_conformance.py --spec-dir ../spec
 ```
 
-The suite is currently **43 passed / 68 failed / 0 skipped / 111 total**. The failures are pre-existing and enumerated in README.md under "Current status".
+The result depends on which `spec` revision you point it at, so always say which:
+
+- against `spec` at core 3.4 / health 2.5 / clinical 1.13: **86 passed / 32 failed / 0 skipped / 118 total**
+- against the revision in `scripts/SPEC_PIN` (core 3.3 / health 2.4 / clinical 1.12), which is what CI executes: **52 passed / 66 failed / 0 skipped / 118 total**
+
+The difference is not noise. 14 fixtures evaluate zero constraints at the older
+vocabulary because the shapes that target them do not exist there, and the runner
+counts a zero-constraint pass as a failure. Re-pinning `scripts/SPEC_PIN` is what
+moves CI onto the newer number.
 
 **Never resolve a failure by weakening the runner.** Do not skip a fixture, relax an assertion, or add a baseline of known failures. A new fixture that the runner reports as `UNSHAPED` is not testing anything: no shape targets it, so zero constraints ran and its PASS would be vacuous.
 
@@ -47,24 +55,29 @@ spec tag → conformance fixtures added → SDK releases
 
 Check `VOCAB_VERSIONS` at the repo root. Compare against `spec/VOCAB_VERSIONS` to see what's missing.
 
-### Vocabulary coverage (as of 2026-06-22)
+### Vocabulary coverage (as of 2026-08-03)
 
-Covered up to core=3.3, health=2.4, clinical=1.9 (matches `spec/VOCAB_VERSIONS`). Recent additions:
-- core v3.3: `cascade:AIAsserted` provenance leaf (fixture `social-002`); `cascade:ProxyAgent` caregiver-proxy with ProxyAgentShape required-field coverage (fixtures `proxy-001` valid, `proxy-002` missing `proxyRelationship`).
-- health v2.4: `health:SocialHistoryRecord` + `smokingStatus`/`alcoholUse`/`exerciseFrequency`/`occupationalExposure` (fixture `social-001`).
-- clinical v1.9: `cascade:AIExtracted` now valid in every clinical record's `dataProvenance` enum (fixture `med-011`, an AIExtracted Medication).
+Covered up to core=3.4, health=2.5, clinical=1.13, coverage=1.3. Read the comments in
+`VOCAB_VERSIONS`: each row now names what a fixture actually exercises and what it does
+not, measured by recording which node shapes matched a focus node across the whole suite.
+- core v3.4: `cascade:ExportManifest` and `cascade:RecordSummary` shaped (`pod-002` valid, `pod-004` negative).
+- health v2.5: five record classes and three daily-snapshot classes shaped. 26 existing fixtures that had evaluated zero constraints became live; `dailyvital-*`, `dailyactivity-*`, `dailysleep-*` added.
+- clinical v1.13: four duplicated record classes deprecated. Deprecation is not a SHACL constraint, so no fixture asserts it; the clinical fixtures are executed against the v1.13 shapes.
 
 ### Known gaps
 
-See `VOCAB_VERSIONS` comments. Missing fixture categories:
-- `encounter` (Clinical v1.7)
-- `medication-administration` (Clinical v1.7)
-- `implanted-device` (Clinical v1.7)
-- `imaging-study` (Clinical v1.7)
-- `claim-record` (Coverage v1.3)
-- `benefit-statement` (Coverage v1.3)
-- `denial-notice` (Coverage v1.3)
-- FHIR passthrough properties on existing records (Core v2.8)
+Each of these is a class that fixtures assert and no shape targets, so the fixture
+evaluates zero constraints and the runner reports it `UNSHAPED`. A **negative** fixture
+for any of them is impossible until a shape exists: there is no constraint to violate.
+
+- `health:ProcedureRecord` — asserted by `proc-001/002/003`, not defined in `health.ttl`
+- `clinical:Encounter`, `clinical:MedicationAdministration`, `clinical:ImplantedDevice`, `clinical:ImagingStudy` — defined in `clinical.ttl`, no shape
+- `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `coverage:AppealRecord` — defined in `coverage.ttl`, no shape
+- `clinical:CoverageRecord` — asserted by `coverage-001`; `coverage:InsurancePlan` is the shaped spelling
+- `ldp:BasicContainer` — asserted by `pod-001`/`pod-003`, external vocabulary, no Cascade shape
+- `cascade:InteractionScenario` — shaped, but no fixture instantiates it
+- `checkup:` and `pots:` — `VOCAB_VERSIONS` carries a version row for each and no fixture instantiates any class either vocabulary shapes
+- `health:SocialHistoryRecordShape` declares only `sh:Info` constraints, so the `health:` spelling of social history cannot have a negative fixture; `social-003` covers the `clinical:` spelling
 - (Resolved 2026-06-22) `proc-001/002/003` previously used `dataType: "ProcedureRecord"` (not in the fixture-schema enum) and failed `schema/fixture-schema.json` validation; corrected to `dataType: "Procedure"` (input `type` stays `ProcedureRecord`, matching the cond/lab convention). All fixtures now validate against the schema.
 
 ## Fixture Format
