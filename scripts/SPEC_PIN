@@ -1,0 +1,15 @@
+# Pinned `spec` revision the conformance runner validates against.
+#
+# The runner refuses to run if the spec checkout it is given is not at this
+# commit (override with --allow-spec-drift when deliberately testing against
+# unreleased vocabulary). Without a pin the suite silently tracks whatever is
+# on spec `main`, so a run that passed yesterday can pass today for a
+# different reason.
+#
+# To re-pin: check out the new spec revision, put its full SHA and its
+# VOCAB_VERSIONS line below, run `make -C . conformance` (or
+# `scripts/run_conformance.py`), and record the resulting counts in the PR.
+
+repo=https://github.com/the-cascade-protocol/spec
+commit=acbd319746c1940454889c99138a47cd419771b0
+vocab=core=3.3 health=2.4 clinical=1.12 coverage=1.3 checkup=3.2 pots=1.4

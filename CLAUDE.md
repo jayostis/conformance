@@ -7,9 +7,22 @@ Downstream SDKs (sdk-typescript, sdk-python) and tools (cascade-cli) must pass a
 
 ## Key Architecture
 
-- `fixtures/` — JSON fixture files, one per record instance. Named `{type}-{id}.json`.
+- `fixtures/` — JSON fixture files, one per record instance. Named `{type}-{id}.json`. Also 40 `.ttl` fixtures in subdirectories, with polarity in the filename (`*.INVALID.ttl`).
 - `schema/fixture-schema.json` — JSON Schema for the fixture format (includes `dataType` enum).
+- `scripts/run_conformance.py` — executes every fixture against the SHACL shapes from a pinned `spec` checkout. `scripts/SPEC_PIN` names the commit.
+- `scripts/selftest_runner.py` — mutation tests proving the runner can fail.
 - `reference-patient-pod/` — Example Turtle files showing real schema usage.
+
+## MANDATORY: run the suite before claiming a fixture works
+
+```bash
+python3 -m pip install -r scripts/requirements.txt
+python3 scripts/run_conformance.py --spec-dir ../spec
+```
+
+The suite is currently **43 passed / 68 failed / 0 skipped / 111 total**. The failures are pre-existing and enumerated in README.md under "Current status".
+
+**Never resolve a failure by weakening the runner.** Do not skip a fixture, relax an assertion, or add a baseline of known failures. A new fixture that the runner reports as `UNSHAPED` is not testing anything: no shape targets it, so zero constraints ran and its PASS would be vacuous.
 
 ## MANDATORY: Deployment Discipline
 
