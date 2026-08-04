@@ -1,0 +1,23 @@
+{
+  "id": "dailyvital-001",
+  "description": "Daily vital reading: one day's aggregated resting heart rate inside a wellness history container (health v2.5)",
+  "dataType": "DailyVitalReading",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:dvr0-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "DailyVitalReading",
+    "date": "2026-01-20T00:00:00Z",
+    "value": 68,
+    "unit": "bpm",
+    "sampleCount": 1440,
+    "loincCode": "8867-4",
+    "dataProvenance": "DeviceGenerated"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix loinc: <http://loinc.org/rdf#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:dvr0-0001-aaaa-bbbb-ccccddddeeee> a health:DailyVitalReading ;\n    health:date \"2026-01-20T00:00:00Z\"^^xsd:dateTime ;\n    health:value 68 ;\n    health:unit \"bpm\" ;\n    cascade:sampleCount 1440 ;\n    cascade:loincCode <http://loinc.org/rdf#8867-4> ;\n    cascade:dataProvenance cascade:DeviceGenerated .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "wellness", "device"],
+  "notes": "Uses the health:date / health:value / health:unit spelling emitted by the Swift SDK's HealthProfileSerializer. health:DailyVitalReadingShape accepts a timestamp in either that spelling or the reference pod's cascade:date, because both emitters are live; this fixture covers the first and the reference pod covers the second."
+}

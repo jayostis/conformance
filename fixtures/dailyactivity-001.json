@@ -1,0 +1,23 @@
+{
+  "id": "dailyactivity-001",
+  "description": "Daily activity snapshot: one day of step, energy, exercise and stand metrics from a wearable (health v2.5)",
+  "dataType": "DailyActivitySnapshot",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:dact-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "DailyActivitySnapshot",
+    "date": "2026-01-20T00:00:00Z",
+    "steps": 8432,
+    "activeEnergyKcal": 412.5,
+    "exerciseMinutes": 37,
+    "standHours": 11,
+    "dataProvenance": "DeviceGenerated"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:dact-0001-aaaa-bbbb-ccccddddeeee> a health:DailyActivitySnapshot ;\n    cascade:date \"2026-01-20T00:00:00Z\"^^xsd:dateTime ;\n    health:steps 8432 ;\n    health:activeEnergyKcal 412.5 ;\n    health:exerciseMinutes 37 ;\n    health:standHours 11 ;\n    cascade:dataProvenance cascade:DeviceGenerated .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "full-fields", "wellness", "device"],
+  "notes": "health:DailyActivitySnapshot is the single-day class. health:ActivitySnapshot is the 7-day aggregate and is a different class with a different shape; the two are deliberately not merged."
+}

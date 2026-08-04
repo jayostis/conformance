@@ -1,0 +1,22 @@
+{
+  "id": "social-003",
+  "description": "Negative: EHR-extracted social history record with a category outside the defined value set",
+  "dataType": "SocialHistoryRecord",
+  "vocabulary": "clinical",
+  "input": {
+    "id": "urn:uuid:soc0-0003-aaaa-bbbb-ccccddddeeee",
+    "type": "SocialHistoryRecord",
+    "socialHistoryCategory": "tobacco",
+    "packsPerYear": 12.5,
+    "dataProvenance": "AIExtracted",
+    "schemaVersion": "1.3"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n\n<urn:uuid:soc0-0003-aaaa-bbbb-ccccddddeeee> a clinical:SocialHistoryRecord ;\n    clinical:socialHistoryCategory \"tobacco\" ;\n    clinical:packsPerYear 12.5 ;\n    cascade:dataProvenance cascade:AIExtracted ;\n    cascade:schemaVersion \"1.3\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "enum-constraint", "social-history", "clinical", "ai-extracted"],
+  "shaclConstraintViolated": "clinical:SocialHistoryRecordShape constrains clinical:socialHistoryCategory with sh:in (smokingStatus alcoholUse substanceUse occupation exercise diet sexualHistory other). 'tobacco' is not one of them.",
+  "notes": "Covers the clinical: spelling of the dual-namespaced pair. The health: spelling (social-001, social-002) cannot have a negative counterpart today: health:SocialHistoryRecordShape declares only sh:Info-severity constraints, so no input can make it report a violation."
+}
