@@ -1,0 +1,98 @@
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Export Manifest — Alex Rivera Reference Patient Pod
+# =============================================================================
+# Provenance metadata for the complete pod export. Records when the pod was
+# generated, which schema versions are in use, record counts per domain,
+# and the provenance layers represented.
+#
+# This manifest enables consuming agents to validate completeness, verify
+# schema compatibility, and understand the provenance landscape before
+# processing individual resources.
+# =============================================================================
+
+<> a cascade:ExportManifest ;
+    dcterms:title "Cascade Reference Patient Pod — Alex Rivera" ;
+    dcterms:description "Synthetic patient pod for protocol validation, SDK testing, and agent development. Contains realistic clinical and wellness data with cross-provenance interaction scenarios." ;
+    dcterms:created "2026-02-19T00:00:00Z"^^xsd:dateTime ;
+    dcterms:creator "Cascade Protocol Team" ;
+
+    # ── Schema Versions ─────────────────────────────────────────────────────
+    cascade:schemaVersion "1.3" ;
+    cascade:patientProfileVersion "2.0" ;
+
+    # ── Provenance Layers Present ────────────────────────────────────────────
+    cascade:provenanceLayers (
+        cascade:ClinicalGenerated
+        cascade:DeviceGenerated
+        cascade:SelfReported
+    ) ;
+
+    # ── Clinical Record Counts ──────────────────────────────────────────────
+    cascade:clinicalSummary [
+        a cascade:RecordSummary ;
+        cascade:domain "clinical" ;
+        cascade:conditionCount "5"^^xsd:integer ;
+        cascade:medicationCount "8"^^xsd:integer ;
+        cascade:allergyCount "3"^^xsd:integer ;
+        cascade:labResultCount "11"^^xsd:integer ;
+        cascade:immunizationCount "4"^^xsd:integer ;
+        cascade:vitalSignDays "30"^^xsd:integer ;
+        cascade:coverageCount "1"^^xsd:integer ;
+        cascade:dataProvenance cascade:ClinicalGenerated ;
+        cascade:notes "Clinical records sourced from EHR export. Vital signs span 2026-01-20 to 2026-02-18."
+    ] ;
+
+    # ── Wellness Record Counts ──────────────────────────────────────────────
+    cascade:wellnessSummary [
+        a cascade:RecordSummary ;
+        cascade:domain "wellness" ;
+        cascade:heartRateDays "30"^^xsd:integer ;
+        cascade:bloodPressureDays "30"^^xsd:integer ;
+        cascade:activityDays "30"^^xsd:integer ;
+        cascade:sleepDays "30"^^xsd:integer ;
+        cascade:supplementCount "3"^^xsd:integer ;
+        cascade:dataProvenance cascade:DeviceGenerated ;
+        cascade:notes "Device data from Apple Watch Series 9 via HealthKit. Supplements are self-reported. BP from Omron Evolv home monitor."
+    ] ;
+
+    # ── Device Sources ──────────────────────────────────────────────────────
+    cascade:deviceSources (
+        [ a prov:Agent ; prov:label "Apple Watch Series 9" ; cascade:sourceType "healthKit" ; cascade:dataTypes "heartRate, activity, sleep" ]
+        [ a prov:Agent ; prov:label "Omron Evolv" ; cascade:sourceType "bluetoothDevice" ; cascade:dataTypes "bloodPressure" ]
+    ) ;
+
+    # ── Interaction Scenarios ────────────────────────────────────────────────
+    cascade:interactionScenarios (
+        [
+            a cascade:InteractionScenario ;
+            dcterms:title "ACE Inhibitor + Potassium Supplement Hyperkalemia Risk" ;
+            dcterms:description "Patient takes lisinopril (ACE inhibitor, EHR-prescribed) and self-initiated potassium chloride 20mEq. Serum K+ is 5.1 mEq/L (borderline high). An AI agent must cross-correlate data from three provenance sources: clinical/medications.ttl (ClinicalGenerated), wellness/supplements.ttl (SelfReported), and clinical/lab-results.ttl (ClinicalGenerated) to detect this risk." ;
+            cascade:involvedResources (
+                <clinical/medications.ttl>
+                <wellness/supplements.ttl>
+                <clinical/lab-results.ttl>
+            ) ;
+            cascade:severity "high" ;
+            cascade:requiresCrossProvenance true
+        ]
+    ) ;
+
+    # ── Generation Provenance ────────────────────────────────────────────────
+    prov:wasGeneratedBy [
+        a prov:Activity ;
+        prov:label "Reference Patient Pod Generation" ;
+        prov:startedAtTime "2026-02-19T00:00:00Z"^^xsd:dateTime ;
+        prov:endedAtTime "2026-02-19T00:00:00Z"^^xsd:dateTime ;
+        prov:wasAssociatedWith [
+            a prov:SoftwareAgent ;
+            prov:label "Cascade Protocol Reference Data Generator" ;
+            cascade:version "1.0"
+        ]
+    ] .

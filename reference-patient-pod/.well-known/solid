@@ -1,0 +1,12 @@
+{
+  "root": "https://alex-rivera.pod.cascadeprotocol.org/",
+  "oidcIssuer": "https://cascadeprotocol.org",
+  "storage": "https://alex-rivera.pod.cascadeprotocol.org/",
+  "serverDescription": "Cascade Protocol Reference Patient Pod",
+  "apiVersion": "1.0",
+  "features": {
+    "encryptionAtRest": true,
+    "provenanceTracking": true,
+    "shaclValidation": true
+  }
+}

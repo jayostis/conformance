@@ -1,0 +1,52 @@
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix sct: <http://snomed.info/sct/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix icd10: <http://hl7.org/fhir/sid/icd-10-cm/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+# =============================================================================
+# Patient Profile — Alex Rivera
+# =============================================================================
+# Reference patient for Cascade Protocol demonstration.
+# Schema Version: 2.0 (PatientProfile)
+# Provenance: ClinicalGenerated (demographics from EHR)
+# =============================================================================
+
+<urn:uuid:a1b2c3d4-e5f6-7890-abcd-ef1234567890> a cascade:PatientProfile ;
+    cascade:schemaVersion "2.0" ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:dateOfBirth "1973-08-15"^^xsd:date ;
+    cascade:biologicalSex "male" ;
+    cascade:computedAge "52"^^xsd:integer ;
+    cascade:ageGroup "adult" ;
+    foaf:name "Alex Rivera" ;
+    foaf:givenName "Alex" ;
+    foaf:familyName "Rivera" ;
+    health:bloodType "aPositive" ;
+    cascade:emergencyContact [
+        a cascade:EmergencyContact ;
+        cascade:contactName "Maria Rivera" ;
+        cascade:contactRelationship "spouse" ;
+        cascade:contactPhone "555-0142"
+    ] ;
+    cascade:address [
+        a cascade:Address ;
+        cascade:addressLine "742 Evergreen Terrace" ;
+        cascade:addressCity "Portland" ;
+        cascade:addressState "OR" ;
+        cascade:addressPostalCode "97205" ;
+        cascade:addressCountry "US" ;
+        cascade:addressUse "home"
+    ] ;
+    cascade:preferredPharmacy [
+        a cascade:PharmacyInfo ;
+        cascade:pharmacyName "Cascade Pharmacy" ;
+        cascade:pharmacyAddress "100 NW 23rd Ave, Portland, OR 97210" ;
+        cascade:pharmacyPhone "555-0199"
+    ] ;
+    cascade:profileId "a1b2c3d4-e5f6-7890-abcd-ef1234567890" .

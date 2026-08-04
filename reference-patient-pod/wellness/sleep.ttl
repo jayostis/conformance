@@ -1,0 +1,47 @@
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+# =============================================================================
+# Sleep Data — Alex Rivera
+# =============================================================================
+# 30 days of sleep tracking from Apple Watch (2026-01-20 to 2026-02-18).
+# Duration: 5.5-8.5 hours/night with realistic weekly patterns.
+# Quality: fair to good (typical for a 52-year-old with managed conditions).
+# Provenance: DeviceGenerated (Apple Watch Series 9 via HealthKit)
+# =============================================================================
+
+<#sleep> a health:SleepData ;
+    health:dailySleepHistory (
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-20T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.2"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-21T00:00:00Z"^^xsd:dateTime ; health:durationHours "6.8"^^xsd:decimal ; health:sleepQuality health:Fair ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-22T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.5"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-23T00:00:00Z"^^xsd:dateTime ; health:durationHours "6.1"^^xsd:decimal ; health:sleepQuality health:Fair ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-24T00:00:00Z"^^xsd:dateTime ; health:durationHours "5.5"^^xsd:decimal ; health:sleepQuality health:Poor ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-25T00:00:00Z"^^xsd:dateTime ; health:durationHours "8.3"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-26T00:00:00Z"^^xsd:dateTime ; health:durationHours "8.5"^^xsd:decimal ; health:sleepQuality health:Excellent ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-27T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.0"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-28T00:00:00Z"^^xsd:dateTime ; health:durationHours "6.4"^^xsd:decimal ; health:sleepQuality health:Fair ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-29T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.8"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-30T00:00:00Z"^^xsd:dateTime ; health:durationHours "6.9"^^xsd:decimal ; health:sleepQuality health:Fair ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-01-31T00:00:00Z"^^xsd:dateTime ; health:durationHours "5.8"^^xsd:decimal ; health:sleepQuality health:Poor ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-01T00:00:00Z"^^xsd:dateTime ; health:durationHours "8.1"^^xsd:decimal ; health:sleepQuality health:Excellent ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-02T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.6"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-03T00:00:00Z"^^xsd:dateTime ; health:durationHours "6.5"^^xsd:decimal ; health:sleepQuality health:Fair ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-04T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.3"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-05T00:00:00Z"^^xsd:dateTime ; health:durationHours "6.7"^^xsd:decimal ; health:sleepQuality health:Fair ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-06T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.9"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-07T00:00:00Z"^^xsd:dateTime ; health:durationHours "5.9"^^xsd:decimal ; health:sleepQuality health:Poor ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-08T00:00:00Z"^^xsd:dateTime ; health:durationHours "8.0"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-09T00:00:00Z"^^xsd:dateTime ; health:durationHours "8.4"^^xsd:decimal ; health:sleepQuality health:Excellent ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-10T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.1"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-11T00:00:00Z"^^xsd:dateTime ; health:durationHours "6.3"^^xsd:decimal ; health:sleepQuality health:Fair ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-12T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.4"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-13T00:00:00Z"^^xsd:dateTime ; health:durationHours "6.6"^^xsd:decimal ; health:sleepQuality health:Fair ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-14T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.7"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-15T00:00:00Z"^^xsd:dateTime ; health:durationHours "8.2"^^xsd:decimal ; health:sleepQuality health:Excellent ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-16T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.0"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-17T00:00:00Z"^^xsd:dateTime ; health:durationHours "6.2"^^xsd:decimal ; health:sleepQuality health:Fair ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+        [ a health:DailySleepSnapshot ; cascade:date "2026-02-18T00:00:00Z"^^xsd:dateTime ; health:durationHours "7.5"^^xsd:decimal ; health:sleepQuality health:Good ; prov:wasGeneratedBy [ a prov:Activity ; cascade:sourceType "healthKit" ; prov:label "Apple Watch Series 9" ] ]
+    ) .
