@@ -15,11 +15,11 @@
     "provenanceClass": "userTracked"
   },
   "expectedOutput": {
-    "turtle": "",
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n\n<urn:uuid:neg0-0003-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;\n    clinical:drugName \"Ibuprofen\" ;\n    clinical:status \"active\" ;\n    cascade:dataProvenance cascade:SelfReported ;\n    cascade:schemaVersion \"1\" ;\n    clinical:dosage \"400 mg\" ;\n    clinical:frequency \"as needed\" ;\n    clinical:provenanceClass \"userTracked\" .\n",
     "validationMode": "shacl-valid"
   },
   "shouldAccept": false,
   "tags": ["negative", "pattern-constraint"],
-  "shaclConstraintViolated": "MedicationShape requires cascade:schemaVersion to match pattern '^[0-9]+\\.[0-9]+$'. The value '1' does not include a minor version number.",
+  "shaclConstraintViolated": "clinical:MedicationShape requires cascade:schemaVersion to match pattern '^[0-9]+\\.[0-9]+$'. The value '1' does not include a minor version number.",
   "notes": "Derived from clinical:MedicationShape which requires cascade:schemaVersion with sh:pattern constraint for major.minor format."
 }

@@ -14,11 +14,11 @@
     "resultUnit": "g/dL"
   },
   "expectedOutput": {
-    "turtle": "",
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:neg0-l002-aaaa-bbbb-ccccddddeeee> a health:LabResultRecord ;\n    health:testName \"Complete Blood Count\" ;\n    health:resultValue \"14.2\" ;\n    health:interpretation \"normal\" ;\n    health:performedDate \"2026-01-15T08:30:00Z\"^^xsd:dateTime ;\n    cascade:schemaVersion \"1.3\" ;\n    health:resultUnit \"g/dL\" .\n",
     "validationMode": "shacl-valid"
   },
   "shouldAccept": false,
   "tags": ["negative", "required-field"],
-  "shaclConstraintViolated": "LabResultShape requires cascade:dataProvenance (sh:minCount 1). Every lab result must declare its provenance source.",
+  "shaclConstraintViolated": "health:LabResultRecordShape requires cascade:dataProvenance (sh:minCount 1). Every lab result must declare its provenance source.",
   "notes": "Derived from clinical:LabResultShape which requires cascade:dataProvenance with sh:minCount 1."
 }

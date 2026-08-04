@@ -13,11 +13,11 @@
     "contains": []
   },
   "expectedOutput": {
-    "turtle": "",
+    "turtle": "@prefix ldp: <http://www.w3.org/ns/ldp#> .\n@prefix dcterms: <http://purl.org/dc/terms/> .\n@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<> a ldp:BasicContainer ;\n    dcterms:title \"Empty Patient Pod\" ;\n    dcterms:description \"A pod with no resources.\" ;\n    dcterms:created \"2026-02-19T00:00:00Z\"^^xsd:dateTime ;\n    cascade:schemaVersion \"1.3\" .\n",
     "validationMode": "exact-match"
   },
   "shouldAccept": false,
   "tags": ["negative", "pod-structure", "container"],
   "shaclConstraintViolated": "A Cascade Pod root container must contain at least one resource via ldp:contains. An empty pod has no clinical utility.",
-  "notes": "Tests that an empty pod container with no resources is rejected. A valid Cascade Pod must contain at least the profile and manifest resources."
+  "notes": "Tests that an empty pod container with no resources is rejected. A valid Cascade Pod must contain at least the profile and manifest resources. The invalid serialization is authored, but no SHACL shape targets ldp:BasicContainer in any Cascade vocabulary, so nothing rejects it yet and the runner reports this fixture as UNSHAPED. It becomes a live negative the moment a pod-container shape exists."
 }

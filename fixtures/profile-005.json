@@ -13,11 +13,11 @@
     "ageGroup": "young_adult"
   },
   "expectedOutput": {
-    "turtle": "",
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:neg0-p002-aaaa-bbbb-ccccddddeeee> a cascade:PatientProfile ;\n    cascade:schemaVersion \"2.0\" ;\n    cascade:dataProvenance cascade:SelfReported ;\n    cascade:dateOfBirth \"1990-06-20\"^^xsd:date ;\n    cascade:computedAge \"35\"^^xsd:integer ;\n    cascade:ageGroup \"young_adult\" .\n",
     "validationMode": "shacl-valid"
   },
   "shouldAccept": false,
   "tags": ["negative", "required-field"],
-  "shaclConstraintViolated": "PatientProfileShape requires cascade:biologicalSex (sh:minCount 1, sh:Violation). Biological sex must be one of 'male', 'female', or 'intersex' for clinical calculations.",
+  "shaclConstraintViolated": "cascade:PatientProfileShape requires cascade:biologicalSex (sh:minCount 1, sh:Violation). Biological sex must be one of 'male', 'female', or 'intersex' for clinical calculations.",
   "notes": "Derived from cascade:PatientProfileShape which requires cascade:biologicalSex with sh:minCount 1, sh:in ('male', 'female', 'intersex') at sh:Violation severity."
 }

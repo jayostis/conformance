@@ -12,11 +12,11 @@
     "creator": "Test"
   },
   "expectedOutput": {
-    "turtle": "",
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix dcterms: <http://purl.org/dc/terms/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<> a cascade:ExportManifest ;\n    dcterms:title \"Incomplete Manifest\" ;\n    dcterms:description \"A manifest without schema version.\" ;\n    dcterms:created \"2026-02-19T00:00:00Z\"^^xsd:dateTime ;\n    dcterms:creator \"Test\" .\n",
     "validationMode": "exact-match"
   },
   "shouldAccept": false,
   "tags": ["negative", "pod-structure", "manifest"],
-  "shaclConstraintViolated": "ExportManifest requires cascade:schemaVersion. Without a schema version, consuming agents cannot determine compatibility.",
+  "shaclConstraintViolated": "cascade:ExportManifestShape requires cascade:schemaVersion (sh:minCount 1). Without a schema version, consuming agents cannot determine compatibility.",
   "notes": "Tests that a manifest without cascade:schemaVersion is rejected. Schema version is mandatory for all Cascade Protocol metadata resources."
 }
