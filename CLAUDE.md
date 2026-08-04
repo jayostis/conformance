@@ -20,15 +20,16 @@ python3 -m pip install -r scripts/requirements.txt
 python3 scripts/run_conformance.py --spec-dir ../spec
 ```
 
-The result depends on which `spec` revision you point it at, so always say which:
+Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.4 / health 2.5 /
+clinical 1.13), which is what CI executes: **86 passed / 32 failed / 0 skipped /
+118 total**, 61,391 constraint checks.
 
-- against `spec` at core 3.4 / health 2.5 / clinical 1.13: **86 passed / 32 failed / 0 skipped / 118 total**
-- against the revision in `scripts/SPEC_PIN` (core 3.3 / health 2.4 / clinical 1.12), which is what CI executes: **52 passed / 66 failed / 0 skipped / 118 total**
-
-The difference is not noise. 14 fixtures evaluate zero constraints at the older
-vocabulary because the shapes that target them do not exist there, and the runner
-counts a zero-constraint pass as a failure. Re-pinning `scripts/SPEC_PIN` is what
-moves CI onto the newer number.
+The result depends on which `spec` revision you point it at, so **always say which**,
+and never quote a number obtained with `--allow-spec-drift` as the suite's result.
+The same 118 fixtures score 52/66 against the pre-2026-08-03 vocabulary, because 14
+of them evaluate zero constraints where the shapes that target them do not exist and
+the runner counts a zero-constraint pass as a failure. Moving the pin is what moves
+that number, so re-pin deliberately and record both counts in the PR.
 
 **Never resolve a failure by weakening the runner.** Do not skip a fixture, relax an assertion, or add a baseline of known failures. A new fixture that the runner reports as `UNSHAPED` is not testing anything: no shape targets it, so zero constraints ran and its PASS would be vacuous.
 

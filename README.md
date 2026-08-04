@@ -26,7 +26,10 @@ Every count below is derived from the fixture files themselves, not maintained b
 | Immunization | `imm-` | 3 | Vaccine records |
 | Family History | `fam-` | 3 | Family medical history |
 | Procedure | `proc-` | 3 | Procedures and surgical history |
-| Social History | `social-` | 2 | Consumer-reported social/behavioral history (health v2.4) |
+| Social History | `social-` | 3 | Social/behavioral history: consumer-reported (health v2.4) and EHR-extracted (clinical v1.8) |
+| Daily Activity Snapshot | `dailyactivity-` | 2 | One day of activity metrics from a wearable (health v2.5) |
+| Daily Sleep Snapshot | `dailysleep-` | 2 | One night of sleep metrics from a wearable (health v2.5) |
+| Daily Vital Reading | `dailyvital-` | 2 | One day's aggregated vital sign inside a history container (health v2.5) |
 | Proxy Agent | `proxy-` | 2 | Caregiver-proxy actor operating a patient's Pod (core v3.3) |
 | Benefit Statement | `benefit-` | 1 | Explanation of benefits |
 | Claim Record | `claim-` | 1 | Insurance claim records |
@@ -35,7 +38,7 @@ Every count below is derived from the fixture files themselves, not maintained b
 | Encounter | `encounter-` | 1 | Clinical encounters and visits |
 | Imaging Study | `imaging-` | 1 | Imaging studies and results |
 | Medication Administration | `medadmin-` | 1 | Medication administration events |
-| **Total** | | **71** | 20 data types |
+| **Total** | | **78** | 23 data types |
 
 ### RDF fixtures (`fixtures/**/*.ttl`)
 
@@ -55,9 +58,9 @@ Every count below is derived from the fixture files themselves, not maintained b
 | `genomics/vrs/` | 1 | 1 | 0 | GA4GH VRS allele conversion oracle |
 | **Total** | **40** | **33** | **7** | |
 
-**Grand total: 111 executable fixtures.**
+**Grand total: 118 executable fixtures.**
 
-A further 92 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
+A further 93 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
 ## Running the suite
 
@@ -125,29 +128,48 @@ To re-pin:
 
 ## Current status
 
-As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.3, health 2.4, clinical 1.12):
+As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.4, health 2.5, clinical 1.13):
 
 ```
-passed  43
-failed  68
+passed  86
+failed  32
 skipped  0
-total   111        60,212 constraint checks evaluated
+total   118        61,391 constraint checks evaluated
 ```
 
-This is the first time these fixtures have been executed by anything. The 68 failures are pre-existing and were latent, not caused by the runner. They break down as:
+The first execution of these fixtures, against the older `spec` revision the pin
+originally named, was **43 passed / 68 failed / 0 skipped / 111 total**. Three things
+moved it: 18 fixtures started passing on their own when `spec` defined and shaped the
+classes they had always asserted; 18 were fixed here; 7 were added. No fixture that
+passed has since failed. The remaining 32 break down as:
 
 | Reason | Count | Notes |
 |---|---|---|
-| `UNSHAPED` | 27 | 21 of these are `health:LabResultRecord`, `health:ConditionRecord`, `health:AllergyRecord`, `health:ImmunizationRecord`, `health:FamilyHistoryRecord` and `health:ProcedureRecord`, which are asserted by fixtures but not defined as classes or targeted by any shape. The rest are `clinical:Encounter`, `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:CoverageRecord`, `coverage:DenialNotice`, `ldp:BasicContainer`, `cascade:ExportManifest` and `cascade:RecordSummary`. |
-| `NO_TURTLE` | 22 | 19 negative fixtures declare `expectedOutput.turtle: ""`. A shapes-only runner can only exercise the post-validation path, which needs the invalid serialization to exist. The other 3 are comment-only placeholder `.ttl` files. |
-| `VIOLATIONS` | 16 | Conversion oracles under `fixtures/genomics/` and one under `fixtures/core/` whose expected output does not satisfy the shapes it is supposed to produce. |
-| `PARSE_ERROR` | 3 | `benefit-001`, `claim-001` and `imaging-001` contain Turtle that no parser accepts: a numeric literal cannot carry an explicit datatype (`450.00^^xsd:decimal` must be `"450.00"^^xsd:decimal`). |
-
-One further file, `fixtures/genomics/vrs/example-allele-BRCA2-deletion.input.json`, is not valid JSON (it opens with `#` comment lines), and is reported as a discovery error.
+| `VIOLATIONS` | 16 | Conversion oracles under `fixtures/genomics/` and one under `fixtures/core/` whose expected output does not satisfy the shapes it is supposed to produce. Each is either an importer defect or a shape stricter than the source format can satisfy, and they need triage one at a time. |
+| `UNSHAPED` | 13 | Every one is a class a fixture asserts and no shape targets, so zero constraints run: `health:ProcedureRecord` (`proc-001/002/003`, not defined in `health.ttl` at all), `clinical:Encounter`, `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `clinical:CoverageRecord`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, and `ldp:BasicContainer` (`pod-001`, `pod-003`). Two of the 13 are negative fixtures whose Turtle is authored and correct; they go live the moment a shape exists. |
+| `NO_TURTLE` | 3 | Comment-only placeholder `.ttl` files: two unauthored advisory oracles, and `genomics/phenopackets/biosamples-SAMN05324082.expected.ttl`, which is deliberately empty because it asserts `detect() === false` — not a SHACL assertion, so it needs a different home. |
 
 **These failures must not be resolved by weakening the runner.** Do not skip a fixture, relax an assertion, or add a baseline of known failures. A runner that passes everything on its first run is a runner that tests nothing, which is the state this repository was in before it had one. Fix the fixture or fix the vocabulary.
 
-The two directories that pass cleanly, `fixtures/evidence/` (7 of 7) and `fixtures/workbench/` (7 of 7), are worth noting: both include negative fixtures that the shapes correctly reject, which is what a healthy fixture set looks like.
+### A negative fixture is the only one that can catch a validator that stopped validating
+
+Until this suite was first executed, **19 of its 20 negative fixtures declared
+`expectedOutput.turtle: ""`**. A shapes-based runner validates that string, so those
+19 were validating an empty graph: they reported the same result no matter what the
+shapes said. Only `proxy-002` worked. Each now carries the serialization of its own
+`input`, defect included, and is rejected by the constraint its `shaclConstraintViolated`
+field names — verified one fixture at a time, and verified again by repairing only the
+named defect and confirming the rejection goes away.
+
+Where a class has no shape, a negative fixture is not merely missing but **impossible**:
+there is no constraint to violate, so the fixture would evaluate zero constraints and
+assert nothing. That is why seven of the data types above still have a positive fixture
+and no negative. It is a vocabulary gap, not a fixture-authoring gap, and adding an
+inert negative would hide it rather than close it.
+
+`fixtures/evidence/` (7 of 7) and `fixtures/workbench/` (7 of 7) pass cleanly, and both
+include negative fixtures the shapes correctly reject, which is what a healthy fixture
+set looks like.
 
 ## Fixture Format
 
