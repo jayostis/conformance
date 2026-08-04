@@ -1,0 +1,4 @@
+# Pinned so a runner result is reproducible. CI installs exactly this file.
+pyshacl==0.30.1
+rdflib==7.6.0
+jsonschema==4.25.1
