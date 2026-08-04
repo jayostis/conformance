@@ -12,11 +12,11 @@
     "onsetDate": "2015-06-01T00:00:00Z"
   },
   "expectedOutput": {
-    "turtle": "",
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:neg0-c002-aaaa-bbbb-ccccddddeeee> a health:ConditionRecord ;\n    health:conditionName \"Migraine\" ;\n    health:status \"active\" ;\n    cascade:dataProvenance cascade:SelfReported ;\n    health:onsetDate \"2015-06-01T00:00:00Z\"^^xsd:dateTime .\n",
     "validationMode": "shacl-valid"
   },
   "shouldAccept": false,
   "tags": ["negative", "required-field"],
-  "shaclConstraintViolated": "ConditionShape requires cascade:schemaVersion (sh:minCount 1). The schema version is mandatory for all records to ensure compatibility.",
+  "shaclConstraintViolated": "health:ConditionRecordShape requires cascade:schemaVersion (sh:minCount 1). The schema version is mandatory for all records to ensure compatibility.",
   "notes": "Derived from clinical:ConditionShape which requires cascade:schemaVersion with sh:minCount 1 and sh:pattern for major.minor format."
 }

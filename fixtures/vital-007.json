@@ -15,11 +15,11 @@
     "schemaVersion": "1.3"
   },
   "expectedOutput": {
-    "turtle": "",
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:neg0-v002-aaaa-bbbb-ccccddddeeee> a clinical:VitalSign ;\n    clinical:vitalType \"painScore\" ;\n    clinical:vitalTypeName \"Pain Score\" ;\n    clinical:value 4 ;\n    clinical:unit \"scale\" ;\n    clinical:effectiveDate \"2026-01-20T09:15:00Z\"^^xsd:dateTime ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" .\n",
     "validationMode": "shacl-valid"
   },
   "shouldAccept": false,
   "tags": ["negative", "enum-constraint"],
-  "shaclConstraintViolated": "VitalSignShape requires clinical:vitalType to be one of the enumerated values (heartRate, bloodPressureSystolic, bloodPressureDiastolic, respiratoryRate, temperature, oxygenSaturation, etc.). 'painScore' is not a valid vital type.",
+  "shaclConstraintViolated": "clinical:VitalSignShape requires clinical:vitalType to be one of the enumerated values (heartRate, bloodPressureSystolic, bloodPressureDiastolic, respiratoryRate, temperature, oxygenSaturation, etc.). 'painScore' is not a valid vital type.",
   "notes": "Derived from clinical:VitalSignShape sh:in constraint on clinical:vitalType. Pain score is not part of the Cascade Protocol vital sign vocabulary."
 }

@@ -1,0 +1,22 @@
+{
+  "id": "dailysleep-002",
+  "description": "Negative: daily sleep snapshot with a sleepQuality rating outside the four defined individuals",
+  "dataType": "DailySleepSnapshot",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:dslp-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "DailySleepSnapshot",
+    "date": "2026-01-21T00:00:00Z",
+    "durationHours": 5.1,
+    "sleepQuality": "Restless",
+    "dataProvenance": "DeviceGenerated"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:dslp-0002-aaaa-bbbb-ccccddddeeee> a health:DailySleepSnapshot ;\n    cascade:date \"2026-01-21T00:00:00Z\"^^xsd:dateTime ;\n    health:durationHours 5.1 ;\n    health:sleepQuality health:Restless ;\n    cascade:dataProvenance cascade:DeviceGenerated .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "enum-constraint", "wellness", "device"],
+  "shaclConstraintViolated": "health:DailySleepSnapshotShape constrains health:sleepQuality with sh:in (health:Excellent health:Good health:Fair health:Poor). health:Restless is not one of them.",
+  "notes": "A vendor-specific quality label leaking through an importer is the realistic source of an out-of-vocabulary value here. Without the sh:in it would be stored and later compared against the four defined ratings as if it were one of them."
+}

@@ -5,7 +5,9 @@
 
 <urn:cascade:medication:example-ai>
     a clinical:Medication ;
+    clinical:drugName "Metformin" ;
     cascade:dataProvenance cascade:AIExtracted ;
+    cascade:schemaVersion "1.3" ;
     prov:wasGeneratedBy <urn:cascade:activity:extraction-1> .
 
 <urn:cascade:activity:extraction-1>

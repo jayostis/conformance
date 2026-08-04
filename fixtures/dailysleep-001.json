@@ -1,0 +1,21 @@
+{
+  "id": "dailysleep-001",
+  "description": "Daily sleep snapshot: one night's duration and quality rating from a wearable (health v2.5)",
+  "dataType": "DailySleepSnapshot",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:dslp-0001-aaaa-bbbb-ccccddddeeee",
+    "type": "DailySleepSnapshot",
+    "date": "2026-01-20T00:00:00Z",
+    "durationHours": 7.4,
+    "sleepQuality": "Good",
+    "dataProvenance": "DeviceGenerated"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:dslp-0001-aaaa-bbbb-ccccddddeeee> a health:DailySleepSnapshot ;\n    cascade:date \"2026-01-20T00:00:00Z\"^^xsd:dateTime ;\n    health:durationHours 7.4 ;\n    health:sleepQuality health:Good ;\n    cascade:dataProvenance cascade:DeviceGenerated .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": ["happy-path", "wellness", "device"],
+  "notes": "health:sleepQuality is written as an IRI (health:Good) because that is what every known emitter produces, even though health.ttl still declares the property xsd:string-ranged. health:DailySleepSnapshotShape asserts no sh:datatype for exactly that reason and constrains the permitted individuals instead."
+}

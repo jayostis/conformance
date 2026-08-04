@@ -7,7 +7,7 @@ Date: 2026-08-03
 
 The Cascade Protocol Conformance Test Suite validates that SDK implementations correctly serialize health data to RDF/Turtle format according to the Cascade Protocol specification. It provides a standardized set of test fixtures that any SDK (Swift, Python, JavaScript, etc.) can run against to verify conformance.
 
-The suite also ships its own runner (`scripts/run_conformance.py`), which executes every fixture against the SHACL shapes published by `spec`. See [Running the suite](#running-the-suite) and [Current status](#current-status).
+The suite also ships its own runner (`scripts/run_conformance.py`), which executes every fixture against the SHACL shapes published by `spec`, and a ratchet (`scripts/check_baseline.py`) that gates CI on whether anything got worse — or got better without [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) being updated. See [Running the suite](#running-the-suite), [Current status](#current-status) and [What a green CI run means](#what-a-green-ci-run-means).
 
 ### Record fixtures (`fixtures/*.json`)
 
@@ -26,7 +26,10 @@ Every count below is derived from the fixture files themselves, not maintained b
 | Immunization | `imm-` | 3 | Vaccine records |
 | Family History | `fam-` | 3 | Family medical history |
 | Procedure | `proc-` | 3 | Procedures and surgical history |
-| Social History | `social-` | 2 | Consumer-reported social/behavioral history (health v2.4) |
+| Social History | `social-` | 3 | Social/behavioral history: consumer-reported (health v2.4) and EHR-extracted (clinical v1.8) |
+| Daily Activity Snapshot | `dailyactivity-` | 2 | One day of activity metrics from a wearable (health v2.5) |
+| Daily Sleep Snapshot | `dailysleep-` | 2 | One night of sleep metrics from a wearable (health v2.5) |
+| Daily Vital Reading | `dailyvital-` | 2 | One day's aggregated vital sign inside a history container (health v2.5) |
 | Proxy Agent | `proxy-` | 2 | Caregiver-proxy actor operating a patient's Pod (core v3.3) |
 | Benefit Statement | `benefit-` | 1 | Explanation of benefits |
 | Claim Record | `claim-` | 1 | Insurance claim records |
@@ -35,7 +38,7 @@ Every count below is derived from the fixture files themselves, not maintained b
 | Encounter | `encounter-` | 1 | Clinical encounters and visits |
 | Imaging Study | `imaging-` | 1 | Imaging studies and results |
 | Medication Administration | `medadmin-` | 1 | Medication administration events |
-| **Total** | | **71** | 20 data types |
+| **Total** | | **78** | 23 data types |
 
 ### RDF fixtures (`fixtures/**/*.ttl`)
 
@@ -55,9 +58,9 @@ Every count below is derived from the fixture files themselves, not maintained b
 | `genomics/vrs/` | 1 | 1 | 0 | GA4GH VRS allele conversion oracle |
 | **Total** | **40** | **33** | **7** | |
 
-**Grand total: 111 executable fixtures.**
+**Grand total: 118 executable fixtures.**
 
-A further 92 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
+A further 93 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
 ## Running the suite
 
@@ -68,12 +71,19 @@ python3 -m pip install -r scripts/requirements.txt
 git clone https://github.com/the-cascade-protocol/spec.git ../spec
 git -C ../spec checkout "$(grep '^commit=' scripts/SPEC_PIN | cut -d= -f2)"
 
-python3 scripts/run_conformance.py --spec-dir ../spec
+# 1. the truth: execute and report every fixture
+python3 scripts/run_conformance.py --spec-dir ../spec --json results.json
+
+# 2. the gate: did anything get worse, or better without the record being updated?
+python3 scripts/check_baseline.py --results results.json
 ```
 
 `--spec-dir` also reads from `$CASCADE_SPEC_DIR`, and defaults to `../spec`. Useful flags: `--json PATH` writes machine-readable results, `--select GLOB` restricts the run while debugging (CI never uses it), `--quiet` suppresses the text report.
 
-Exit codes: `0` every fixture passed, `1` one or more failed, `2` the runner's own self-checks failed and no fixture result should be believed.
+The two commands answer different questions and the split is deliberate. The runner reports what is true and exits `1` while any fixture fails, which it will for as long as the vocabulary has gaps. The gate decides whether that is acceptable, by comparing the report against the enumerated baseline in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json). Nothing is filtered out of the report to make the gate pass.
+
+Runner exit codes: `0` every fixture passed, `1` one or more failed, `2` the runner's own self-checks failed and no fixture result should be believed.
+Gate exit codes: `0` the ratchet held, `1` the ratchet was violated in either direction, `2` the gate could not run or the baseline is unusable.
 
 ### What the runner actually does
 
@@ -101,7 +111,7 @@ So the runner computes, independently of the SHACL engine, how many constraint p
 
 The runner aborts the whole run (exit 2) rather than reporting anything if the shapes graph is empty, if a shapes or ontology file fails to parse, if no shape declares a constraint, or if zero constraints were evaluated across the entire suite. Each of those is a way a runner can report PASS while testing nothing.
 
-`scripts/selftest_runner.py` is the proof that the above holds. It mutates fixtures and shapes in temporary directories and asserts the runner notices: that breaking one constraint produces exactly one violation naming that constraint, that repairing a negative fixture is reported as unexpectedly conforming, and that deleting a shape yields `UNSHAPED` rather than `PASS`. No mutated copy is ever written inside the repository. Run it with `python3 scripts/selftest_runner.py --spec-dir ../spec`.
+`scripts/selftest_runner.py` is the proof that the above holds. It mutates fixtures, shapes and baselines in temporary directories and asserts the runner and the gate notice: that breaking one constraint produces exactly one violation naming that constraint, that repairing a negative fixture is reported as unexpectedly conforming, that deleting a shape yields `UNSHAPED` rather than `PASS`, that a drifted `spec` checkout is refused, and that the ratchet fails **in both directions** — on a failure the baseline does not list, and on a baselined failure that starts passing. No mutated copy is ever written inside the repository. Run it with `python3 scripts/selftest_runner.py --spec-dir ../spec`.
 
 ### The spec pin
 
@@ -111,43 +121,103 @@ To re-pin:
 
 1. Check out the new `spec` revision and note its full SHA and its `VOCAB_VERSIONS` line.
 2. Update `commit=` and `vocab=` in `scripts/SPEC_PIN`.
-3. Run `python3 scripts/run_conformance.py --spec-dir ../spec` and record the before and after counts in the pull request. A re-pin that changes the pass count is a vocabulary change with consequences, and the pull request should say what they are.
-4. Update `VOCAB_VERSIONS` at the repository root only once fixtures actually cover the new vocabulary. The pin and `VOCAB_VERSIONS` answer different questions: the pin says what the shapes came from, `VOCAB_VERSIONS` says what the fixtures cover.
+3. Run `python3 scripts/run_conformance.py --spec-dir ../spec --json results.json` and record the before and after counts in the pull request. A re-pin that changes the pass count is a vocabulary change with consequences, and the pull request should say what they are.
+4. Re-measure `KNOWN_FAILURES.json` in the same commit: set its `specPin` to the new SHA and reconcile its entries. The gate refuses to run when the two disagree, and names the exact edit. Different shapes give different results, so **a re-pin requiring a baseline update is the ratchet working**, not a failure.
+5. Update `VOCAB_VERSIONS` at the repository root only once fixtures actually cover the new vocabulary. The pin and `VOCAB_VERSIONS` answer different questions: the pin says what the shapes came from, `VOCAB_VERSIONS` says what the fixtures cover.
 
-`--allow-spec-drift` bypasses the check for local experiments against unreleased vocabulary. CI never passes it.
+The runner also refuses a checkout that sits at the pinned commit but has uncommitted changes under `ontologies/`: the shapes being validated would then not be the ones that SHA describes, and every result would be attributed to a revision that does not describe them.
+
+`--allow-spec-drift` bypasses both checks for local experiments against unreleased vocabulary. CI never passes it, the results file records that it was used, and the gate refuses to ratchet a run that used it — a drifted run is not evidence about the pinned vocabulary.
 
 ### Continuous integration
 
 `.github/workflows/conformance.yml` runs on every push to `main` and every pull request, in two jobs:
 
 - **runner mutation tests** runs `scripts/selftest_runner.py`. This job is green and must stay green. If it goes red, no result from the other job means anything.
-- **fixture suite** runs every fixture. This job is currently red; see below.
+- **fixture suite** runs every fixture, prints the whole report, then ratchets it against `KNOWN_FAILURES.json`. The suite itself is still red and the report still names all 31 failures; the job is green only while nothing has got worse and nothing has got better without the record being updated. See [What a green CI run means](#what-a-green-ci-run-means).
 
 ## Current status
 
-As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.3, health 2.4, clinical 1.12):
+As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.4, health 2.5, clinical 1.13):
 
 ```
-passed  43
-failed  68
+passed  87
+failed  31
 skipped  0
-total   111        60,212 constraint checks evaluated
+total   118        61,391 constraint checks evaluated
 ```
 
-This is the first time these fixtures have been executed by anything. The 68 failures are pre-existing and were latent, not caused by the runner. They break down as:
+The first execution of these fixtures, against the older `spec` revision the pin
+originally named, was **43 passed / 68 failed / 0 skipped / 111 total**. Three things
+moved it: 18 fixtures started passing on their own when `spec` defined and shaped the
+classes they had always asserted; 19 were fixed here; 7 were added. No fixture that
+passed has since failed. The remaining 31 break down as:
 
-| Reason | Count | Notes |
-|---|---|---|
-| `UNSHAPED` | 27 | 21 of these are `health:LabResultRecord`, `health:ConditionRecord`, `health:AllergyRecord`, `health:ImmunizationRecord`, `health:FamilyHistoryRecord` and `health:ProcedureRecord`, which are asserted by fixtures but not defined as classes or targeted by any shape. The rest are `clinical:Encounter`, `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:CoverageRecord`, `coverage:DenialNotice`, `ldp:BasicContainer`, `cascade:ExportManifest` and `cascade:RecordSummary`. |
-| `NO_TURTLE` | 22 | 19 negative fixtures declare `expectedOutput.turtle: ""`. A shapes-only runner can only exercise the post-validation path, which needs the invalid serialization to exist. The other 3 are comment-only placeholder `.ttl` files. |
-| `VIOLATIONS` | 16 | Conversion oracles under `fixtures/genomics/` and one under `fixtures/core/` whose expected output does not satisfy the shapes it is supposed to produce. |
-| `PARSE_ERROR` | 3 | `benefit-001`, `claim-001` and `imaging-001` contain Turtle that no parser accepts: a numeric literal cannot carry an explicit datatype (`450.00^^xsd:decimal` must be `"450.00"^^xsd:decimal`). |
+| Reason | Count | Owned by | Notes |
+|---|---|---|---|
+| `VIOLATIONS` | 15 | `spec` (3), undecided (12) | Conversion oracles under `fixtures/genomics/`. Each `.expected.ttl` records what the importer currently emits from the neighbouring `.input.json`, so a violation means either the importer must emit more or the shape must ask less. Three are settled — GA4GH Phenopackets do not carry a date of birth or a biological sex, so `cascade:PatientProfileShape` is stricter than the source format can satisfy. The other twelve need triage one at a time. |
+| `UNSHAPED` | 13 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `health:ProcedureRecord` (`proc-001/002/003`, not defined in `health.ttl` at all), `clinical:Encounter`, `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `clinical:CoverageRecord`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. Two are negative fixtures whose Turtle is authored and correct; they go live the moment a shape exists. |
+| `NO_TURTLE` | 3 | `conformance` | Comment-only placeholder `.ttl` files: two unauthored advisory oracles, and `genomics/phenopackets/biosamples-SAMN05324082.expected.ttl`, which is deliberately empty because it asserts `detect() === false` — not a SHACL assertion, so it needs a different home. |
 
-One further file, `fixtures/genomics/vrs/example-allele-BRCA2-deletion.input.json`, is not valid JSON (it opens with `#` comment lines), and is reported as a discovery error.
+Each of the 31 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
+constraint it violates and the repo that owns the fix.
 
-**These failures must not be resolved by weakening the runner.** Do not skip a fixture, relax an assertion, or add a baseline of known failures. A runner that passes everything on its first run is a runner that tests nothing, which is the state this repository was in before it had one. Fix the fixture or fix the vocabulary.
+### What a green CI run means
 
-The two directories that pass cleanly, `fixtures/evidence/` (7 of 7) and `fixtures/workbench/` (7 of 7), are worth noting: both include negative fixtures that the shapes correctly reject, which is what a healthy fixture set looks like.
+**Not "everything passes".** The suite is red on its own terms and the runner's report
+says so on every run, naming every failure. The *job* is green when the ratchet holds:
+
+- a failure appears that `KNOWN_FAILURES.json` does not list → **red**, naming it;
+- a listed failure starts **passing** → **red**, telling you to remove the entry.
+
+The second is why this is a ratchet and not a suppression list. A baseline that only
+catches new failures grows and never shrinks; one that also fails when the truth
+improves can only shrink deliberately. Entries are keyed on `(fixture, reason)`, so a
+fixture that goes `UNSHAPED` → `VIOLATIONS` fails the gate even though it was already
+failing — that is a new fact about the world.
+
+The baseline never grows on its own. Adding an entry is an explicit committed edit
+carrying an `ownedBy`. `check_baseline.py --regenerate` exists, writes anything new as
+`ownedBy: "UNASSIGNED"`, and the gate refuses to pass while any entry is unassigned;
+**using it needs justifying in the pull request.** The gate also exits 2 rather than
+green if the baseline is missing or unparseable, if the run evaluated zero constraints,
+if the run used `--allow-spec-drift`, or if the baseline was measured against a
+different `spec` revision than the run used.
+
+**Advancing `scripts/SPEC_PIN` is expected to require a baseline update, and that is
+the mechanism working, not a failure.** Different shapes produce different results:
+`spec` PR #13, for instance, tightens `genomics:CopyNumberVariantShape`, which adds a
+violation to `genomics/phenopackets/retinoblastoma.expected.ttl`. Re-measure the
+baseline in the same commit that moves the pin; the gate names the one-line fix.
+
+**None of this permits weakening the runner.** Do not skip a fixture, relax an
+assertion, or soften a shape to make a fixture pass. Do not baseline a failure this
+repository could fix — that is what the `ownedBy` field is for and why 13 of the 31 say
+`spec`. A runner that passes everything is a runner that tests nothing, which is the
+state this repository was in before it had one.
+
+Both ratchet directions, and every one of the exit-2 refusals, are mutation-tested in
+`scripts/selftest_runner.py` and run in CI.
+
+### A negative fixture is the only one that can catch a validator that stopped validating
+
+Until this suite was first executed, **19 of its 20 negative fixtures declared
+`expectedOutput.turtle: ""`**. A shapes-based runner validates that string, so those
+19 were validating an empty graph: they reported the same result no matter what the
+shapes said. Only `proxy-002` worked. Each now carries the serialization of its own
+`input`, defect included, and is rejected by the constraint its `shaclConstraintViolated`
+field names — verified one fixture at a time, and verified again by repairing only the
+named defect and confirming the rejection goes away.
+
+Where a class has no shape, a negative fixture is not merely missing but **impossible**:
+there is no constraint to violate, so the fixture would evaluate zero constraints and
+assert nothing. That is why seven of the data types above still have a positive fixture
+and no negative. It is a vocabulary gap, not a fixture-authoring gap, and adding an
+inert negative would hide it rather than close it.
+
+`fixtures/evidence/` (7 of 7) and `fixtures/workbench/` (7 of 7) pass cleanly, and both
+include negative fixtures the shapes correctly reject, which is what a healthy fixture
+set looks like.
 
 ## Fixture Format
 

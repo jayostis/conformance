@@ -1,5 +1,3 @@
-# Example VRS Allele - BRCA2 c.5946delT computed via vrs-python
-# ga4gh:VA. namespace identifier deterministically derived from sequence + location + state
 {
   "type": "Allele",
   "id": "ga4gh:VA.S3LWLZ-vfWfvxtOdT_BcsoMaP1mLfuNS",

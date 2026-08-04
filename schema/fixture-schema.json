@@ -16,7 +16,7 @@
     },
     "dataType": {
       "type": "string",
-      "enum": ["Medication", "Condition", "Allergy", "LabResult", "VitalSign", "PatientProfile", "Immunization", "Coverage", "PodStructure", "Procedure", "FamilyHistory", "ActivitySnapshot", "SleepSnapshot", "Encounter", "MedicationAdministration", "ImplantedDevice", "ImagingStudy", "ClaimRecord", "BenefitStatement", "DenialNotice", "AppealRecord", "SocialHistoryRecord", "ProxyAgent"],
+      "enum": ["Medication", "Condition", "Allergy", "LabResult", "VitalSign", "PatientProfile", "Immunization", "Coverage", "PodStructure", "Procedure", "FamilyHistory", "ActivitySnapshot", "SleepSnapshot", "DailyVitalReading", "DailyActivitySnapshot", "DailySleepSnapshot", "Encounter", "MedicationAdministration", "ImplantedDevice", "ImagingStudy", "ClaimRecord", "BenefitStatement", "DenialNotice", "AppealRecord", "SocialHistoryRecord", "ProxyAgent"],
       "description": "The Cascade Protocol data type under test"
     },
     "vocabulary": {
@@ -60,7 +60,9 @@
           "required-field",
           "enum-constraint",
           "pattern-constraint",
+          "range-constraint",
           "type-constraint",
+          "wellness",
           "clinical",
           "self-reported",
           "device",

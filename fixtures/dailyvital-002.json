@@ -1,0 +1,22 @@
+{
+  "id": "dailyvital-002",
+  "description": "Negative: daily vital reading with no timestamp in either accepted spelling",
+  "dataType": "DailyVitalReading",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:dvr0-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "DailyVitalReading",
+    "value": 68,
+    "unit": "bpm",
+    "sampleCount": 1440,
+    "dataProvenance": "DeviceGenerated"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n\n<urn:uuid:dvr0-0002-aaaa-bbbb-ccccddddeeee> a health:DailyVitalReading ;\n    health:value 68 ;\n    health:unit \"bpm\" ;\n    cascade:sampleCount 1440 ;\n    cascade:dataProvenance cascade:DeviceGenerated .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "required-field", "wellness", "device"],
+  "shaclConstraintViolated": "health:DailyVitalReadingShape requires a timestamp through a node-level sh:or over cascade:date and health:date. This reading carries neither, so the sh:or is unsatisfied.",
+  "notes": "The date is required through sh:or rather than sh:minCount because two live emitters spell it differently (health:date and cascade:date). Omitting both is the only way to violate it, and is exactly the failure that would drop a reading out of the time series it belongs to."
+}

@@ -13,11 +13,11 @@
     "allergySeverity": "mild"
   },
   "expectedOutput": {
-    "turtle": "",
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n\n<urn:uuid:neg0-a002-aaaa-bbbb-ccccddddeeee> a health:AllergyRecord ;\n    health:allergen \"\" ;\n    cascade:dataProvenance cascade:SelfReported ;\n    cascade:schemaVersion \"1.3\" ;\n    health:allergyCategory \"medication\" ;\n    health:allergySeverity \"mild\" .\n",
     "validationMode": "shacl-valid"
   },
   "shouldAccept": false,
   "tags": ["negative", "pattern-constraint"],
-  "shaclConstraintViolated": "AllergyShape requires health:allergen with sh:minLength 1. An empty string is not a valid allergen name.",
+  "shaclConstraintViolated": "health:AllergyRecordShape requires health:allergen with sh:minLength 1. An empty string is not a valid allergen name.",
   "notes": "Derived from clinical:AllergyShape which requires clinical:allergen with sh:minLength 1."
 }

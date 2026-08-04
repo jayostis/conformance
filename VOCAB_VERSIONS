@@ -3,14 +3,72 @@
 # Run scripts/check-downstream-versions.sh from spec/ to check all repos at once.
 # Update this file when adding new fixture categories for a vocabulary version.
 #
-core=3.3
+# WHAT A ROW HERE CLAIMS (tightened 2026-08-03, when the fixtures were executed
+# by automation for the first time and several rows turned out to be unbacked):
+# a version row means at least one fixture instantiates a class that a shape in
+# that vocabulary targets, and `scripts/run_conformance.py` evaluates a non-zero
+# number of constraints against it. It is a claim of exercised coverage, not of
+# mere compatibility, and it is checkable by running the suite. Where a version
+# introduced something no fixture reaches, the gap is named rather than implied.
+#
+# The shapes the suite actually runs against come from the revision named in
+# scripts/SPEC_PIN, not from this file. If the two disagree, SPEC_PIN wins and
+# the rows below describe a vocabulary CI is not executing, so keep them in step:
+# SPEC_PIN's `vocab=` line must repeat the versions below verbatim. As of
+# 2026-08-03 both read core=3.4 health=2.5 clinical=1.13 coverage=1.3
+# checkup=3.2 pots=1.4, and the pin is spec af0d7ed.
+#
+core=3.4
+# core=3.4: cascade:ExportManifest modelled on dcat:Dataset and cascade:RecordSummary
+#   on void:Dataset, both now defined and shaped. Fixtures: pod-002 (valid manifest
+#   carrying a RecordSummary; ExportManifestShape and RecordSummaryShape both fire),
+#   pod-004 (manifest with no cascade:schemaVersion, rejected by
+#   ExportManifestShape / cascade:schemaVersion / sh:minCount).
+#   NOT covered: cascade:InteractionScenario has a shape and no fixture.
 # core=3.3: cascade:AIAsserted provenance leaf (ungrounded general-AI content, subClassOf ConsumerGenerated) + cascade:ProxyAgent caregiver-proxy actor (ProxyAgentShape requires actsForPatient, proxyRelationship, proxyGrantedAt). Fixtures: social-002, proxy-001, proxy-002.
-health=2.4
+health=2.5
+# health=2.5: five record classes defined and shaped (LabResultRecord, ConditionRecord,
+#   AllergyRecord, ImmunizationRecord, FamilyHistoryRecord) and three previously
+#   untargeted daily-snapshot classes shaped (DailyVitalReading, DailyActivitySnapshot,
+#   DailySleepSnapshot). Fixtures: lab-001..007, cond-001..007, allergy-001..006,
+#   imm-001..003, fam-001..003 (26 fixtures that evaluated zero constraints before
+#   these shapes existed), plus dailyvital-001/002, dailyactivity-001/002,
+#   dailysleep-001/002.
+#   NOT covered: the six health:HealthProfile subclasses added in v2.5
+#   (ActivityData, SleepData, HeartRateData, BloodPressureData, HRVData,
+#   BodyMeasurements) have no fixture; they are exercised only by the reference pod.
+#   ALSO NOT covered: health:ProcedureRecord is asserted by proc-001/002/003 but is
+#   still not defined in health.ttl and no shape targets it, so those three fixtures
+#   evaluate zero constraints and the runner reports them UNSHAPED.
 # health=2.4: health:SocialHistoryRecord + smokingStatus/alcoholUse/exerciseFrequency/occupationalExposure (consumer-reported social history). Fixtures: social-001.
-clinical=1.9
+#   Note: health:SocialHistoryRecordShape declares only sh:Info-severity constraints,
+#   so no fixture can be rejected by it and the health: spelling has no negative
+#   counterpart. social-003 covers the clinical: spelling instead.
+clinical=1.13
+# clinical=1.13: four duplicated record classes (LabResult, Condition, Allergy,
+#   Immunization) marked owl:deprecated with rdfs:seeAlso to their health: equivalents.
+#   Deprecation is ontology metadata, not a SHACL constraint, so no fixture can assert
+#   it. What this row does claim, and what the suite checks, is that every clinical
+#   fixture is executed against the v1.13 shapes: MedicationShape (med-001..011 plus
+#   core/ai-extracted-medication.ttl, 12 focus nodes), VitalSignShape (vital-001..007),
+#   SocialHistoryRecordShape (clinical/social-history-smoking.ttl, social-003).
 # clinical=1.9: cascade:AIExtracted added to the dataProvenance sh:in enum on every clinical record shape; an AIExtracted Medication is now SHACL-valid. Fixtures: med-011.
 # clinical=1.8: Medication RDF type and predicates migrated from health: to clinical: namespace
 coverage=1.3
+# coverage=1.3: coverage:InsurancePlanShape is exercised by coverage-002, coverage-003
+#   (valid) and coverage-004 (missing coverage:providerName, rejected by that shape's
+#   sh:minCount). NOT covered: coverage:ClaimRecord, coverage:BenefitStatement,
+#   coverage:DenialNotice and coverage:AppealRecord are defined in coverage.ttl and
+#   targeted by no shape, so claim-001, benefit-001 and denial-001 evaluate zero
+#   constraints and there can be no negative counterpart for them yet.
+#
+# NO FIXTURE COVERAGE — these two rows are retained to record the versions this repo
+# is aligned to, but no fixture in fixtures/ instantiates any class either vocabulary
+# shapes, so the suite evaluates zero constraints from them. Measured 2026-08-03 by
+# recording which node shapes matched a focus node across all 118 fixtures: no
+# checkup: or pots: shape fired. (One phenopacket oracle uses the predicate
+# checkup:recommendedActions, which no shape targets.) Treat both as UNVERIFIED
+# until fixtures exist.
 checkup=3.2
 pots=1.4
 #

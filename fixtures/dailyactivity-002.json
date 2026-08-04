@@ -1,0 +1,23 @@
+{
+  "id": "dailyactivity-002",
+  "description": "Negative: daily activity snapshot whose exerciseMinutes exceeds the minutes in a day",
+  "dataType": "DailyActivitySnapshot",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:dact-0002-aaaa-bbbb-ccccddddeeee",
+    "type": "DailyActivitySnapshot",
+    "date": "2026-01-21T00:00:00Z",
+    "steps": 8432,
+    "exerciseMinutes": 2220,
+    "standHours": 11,
+    "dataProvenance": "DeviceGenerated"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:dact-0002-aaaa-bbbb-ccccddddeeee> a health:DailyActivitySnapshot ;\n    cascade:date \"2026-01-21T00:00:00Z\"^^xsd:dateTime ;\n    health:steps 8432 ;\n    health:exerciseMinutes 2220 ;\n    health:standHours 11 ;\n    cascade:dataProvenance cascade:DeviceGenerated .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": ["negative", "range-constraint", "wellness", "device"],
+  "shaclConstraintViolated": "health:DailyActivitySnapshotShape constrains health:exerciseMinutes with sh:maxInclusive 1440. 2220 exceeds the number of minutes in a day.",
+  "notes": "2220 is 37 minutes expressed in seconds. A unit error at the import boundary is the realistic way this bound gets crossed, and it is silently plausible without the constraint: 2220 is not an absurd-looking integer on its own."
+}

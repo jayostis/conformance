@@ -13,11 +13,11 @@
     "ageGroup": "young_adult"
   },
   "expectedOutput": {
-    "turtle": "",
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:neg0-p001-aaaa-bbbb-ccccddddeeee> a cascade:PatientProfile ;\n    cascade:schemaVersion \"2.0\" ;\n    cascade:dataProvenance cascade:SelfReported ;\n    cascade:biologicalSex \"male\" ;\n    cascade:computedAge \"35\"^^xsd:integer ;\n    cascade:ageGroup \"young_adult\" .\n",
     "validationMode": "shacl-valid"
   },
   "shouldAccept": false,
   "tags": ["negative", "required-field"],
-  "shaclConstraintViolated": "PatientProfileShape requires cascade:dateOfBirth (sh:minCount 1, sh:Violation). Date of birth is mandatory for age calculation and screening eligibility.",
+  "shaclConstraintViolated": "cascade:PatientProfileShape requires cascade:dateOfBirth (sh:minCount 1, sh:Violation). Date of birth is mandatory for age calculation and screening eligibility.",
   "notes": "Derived from cascade:PatientProfileShape which requires cascade:dateOfBirth with sh:minCount 1 at sh:Violation severity."
 }
