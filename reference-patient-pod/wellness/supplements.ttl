@@ -1,0 +1,74 @@
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+# =============================================================================
+# Supplements — Alex Rivera (Self-Reported)
+# =============================================================================
+# 3 self-reported supplements/OTC medications tracked in the wellness section.
+# These are patient-entered and use the clinical:Supplement type from the
+# SDK's supplement serialization format.
+# Schema Version: 1.3
+# Provenance: SelfReported (patient-entered)
+# =============================================================================
+
+# Supplement 1: Fish Oil (Omega-3) 1000mg daily
+<urn:uuid:supp-0001-aaaa-bbbb-ccccddddeeee> a clinical:Supplement ;
+    clinical:supplementName "Fish Oil (Omega-3 Fatty Acids)" ;
+    clinical:regulatoryStatus "dietarySupplement" ;
+    clinical:isActive true ;
+    cascade:dataProvenance cascade:SelfReported ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dose "1000 mg" ;
+    clinical:frequency "once daily" ;
+    clinical:form "softgel" ;
+    clinical:evidenceStrength "moderateEvidence" ;
+    clinical:startDate "2023-01-15T00:00:00Z"^^xsd:dateTime ;
+    clinical:reasonForUse "Cardiovascular health, triglyceride support" ;
+    clinical:notes "Nature Made brand. Taking for heart health given hyperlipidemia and family history." ;
+    clinical:cascadeUri <https://ns.cascadeprotocol.org/supplement/fish-oil-omega3> .
+
+# Supplement 2: Cetirizine 10mg daily (OTC antihistamine)
+<urn:uuid:supp-0002-aaaa-bbbb-ccccddddeeee> a clinical:Supplement ;
+    clinical:supplementName "Cetirizine (Zyrtec)" ;
+    clinical:regulatoryStatus "otcDrug" ;
+    clinical:isActive true ;
+    cascade:dataProvenance cascade:SelfReported ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dose "10 mg" ;
+    clinical:frequency "once daily" ;
+    clinical:form "tablet" ;
+    clinical:evidenceStrength "strongEvidence" ;
+    clinical:startDate "2010-05-01T00:00:00Z"^^xsd:dateTime ;
+    clinical:reasonForUse "Seasonal allergic rhinitis" ;
+    clinical:notes "OTC antihistamine for seasonal allergies. Takes daily during allergy season (spring and fall), intermittently otherwise." ;
+    clinical:cascadeUri <https://ns.cascadeprotocol.org/supplement/cetirizine-otc> .
+
+# Supplement 3: Potassium Chloride 20mEq daily
+# ============================================================================
+# WARNING: MEDICATION INTERACTION SCENARIO
+# This potassium supplement interacts with the patient's lisinopril prescription.
+# ACE inhibitors reduce aldosterone, decreasing renal potassium excretion.
+# Combined with supplemental K+, this raises hyperkalemia risk.
+# The patient's most recent serum K+ was 5.1 mEq/L (above normal range of 3.5-5.0).
+# An AI agent should detect this cross-provenance interaction by correlating:
+#   1. clinical/medications.ttl -> Lisinopril (ACE inhibitor)
+#   2. wellness/supplements.ttl -> Potassium supplement (this record)
+#   3. clinical/lab-results.ttl -> Serum K+ 5.1 mEq/L (borderline high)
+# ============================================================================
+<urn:uuid:supp-0003-aaaa-bbbb-ccccddddeeee> a clinical:Supplement ;
+    clinical:supplementName "Potassium Chloride" ;
+    clinical:regulatoryStatus "dietarySupplement" ;
+    clinical:isActive true ;
+    cascade:dataProvenance cascade:SelfReported ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dose "20 mEq" ;
+    clinical:frequency "once daily" ;
+    clinical:form "tablet" ;
+    clinical:evidenceStrength "limitedEvidence" ;
+    clinical:startDate "2025-08-01T00:00:00Z"^^xsd:dateTime ;
+    clinical:reasonForUse "Muscle cramps, general electrolyte support" ;
+    clinical:notes "Self-initiated. Patient reports occasional leg cramps. Not prescribed by physician. INTERACTION RISK: Patient also takes lisinopril (ACE inhibitor) which can elevate serum potassium." ;
+    clinical:cascadeUri <https://ns.cascadeprotocol.org/supplement/potassium-chloride> .

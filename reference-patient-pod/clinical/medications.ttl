@@ -1,0 +1,220 @@
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix sct: <http://snomed.info/sct/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix rxnorm: <http://www.nlm.nih.gov/research/umls/rxnorm/> .
+@prefix icd10: <http://hl7.org/fhir/sid/icd-10-cm/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+# =============================================================================
+# Medications — Alex Rivera
+# =============================================================================
+# 8 medication records: 5 active prescription, 1 discontinued, 2 self-reported.
+# Schema Version: 1.3 (Phase EHR v2: Medication Ontology Enrichment)
+# NOTE: Medication #7 (Potassium) interacts with Medication #1 (Lisinopril).
+# =============================================================================
+
+# Medication 1: Lisinopril 20mg daily — Hypertension
+<urn:uuid:med0-0001-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;
+    clinical:drugName "Lisinopril" ;
+    clinical:status "active" ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dosage "20 mg" ;
+    clinical:frequency "once daily" ;
+    clinical:route "oral" ;
+    clinical:prescriber "Dr. Sarah Chen" ;
+    clinical:startDate "2024-06-15T00:00:00Z"^^xsd:dateTime ;
+    clinical:rxNormCode <http://www.nlm.nih.gov/research/umls/rxnorm/197884> ;
+    clinical:notes "Switched from amlodipine. Monitor potassium levels due to ACE inhibitor mechanism." ;
+    clinical:sourceRecordId "ehr-med-2024-0615-001" ;
+    clinical:drugCode <http://www.nlm.nih.gov/research/umls/rxnorm/197884> ;
+    clinical:provenanceClass "healthKitFHIR" ;
+    clinical:sourceFhirResourceType "MedicationRequest" ;
+    clinical:clinicalIntent "prescribed" ;
+    clinical:indication "Essential Hypertension" ;
+    clinical:courseOfTherapyType "continuous" ;
+    clinical:asNeeded false ;
+    clinical:medicationForm "tablet" ;
+    clinical:activeIngredient "Lisinopril" ;
+    clinical:ingredientStrength "20 mg" ;
+    clinical:refillsAllowed 11 ;
+    clinical:supplyDurationDays 30 ;
+    clinical:prescriptionCategory "community" ;
+    clinical:medicationClass "antihypertensive" ;
+    clinical:affectsVitalSigns ("bloodPressure" "heartRate") .
+
+# Medication 2: Metformin 1000mg twice daily — Type 2 Diabetes
+<urn:uuid:med0-0002-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;
+    clinical:drugName "Metformin" ;
+    clinical:status "active" ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dosage "1000 mg" ;
+    clinical:frequency "twice daily" ;
+    clinical:route "oral" ;
+    clinical:prescriber "Dr. Sarah Chen" ;
+    clinical:startDate "2020-07-01T00:00:00Z"^^xsd:dateTime ;
+    clinical:rxNormCode <http://www.nlm.nih.gov/research/umls/rxnorm/861007> ;
+    clinical:notes "Extended-release formulation. Take with evening meal." ;
+    clinical:sourceRecordId "ehr-med-2020-0701-001" ;
+    clinical:drugCode <http://www.nlm.nih.gov/research/umls/rxnorm/861007> ;
+    clinical:provenanceClass "healthKitFHIR" ;
+    clinical:sourceFhirResourceType "MedicationRequest" ;
+    clinical:clinicalIntent "prescribed" ;
+    clinical:indication "Type 2 Diabetes Mellitus" ;
+    clinical:courseOfTherapyType "continuous" ;
+    clinical:asNeeded false ;
+    clinical:medicationForm "tablet" ;
+    clinical:activeIngredient "Metformin Hydrochloride" ;
+    clinical:ingredientStrength "1000 mg" ;
+    clinical:refillsAllowed 11 ;
+    clinical:supplyDurationDays 30 ;
+    clinical:prescriptionCategory "community" .
+
+# Medication 3: Atorvastatin 40mg daily — Hyperlipidemia
+<urn:uuid:med0-0003-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;
+    clinical:drugName "Atorvastatin" ;
+    clinical:status "active" ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dosage "40 mg" ;
+    clinical:frequency "once daily" ;
+    clinical:route "oral" ;
+    clinical:prescriber "Dr. Sarah Chen" ;
+    clinical:startDate "2019-12-01T00:00:00Z"^^xsd:dateTime ;
+    clinical:rxNormCode <http://www.nlm.nih.gov/research/umls/rxnorm/259255> ;
+    clinical:notes "Take at bedtime. Avoid grapefruit." ;
+    clinical:sourceRecordId "ehr-med-2019-1201-001" ;
+    clinical:drugCode <http://www.nlm.nih.gov/research/umls/rxnorm/259255> ;
+    clinical:provenanceClass "healthKitFHIR" ;
+    clinical:sourceFhirResourceType "MedicationRequest" ;
+    clinical:clinicalIntent "prescribed" ;
+    clinical:indication "Hyperlipidemia" ;
+    clinical:courseOfTherapyType "continuous" ;
+    clinical:asNeeded false ;
+    clinical:medicationForm "tablet" ;
+    clinical:activeIngredient "Atorvastatin Calcium" ;
+    clinical:ingredientStrength "40 mg" ;
+    clinical:refillsAllowed 11 ;
+    clinical:supplyDurationDays 30 ;
+    clinical:prescriptionCategory "community" .
+
+# Medication 4: Albuterol Inhaler PRN — Asthma
+<urn:uuid:med0-0004-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;
+    clinical:drugName "Albuterol" ;
+    clinical:status "active" ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dosage "90 mcg/actuation" ;
+    clinical:frequency "as needed" ;
+    clinical:route "inhalation" ;
+    clinical:prescriber "Dr. Sarah Chen" ;
+    clinical:startDate "2005-09-15T00:00:00Z"^^xsd:dateTime ;
+    clinical:rxNormCode <http://www.nlm.nih.gov/research/umls/rxnorm/245314> ;
+    clinical:notes "2 puffs every 4-6 hours as needed for shortness of breath or wheezing." ;
+    clinical:sourceRecordId "ehr-med-2005-0915-001" ;
+    clinical:drugCode <http://www.nlm.nih.gov/research/umls/rxnorm/245314> ;
+    clinical:provenanceClass "healthKitFHIR" ;
+    clinical:sourceFhirResourceType "MedicationRequest" ;
+    clinical:clinicalIntent "prescribed" ;
+    clinical:indication "Mild Persistent Asthma" ;
+    clinical:courseOfTherapyType "continuous" ;
+    clinical:asNeeded true ;
+    clinical:medicationForm "inhaler" ;
+    clinical:activeIngredient "Albuterol Sulfate" ;
+    clinical:ingredientStrength "90 mcg/actuation" ;
+    clinical:prescriptionCategory "community" ;
+    clinical:medicationClass "bronchodilator" ;
+    clinical:affectsVitalSigns ("respiratoryRate" "heartRate") .
+
+# Medication 5: Amlodipine 5mg daily — DISCONTINUED
+<urn:uuid:med0-0005-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;
+    clinical:drugName "Amlodipine" ;
+    clinical:status "discontinued" ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dosage "5 mg" ;
+    clinical:frequency "once daily" ;
+    clinical:route "oral" ;
+    clinical:prescriber "Dr. Sarah Chen" ;
+    clinical:startDate "2018-03-22T00:00:00Z"^^xsd:dateTime ;
+    clinical:endDate "2024-06-15T00:00:00Z"^^xsd:dateTime ;
+    clinical:rxNormCode <http://www.nlm.nih.gov/research/umls/rxnorm/197361> ;
+    clinical:notes "Discontinued 2024-06-15. Switched to lisinopril monotherapy for better renal protection given diabetes diagnosis." ;
+    clinical:sourceRecordId "ehr-med-2018-0322-001" ;
+    clinical:drugCode <http://www.nlm.nih.gov/research/umls/rxnorm/197361> ;
+    clinical:provenanceClass "healthKitFHIR" ;
+    clinical:sourceFhirResourceType "MedicationStatement" ;
+    clinical:clinicalIntent "reportedUse" ;
+    clinical:indication "Essential Hypertension" ;
+    clinical:courseOfTherapyType "continuous" ;
+    clinical:asNeeded false ;
+    clinical:medicationForm "tablet" ;
+    clinical:activeIngredient "Amlodipine Besylate" ;
+    clinical:ingredientStrength "5 mg" ;
+    clinical:prescriptionCategory "community" ;
+    clinical:medicationClass "antihypertensive" ;
+    clinical:affectsVitalSigns ("bloodPressure" "heartRate") .
+
+# Medication 6: Cetirizine 10mg daily — Allergies (Self-Reported)
+<urn:uuid:med0-0006-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;
+    clinical:drugName "Cetirizine" ;
+    clinical:status "active" ;
+    cascade:dataProvenance cascade:SelfReported ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dosage "10 mg" ;
+    clinical:frequency "once daily" ;
+    clinical:route "oral" ;
+    clinical:startDate "2010-05-01T00:00:00Z"^^xsd:dateTime ;
+    clinical:notes "OTC antihistamine for seasonal allergies. Takes daily during spring and fall." ;
+    clinical:provenanceClass "userTracked" ;
+    clinical:indication "Seasonal Allergic Rhinitis" ;
+    clinical:courseOfTherapyType "continuous" ;
+    clinical:asNeeded false ;
+    clinical:medicationForm "tablet" ;
+    clinical:activeIngredient "Cetirizine Hydrochloride" ;
+    clinical:ingredientStrength "10 mg" .
+
+# Medication 7: Potassium Supplement 20mEq daily — INTERACTION WITH LISINOPRIL
+# ============================================================================
+# WARNING: This supplement interacts with Lisinopril (Medication #1).
+# ACE inhibitors like lisinopril reduce aldosterone secretion, which decreases
+# renal potassium excretion. Combined with supplemental potassium, this can
+# lead to hyperkalemia (elevated serum potassium). See lab-results.ttl for
+# Alex's borderline-high potassium of 5.1 mEq/L, supporting this scenario.
+# ============================================================================
+<urn:uuid:med0-0007-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;
+    clinical:drugName "Potassium Chloride" ;
+    clinical:status "active" ;
+    cascade:dataProvenance cascade:SelfReported ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dosage "20 mEq" ;
+    clinical:frequency "once daily" ;
+    clinical:route "oral" ;
+    clinical:startDate "2025-08-01T00:00:00Z"^^xsd:dateTime ;
+    clinical:notes "Self-initiated potassium supplement. POTENTIAL INTERACTION: Concurrent use with lisinopril (ACE inhibitor) increases risk of hyperkalemia. Latest serum K+ is 5.1 mEq/L (borderline high)." ;
+    clinical:provenanceClass "userTracked" ;
+    clinical:indication "Muscle cramps" ;
+    clinical:medicationForm "tablet" ;
+    clinical:activeIngredient "Potassium Chloride" ;
+    clinical:ingredientStrength "20 mEq" .
+
+# Medication 8: Fish Oil 1000mg daily — Supplement (Self-Reported)
+<urn:uuid:med0-0008-aaaa-bbbb-ccccddddeeee> a clinical:Medication ;
+    clinical:drugName "Fish Oil (Omega-3)" ;
+    clinical:status "active" ;
+    cascade:dataProvenance cascade:SelfReported ;
+    cascade:schemaVersion "1.3" ;
+    clinical:dosage "1000 mg" ;
+    clinical:frequency "once daily" ;
+    clinical:route "oral" ;
+    clinical:startDate "2023-01-15T00:00:00Z"^^xsd:dateTime ;
+    clinical:notes "Omega-3 fatty acid supplement for cardiovascular health." ;
+    clinical:provenanceClass "userTracked" ;
+    clinical:indication "Cardiovascular health" ;
+    clinical:medicationForm "softgel" ;
+    clinical:activeIngredient "Omega-3 Fatty Acids (EPA/DHA)" ;
+    clinical:ingredientStrength "1000 mg" .

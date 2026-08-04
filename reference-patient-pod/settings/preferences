@@ -1,0 +1,15 @@
+@prefix pim: <http://www.w3.org/ns/pim/space#> .
+@prefix solid: <http://www.w3.org/ns/solid/terms#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# =============================================================================
+# Private Preferences — Alex Rivera (Reference Patient)
+# =============================================================================
+# Owner-only. Links to the private type index and extended profile.
+# =============================================================================
+
+<> a pim:ConfigurationFile .
+
+<#me>
+    solid:privateTypeIndex </settings/privateTypeIndex.ttl> ;
+    rdfs:seeAlso </profile/extended.ttl> .

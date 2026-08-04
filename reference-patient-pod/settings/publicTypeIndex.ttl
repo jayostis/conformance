@@ -1,0 +1,44 @@
+@prefix solid: <http://www.w3.org/ns/solid/terms#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix coverage: <https://ns.cascadeprotocol.org/coverage/v1#> .
+
+# =============================================================================
+# Public Type Index — Alex Rivera Pod
+# =============================================================================
+# Maps data types to their storage locations in the pod.
+# Public registrations are visible to authorized applications.
+# =============================================================================
+
+<#medications> a solid:TypeRegistration ;
+    solid:forClass clinical:Medication ;
+    solid:instance </clinical/medications.ttl> .
+
+<#conditions> a solid:TypeRegistration ;
+    solid:forClass health:ConditionRecord ;
+    solid:instance </clinical/conditions.ttl> .
+
+<#allergies> a solid:TypeRegistration ;
+    solid:forClass health:AllergyRecord ;
+    solid:instance </clinical/allergies.ttl> .
+
+<#labResults> a solid:TypeRegistration ;
+    solid:forClass health:LabResultRecord ;
+    solid:instance </clinical/lab-results.ttl> .
+
+<#immunizations> a solid:TypeRegistration ;
+    solid:forClass health:ImmunizationRecord ;
+    solid:instance </clinical/immunizations.ttl> .
+
+<#vitalSigns> a solid:TypeRegistration ;
+    solid:forClass clinical:VitalSign ;
+    solid:instance </clinical/vital-signs.ttl> .
+
+<#patientProfile> a solid:TypeRegistration ;
+    solid:forClass cascade:PatientProfile ;
+    solid:instance </clinical/patient-profile.ttl> .
+
+<#coverage> a solid:TypeRegistration ;
+    solid:forClass coverage:InsurancePlan ;
+    solid:instance </clinical/insurance.ttl> .

@@ -1,0 +1,25 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Extended Profile — Alex Rivera (Reference Patient)
+# =============================================================================
+# Owner-only. Holds PHI that must not appear in the public card.ttl.
+# Linked from card.ttl via rdfs:seeAlso and from settings/preferences.
+# NOTE: All data in this file is synthetic — for reference/testing only.
+# =============================================================================
+
+<#me>
+    cascade:dateOfBirth "1973-08-15"^^xsd:date ;
+    cascade:biologicalSex "male" ;
+    vcard:hasTelephone "+1-555-000-0000" ;
+    vcard:hasEmail "alex.rivera@example.com" ;
+    cascade:address [
+        cascade:addressLine "123 Cascade Ave" ;
+        cascade:addressCity "Seattle" ;
+        cascade:addressState "WA" ;
+        cascade:addressPostalCode "98101" ;
+        cascade:addressCountry "US" ;
+    ] .

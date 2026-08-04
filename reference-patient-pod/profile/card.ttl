@@ -1,0 +1,29 @@
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix solid: <http://www.w3.org/ns/solid/terms#> .
+@prefix pim: <http://www.w3.org/ns/pim/space#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+
+# =============================================================================
+# WebID Profile Card — Alex Rivera (Reference Patient)
+# =============================================================================
+# This document is publicly readable per Solid conventions.
+# Keep it to identity and discovery links only — no PHI.
+# PHI (DOB, address, phone, email) belongs in profile/extended.ttl (private).
+# =============================================================================
+
+</profile/card.ttl> a foaf:PersonalProfileDocument ;
+    foaf:primaryTopic <#me> .
+
+<#me> a foaf:Person ;
+    foaf:name "Alex Rivera" ;
+    foaf:givenName "Alex" ;
+    foaf:familyName "Rivera" ;
+
+    pim:storage </> ;
+    pim:preferencesFile </settings/preferences> ;
+    solid:publicTypeIndex </settings/publicTypeIndex.ttl> ;
+    rdfs:seeAlso </profile/extended.ttl> ;
+    rdfs:seeAlso </profile/health.ttl> ;
+
+    cascade:schemaVersion "1.3" .

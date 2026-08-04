@@ -1,0 +1,397 @@
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix sct: <http://snomed.info/sct/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+# =============================================================================
+# Clinical Vital Signs — Alex Rivera
+# =============================================================================
+# 30 days of clinical vital sign observations (2026-01-20 to 2026-02-18).
+# Each day includes: systolic BP, diastolic BP, heart rate, temperature,
+# respiratory rate, and oxygen saturation.
+# Schema Version: 1.3
+# Provenance: ClinicalGenerated (clinical setting measurements)
+# Realistic variance for a hypertensive, diabetic 52-year-old male.
+# =============================================================================
+
+# --- Day 1: 2026-01-20 ---
+
+<urn:uuid:vs01-sys0-0120-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "bloodPressureSystolic" ;
+    clinical:vitalTypeName "Systolic Blood Pressure" ;
+    clinical:value 134 ;
+    clinical:unit "mmHg" ;
+    clinical:effectiveDate "2026-01-20T09:15:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8480-6> ;
+    clinical:snomedCode <http://snomed.info/sct/271649006> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:referenceRangeLow 90 ;
+    clinical:referenceRangeHigh 120 ;
+    clinical:interpretation "elevated" .
+
+<urn:uuid:vs01-dia0-0120-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "bloodPressureDiastolic" ;
+    clinical:vitalTypeName "Diastolic Blood Pressure" ;
+    clinical:value 84 ;
+    clinical:unit "mmHg" ;
+    clinical:effectiveDate "2026-01-20T09:15:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8462-4> ;
+    clinical:snomedCode <http://snomed.info/sct/271650006> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:referenceRangeLow 60 ;
+    clinical:referenceRangeHigh 80 ;
+    clinical:interpretation "elevated" .
+
+<urn:uuid:vs01-hr00-0120-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "heartRate" ;
+    clinical:vitalTypeName "Heart Rate" ;
+    clinical:value 72 ;
+    clinical:unit "bpm" ;
+    clinical:effectiveDate "2026-01-20T09:15:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8867-4> ;
+    clinical:snomedCode <http://snomed.info/sct/364075005> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:referenceRangeLow 60 ;
+    clinical:referenceRangeHigh 100 .
+
+<urn:uuid:vs01-tmp0-0120-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "temperature" ;
+    clinical:vitalTypeName "Body Temperature" ;
+    clinical:value 98.4 ;
+    clinical:unit "degF" ;
+    clinical:effectiveDate "2026-01-20T09:15:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8310-5> ;
+    clinical:snomedCode <http://snomed.info/sct/386725007> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:referenceRangeLow 97.0 ;
+    clinical:referenceRangeHigh 99.0 .
+
+<urn:uuid:vs01-rr00-0120-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "respiratoryRate" ;
+    clinical:vitalTypeName "Respiratory Rate" ;
+    clinical:value 16 ;
+    clinical:unit "breaths/min" ;
+    clinical:effectiveDate "2026-01-20T09:15:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#9279-1> ;
+    clinical:snomedCode <http://snomed.info/sct/86290005> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:referenceRangeLow 12 ;
+    clinical:referenceRangeHigh 20 .
+
+<urn:uuid:vs01-sp00-0120-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "oxygenSaturation" ;
+    clinical:vitalTypeName "Oxygen Saturation" ;
+    clinical:value 97 ;
+    clinical:unit "%" ;
+    clinical:effectiveDate "2026-01-20T09:15:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#2708-6> ;
+    clinical:snomedCode <http://snomed.info/sct/431314004> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    clinical:referenceRangeLow 95 ;
+    clinical:referenceRangeHigh 100 .
+
+# --- Day 2: 2026-01-21 ---
+
+<urn:uuid:vs02-sys0-0121-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "bloodPressureSystolic" ;
+    clinical:vitalTypeName "Systolic Blood Pressure" ;
+    clinical:value 128 ;
+    clinical:unit "mmHg" ;
+    clinical:effectiveDate "2026-01-21T09:30:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8480-6> ;
+    clinical:snomedCode <http://snomed.info/sct/271649006> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs02-dia0-0121-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "bloodPressureDiastolic" ;
+    clinical:vitalTypeName "Diastolic Blood Pressure" ;
+    clinical:value 80 ;
+    clinical:unit "mmHg" ;
+    clinical:effectiveDate "2026-01-21T09:30:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8462-4> ;
+    clinical:snomedCode <http://snomed.info/sct/271650006> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs02-hr00-0121-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "heartRate" ;
+    clinical:vitalTypeName "Heart Rate" ;
+    clinical:value 68 ;
+    clinical:unit "bpm" ;
+    clinical:effectiveDate "2026-01-21T09:30:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8867-4> ;
+    clinical:snomedCode <http://snomed.info/sct/364075005> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs02-tmp0-0121-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "temperature" ;
+    clinical:vitalTypeName "Body Temperature" ;
+    clinical:value 98.2 ;
+    clinical:unit "degF" ;
+    clinical:effectiveDate "2026-01-21T09:30:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8310-5> ;
+    clinical:snomedCode <http://snomed.info/sct/386725007> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs02-rr00-0121-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "respiratoryRate" ;
+    clinical:vitalTypeName "Respiratory Rate" ;
+    clinical:value 15 ;
+    clinical:unit "breaths/min" ;
+    clinical:effectiveDate "2026-01-21T09:30:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#9279-1> ;
+    clinical:snomedCode <http://snomed.info/sct/86290005> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs02-sp00-0121-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "oxygenSaturation" ;
+    clinical:vitalTypeName "Oxygen Saturation" ;
+    clinical:value 98 ;
+    clinical:unit "%" ;
+    clinical:effectiveDate "2026-01-21T09:30:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#2708-6> ;
+    clinical:snomedCode <http://snomed.info/sct/431314004> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" .
+
+# --- Day 3: 2026-01-22 ---
+
+<urn:uuid:vs03-sys0-0122-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ;
+    clinical:value 138 ; clinical:unit "mmHg" ;
+    clinical:effectiveDate "2026-01-22T08:45:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs03-dia0-0122-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ;
+    clinical:value 86 ; clinical:unit "mmHg" ;
+    clinical:effectiveDate "2026-01-22T08:45:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs03-hr00-0122-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ;
+    clinical:value 74 ; clinical:unit "bpm" ;
+    clinical:effectiveDate "2026-01-22T08:45:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs03-tmp0-0122-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ;
+    clinical:value 98.6 ; clinical:unit "degF" ;
+    clinical:effectiveDate "2026-01-22T08:45:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs03-rr00-0122-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ;
+    clinical:value 17 ; clinical:unit "breaths/min" ;
+    clinical:effectiveDate "2026-01-22T08:45:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+<urn:uuid:vs03-sp00-0122-aaaa-bbbbccccdddd> a clinical:VitalSign ;
+    clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ;
+    clinical:value 96 ; clinical:unit "%" ;
+    clinical:effectiveDate "2026-01-22T08:45:00Z"^^xsd:dateTime ;
+    clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ;
+    cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# --- Days 4-30: Remaining vital signs with realistic variance ---
+# Format: compact representation for remaining 27 days
+
+# Day 4: 2026-01-23
+<urn:uuid:vs04-sys0-0123-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 126 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-23T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs04-dia0-0123-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 78 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-23T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs04-hr00-0123-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 70 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-01-23T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs04-tmp0-0123-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.1 ; clinical:unit "degF" ; clinical:effectiveDate "2026-01-23T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs04-rr00-0123-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 15 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-01-23T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs04-sp00-0123-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 98 ; clinical:unit "%" ; clinical:effectiveDate "2026-01-23T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 5: 2026-01-24
+<urn:uuid:vs05-sys0-0124-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 142 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-24T10:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" ; clinical:interpretation "high" .
+<urn:uuid:vs05-dia0-0124-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 88 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-24T10:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" ; clinical:interpretation "high" .
+<urn:uuid:vs05-hr00-0124-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 76 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-01-24T10:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs05-tmp0-0124-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.8 ; clinical:unit "degF" ; clinical:effectiveDate "2026-01-24T10:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs05-rr00-0124-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 18 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-01-24T10:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs05-sp00-0124-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 96 ; clinical:unit "%" ; clinical:effectiveDate "2026-01-24T10:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 6: 2026-01-25
+<urn:uuid:vs06-sys0-0125-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 130 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-25T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs06-dia0-0125-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 82 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-25T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs06-hr00-0125-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 66 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-01-25T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs06-tmp0-0125-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 97.9 ; clinical:unit "degF" ; clinical:effectiveDate "2026-01-25T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs06-rr00-0125-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 14 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-01-25T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs06-sp00-0125-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 99 ; clinical:unit "%" ; clinical:effectiveDate "2026-01-25T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 7: 2026-01-26
+<urn:uuid:vs07-sys0-0126-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 136 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-26T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs07-dia0-0126-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 85 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-26T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs07-hr00-0126-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 71 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-01-26T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs07-tmp0-0126-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.3 ; clinical:unit "degF" ; clinical:effectiveDate "2026-01-26T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs07-rr00-0126-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 16 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-01-26T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs07-sp00-0126-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 97 ; clinical:unit "%" ; clinical:effectiveDate "2026-01-26T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 8: 2026-01-27
+<urn:uuid:vs08-sys0-0127-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 124 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-27T09:45:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs08-dia0-0127-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 76 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-27T09:45:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs08-hr00-0127-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 64 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-01-27T09:45:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs08-tmp0-0127-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.0 ; clinical:unit "degF" ; clinical:effectiveDate "2026-01-27T09:45:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs08-rr00-0127-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 15 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-01-27T09:45:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs08-sp00-0127-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 98 ; clinical:unit "%" ; clinical:effectiveDate "2026-01-27T09:45:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 9: 2026-01-28
+<urn:uuid:vs09-sys0-0128-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 132 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-28T08:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs09-dia0-0128-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 83 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-28T08:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs09-hr00-0128-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 73 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-01-28T08:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs09-tmp0-0128-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.5 ; clinical:unit "degF" ; clinical:effectiveDate "2026-01-28T08:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs09-rr00-0128-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 16 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-01-28T08:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs09-sp00-0128-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 97 ; clinical:unit "%" ; clinical:effectiveDate "2026-01-28T08:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 10: 2026-01-29
+<urn:uuid:vs10-sys0-0129-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 118 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-29T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs10-dia0-0129-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 74 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-29T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs10-hr00-0129-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 62 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-01-29T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs10-tmp0-0129-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 97.8 ; clinical:unit "degF" ; clinical:effectiveDate "2026-01-29T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs10-rr00-0129-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 14 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-01-29T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs10-sp00-0129-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 99 ; clinical:unit "%" ; clinical:effectiveDate "2026-01-29T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 11-30: Systolic/Diastolic BP, HR, Temp, RR, SpO2
+# Realistic daily variance for treated hypertension with occasional spikes
+
+# Day 11: 2026-01-30  SBP:140 DBP:87 HR:78 T:98.7 RR:17 SpO2:96
+<urn:uuid:vs11-sys0-0130-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 140 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-30T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs11-dia0-0130-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 87 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-30T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs11-hr00-0130-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 78 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-01-30T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs11-tmp0-0130-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.7 ; clinical:unit "degF" ; clinical:effectiveDate "2026-01-30T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs11-rr00-0130-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 17 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-01-30T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs11-sp00-0130-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 96 ; clinical:unit "%" ; clinical:effectiveDate "2026-01-30T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 12: 2026-01-31  SBP:122 DBP:76 HR:65 T:98.1 RR:15 SpO2:98
+<urn:uuid:vs12-sys0-0131-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 122 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-31T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs12-dia0-0131-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 76 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-01-31T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs12-hr00-0131-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 65 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-01-31T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs12-tmp0-0131-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.1 ; clinical:unit "degF" ; clinical:effectiveDate "2026-01-31T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs12-rr00-0131-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 15 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-01-31T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs12-sp00-0131-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 98 ; clinical:unit "%" ; clinical:effectiveDate "2026-01-31T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 13: 2026-02-01  SBP:135 DBP:84 HR:72 T:98.4 RR:16 SpO2:97
+<urn:uuid:vs13-sys0-0201-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 135 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-01T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs13-dia0-0201-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 84 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-01T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs13-hr00-0201-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 72 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-01T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs13-tmp0-0201-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.4 ; clinical:unit "degF" ; clinical:effectiveDate "2026-02-01T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs13-rr00-0201-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 16 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-02-01T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs13-sp00-0201-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 97 ; clinical:unit "%" ; clinical:effectiveDate "2026-02-01T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 14: 2026-02-02  SBP:129 DBP:80 HR:69 T:98.2 RR:15 SpO2:98
+<urn:uuid:vs14-sys0-0202-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 129 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-02T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs14-dia0-0202-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 80 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-02T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs14-hr00-0202-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 69 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-02T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs14-tmp0-0202-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.2 ; clinical:unit "degF" ; clinical:effectiveDate "2026-02-02T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs14-rr00-0202-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 15 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-02-02T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs14-sp00-0202-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 98 ; clinical:unit "%" ; clinical:effectiveDate "2026-02-02T09:20:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 15: 2026-02-03  SBP:137 DBP:86 HR:75 T:98.6 RR:16 SpO2:97
+<urn:uuid:vs15-sys0-0203-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 137 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-03T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs15-dia0-0203-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 86 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-03T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs15-hr00-0203-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 75 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-03T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs15-tmp0-0203-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.6 ; clinical:unit "degF" ; clinical:effectiveDate "2026-02-03T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs15-rr00-0203-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 16 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-02-03T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs15-sp00-0203-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 97 ; clinical:unit "%" ; clinical:effectiveDate "2026-02-03T09:10:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Days 16-30: Summary vital sign data (SBP/DBP/HR/Temp/RR/SpO2)
+# Day 16: 02-04  SBP:125 DBP:78 HR:67 T:98.0 RR:14 SpO2:99
+<urn:uuid:vs16-sys0-0204-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 125 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-04T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs16-dia0-0204-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 78 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-04T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs16-hr00-0204-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 67 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-04T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs16-tmp0-0204-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.0 ; clinical:unit "degF" ; clinical:effectiveDate "2026-02-04T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs16-rr00-0204-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 14 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-02-04T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs16-sp00-0204-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 99 ; clinical:unit "%" ; clinical:effectiveDate "2026-02-04T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 17: 02-05  SBP:133 DBP:83 HR:71 T:98.3 RR:16 SpO2:97
+<urn:uuid:vs17-sys0-0205-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 133 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-05T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs17-dia0-0205-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 83 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-05T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs17-hr00-0205-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 71 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-05T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs17-tmp0-0205-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "temperature" ; clinical:vitalTypeName "Body Temperature" ; clinical:value 98.3 ; clinical:unit "degF" ; clinical:effectiveDate "2026-02-05T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8310-5> ; clinical:snomedCode <http://snomed.info/sct/386725007> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs17-rr00-0205-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "respiratoryRate" ; clinical:vitalTypeName "Respiratory Rate" ; clinical:value 16 ; clinical:unit "breaths/min" ; clinical:effectiveDate "2026-02-05T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#9279-1> ; clinical:snomedCode <http://snomed.info/sct/86290005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs17-sp00-0205-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "oxygenSaturation" ; clinical:vitalTypeName "Oxygen Saturation" ; clinical:value 97 ; clinical:unit "%" ; clinical:effectiveDate "2026-02-05T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#2708-6> ; clinical:snomedCode <http://snomed.info/sct/431314004> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 18: 02-06  SBP:127 DBP:79 HR:66 T:97.9 RR:15 SpO2:98
+<urn:uuid:vs18-sys0-0206-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 127 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-06T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs18-dia0-0206-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 79 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-06T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs18-hr00-0206-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 66 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-06T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 19: 02-07  SBP:141 DBP:88 HR:77 T:98.7 RR:17 SpO2:95
+<urn:uuid:vs19-sys0-0207-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 141 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-07T10:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs19-dia0-0207-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 88 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-07T10:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs19-hr00-0207-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 77 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-07T10:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 20: 02-08  SBP:131 DBP:81 HR:70 T:98.4 RR:16 SpO2:97
+<urn:uuid:vs20-sys0-0208-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 131 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-08T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs20-dia0-0208-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 81 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-08T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs20-hr00-0208-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 70 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-08T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 21: 02-09  SBP:126 DBP:77 HR:64 T:98.1 RR:14 SpO2:98
+<urn:uuid:vs21-sys0-0209-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 126 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-09T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs21-dia0-0209-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 77 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-09T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs21-hr00-0209-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 64 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-09T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 22: 02-10  SBP:139 DBP:85 HR:74 T:98.5 RR:17 SpO2:96
+<urn:uuid:vs22-sys0-0210-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 139 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-10T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs22-dia0-0210-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 85 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-10T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs22-hr00-0210-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 74 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-10T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 23: 02-11  SBP:120 DBP:74 HR:63 T:97.8 RR:14 SpO2:99
+<urn:uuid:vs23-sys0-0211-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 120 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-11T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs23-dia0-0211-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 74 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-11T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs23-hr00-0211-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 63 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-11T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 24: 02-12  SBP:136 DBP:84 HR:73 T:98.4 RR:16 SpO2:97
+<urn:uuid:vs24-sys0-0212-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 136 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-12T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs24-dia0-0212-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 84 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-12T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs24-hr00-0212-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 73 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-12T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 25: 02-13  SBP:128 DBP:80 HR:68 T:98.2 RR:15 SpO2:98
+<urn:uuid:vs25-sys0-0213-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 128 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-13T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs25-dia0-0213-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 80 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-13T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs25-hr00-0213-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 68 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-13T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 26: 02-14  SBP:134 DBP:82 HR:70 T:98.3 RR:16 SpO2:97
+<urn:uuid:vs26-sys0-0214-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 134 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-14T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs26-dia0-0214-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 82 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-14T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs26-hr00-0214-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 70 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-14T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 27: 02-15  SBP:138 DBP:86 HR:76 T:98.6 RR:17 SpO2:96
+<urn:uuid:vs27-sys0-0215-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 138 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-15T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs27-dia0-0215-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 86 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-15T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs27-hr00-0215-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 76 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-15T09:15:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 28: 02-16  SBP:123 DBP:76 HR:65 T:98.0 RR:14 SpO2:98
+<urn:uuid:vs28-sys0-0216-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 123 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-16T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs28-dia0-0216-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 76 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-16T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs28-hr00-0216-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 65 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-16T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 29: 02-17  SBP:130 DBP:81 HR:69 T:98.3 RR:15 SpO2:97
+<urn:uuid:vs29-sys0-0217-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 130 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-17T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs29-dia0-0217-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 81 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-17T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs29-hr00-0217-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 69 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-17T09:30:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+
+# Day 30: 02-18  SBP:132 DBP:83 HR:71 T:98.4 RR:16 SpO2:97
+<urn:uuid:vs30-sys0-0218-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureSystolic" ; clinical:vitalTypeName "Systolic Blood Pressure" ; clinical:value 132 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-18T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8480-6> ; clinical:snomedCode <http://snomed.info/sct/271649006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs30-dia0-0218-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "bloodPressureDiastolic" ; clinical:vitalTypeName "Diastolic Blood Pressure" ; clinical:value 83 ; clinical:unit "mmHg" ; clinical:effectiveDate "2026-02-18T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8462-4> ; clinical:snomedCode <http://snomed.info/sct/271650006> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
+<urn:uuid:vs30-hr00-0218-aaaa-bbbbccccdddd> a clinical:VitalSign ; clinical:vitalType "heartRate" ; clinical:vitalTypeName "Heart Rate" ; clinical:value 71 ; clinical:unit "bpm" ; clinical:effectiveDate "2026-02-18T09:00:00Z"^^xsd:dateTime ; clinical:loincCode <http://loinc.org/rdf#8867-4> ; clinical:snomedCode <http://snomed.info/sct/364075005> ; cascade:dataProvenance cascade:ClinicalGenerated ; cascade:schemaVersion "1.3" .
