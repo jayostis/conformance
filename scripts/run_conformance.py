@@ -367,6 +367,25 @@ def spec_head(spec_dir: Path) -> str | None:
         return None
 
 
+def spec_dirty(spec_dir: Path) -> bool:
+    """True if the spec checkout has uncommitted changes under ontologies/.
+
+    A HEAD comparison alone is not enough to pin a vocabulary: a checkout can sit
+    at exactly the pinned commit and still have edited shapes in its working
+    tree, and every result would then be attributed to a revision that does not
+    describe them. This is the same working-tree-versus-committed-state confusion
+    that has already produced one wrong answer elsewhere in this ecosystem.
+    """
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(spec_dir), "status", "--porcelain", "--", "ontologies"],
+            capture_output=True, text=True, check=True,
+        )
+        return bool(out.stdout.strip())
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+
 # --------------------------------------------------------------------------
 # Fixture discovery
 # --------------------------------------------------------------------------
@@ -731,11 +750,21 @@ def main(argv=None) -> int:
         )
 
     actual = spec_head(spec_dir)
+    dirty = spec_dirty(spec_dir)
     if actual and actual != pin["commit"] and not args.allow_spec_drift:
         abort(
             f"spec checkout is at {actual} but scripts/SPEC_PIN expects {pin['commit']}.\n"
             "  Re-pin deliberately (edit scripts/SPEC_PIN) or pass --allow-spec-drift.\n"
             "  An unpinned runner silently tracks a moving vocabulary."
+        )
+    if dirty and not args.allow_spec_drift:
+        abort(
+            f"spec checkout at {spec_dir} is at the pinned commit but has uncommitted "
+            "changes under ontologies/.\n"
+            "  The shapes being validated against are therefore not the ones "
+            f"{pin['commit'][:7]} describes.\n"
+            "  Commit them, stash them, or pass --allow-spec-drift and accept that the "
+            "result is not pinned."
         )
 
     shapes = load_shapes(spec_dir)
@@ -778,6 +807,13 @@ def main(argv=None) -> int:
     if args.json_out:
         payload = {
             "specPin": pin["commit"],
+            # What was ACTUALLY validated against, and whether it differed from
+            # the pin. Without these a consumer of this file cannot tell a pinned
+            # run from an --allow-spec-drift run against arbitrary shapes, and
+            # would treat both as the same evidence.
+            "specHead": actual or "",
+            "specDrifted": bool((actual and actual != pin["commit"]) or dirty),
+            "specDirty": dirty,
             "shapesFiles": shapes.files,
             "constraintChecks": total_checks,
             "counts": {

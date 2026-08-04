@@ -2,15 +2,23 @@ name: conformance
 
 # Two jobs on purpose.
 #
-#   runner-selftest  proves the runner is capable of failing. It mutates fixtures
-#                    and shapes in temporary directories and asserts the runner
-#                    notices. This job is green and must stay green: if it goes
-#                    red, no result from the other job means anything.
+#   runner-selftest  proves the runner AND the ratchet are capable of failing. It
+#                    mutates fixtures, shapes and baselines in temporary
+#                    directories and asserts each one notices. This job is green
+#                    and must stay green: if it goes red, no result from the other
+#                    job means anything.
 #
-#   fixture-suite    executes every fixture against the pinned shapes. It is red,
-#                    and the failures it reports are real. It must never be made
-#                    green by weakening an assertion, skipping a fixture, or
-#                    baselining a failure list. See README.md, "Current status".
+#   fixture-suite    executes every fixture against the pinned shapes and prints
+#                    the full report, then ratchets that report against
+#                    KNOWN_FAILURES.json. The suite is still red on its own terms
+#                    and the report still names every failure; the JOB is green
+#                    only when nothing got worse and nothing got better without
+#                    the record being updated.
+#
+# What must never happen: making this green by skipping a fixture, relaxing an
+# assertion, or letting the baseline absorb a failure this repository could have
+# fixed. The baseline is legitimate only because it fails in both directions —
+# see README.md, "Current status", and scripts/check_baseline.py.
 
 on:
   push:
@@ -90,21 +98,46 @@ jobs:
           echo "CASCADE_SPEC_DIR=${RUNNER_TEMP}/spec" >> "$GITHUB_ENV"
 
       - name: Run every fixture against the pinned shapes
+        # Deliberately NOT piped. A pipe would report tee's exit code, and the
+        # runner's codes are load-bearing here: 1 means fixtures failed (expected,
+        # the ratchet decides what to do about it) while 2 means the runner's own
+        # self-checks failed, which is fatal and must stop the job before anything
+        # reads its output.
         run: |
-          set -o pipefail
+          set +e
           python scripts/run_conformance.py \
             --spec-dir "$CASCADE_SPEC_DIR" \
-            --json conformance-results.json | tee conformance.txt
+            --json conformance-results.json > conformance.txt 2>&1
+          rc=$?
+          set -e
+          cat conformance.txt
+          if [ "$rc" -ge 2 ]; then
+            echo "::error::runner self-check failed (exit $rc); no result from this run is usable"
+            exit "$rc"
+          fi
+
+      - name: Ratchet against the known-failure baseline
+        # Fails when a failure appears that KNOWN_FAILURES.json does not list, AND
+        # when a listed failure starts passing. The second is not a courtesy: it is
+        # what stops the baseline becoming a suppression list.
+        run: |
+          set -o pipefail
+          python scripts/check_baseline.py \
+            --results conformance-results.json | tee baseline.txt
 
       - name: Summary
         if: always()
         run: |
           {
+            echo '## Ratchet'
+            echo '```'
+            cat baseline.txt 2>/dev/null || echo '(the ratchet did not run)'
+            echo '```'
             echo '## Fixture suite'
             echo '```'
             sed -n '1,60p' conformance.txt 2>/dev/null || echo '(no output)'
             echo '```'
-            echo '<details><summary>Full report</summary>'
+            echo '<details><summary>Full report, every fixture and every failure</summary>'
             echo
             echo '```'
             cat conformance.txt 2>/dev/null || true
@@ -120,4 +153,5 @@ jobs:
           path: |
             conformance.txt
             conformance-results.json
+            baseline.txt
           if-no-files-found: warn

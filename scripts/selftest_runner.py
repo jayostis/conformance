@@ -1,14 +1,28 @@
 #!/usr/bin/env python3
-"""Mutation tests for run_conformance.py.
+"""Mutation tests for run_conformance.py and scripts/check_baseline.py.
 
-The question this file exists to answer is: *what would the runner report if the
-thing it claims to check were absent?* A conformance runner that reports PASS
+The question this file exists to answer is: *what would these report if the
+thing they claim to check were absent?* A conformance runner that reports PASS
 because it loaded no shapes, matched no focus nodes, or swallowed a parse error
-is worse than no runner at all, because it manufactures confidence.
+is worse than no runner at all, because it manufactures confidence. A ratcheting
+baseline that only ever goes green is the same failure wearing a different hat.
 
-Every case below builds its input in a temporary directory, runs the real runner
-against it, and asserts on the runner's machine-readable output. **Nothing here
-mutates a tracked file**, and no mutated copy is ever written inside the repo.
+The baseline cases matter most, because the gate is the only thing in this repo
+whose job is to decide that a red suite is acceptable. Four properties are
+asserted, and the second is the one that makes the mechanism legitimate rather
+than a suppression list:
+
+  * a failure not in the baseline fails the gate;
+  * a baselined failure that starts PASSING fails the gate, so the list shrinks
+    deliberately instead of calcifying;
+  * the key is (fixture, reason), so a fixture that changes how it fails is
+    treated as the new fact it is;
+  * a missing, unparseable, pin-mismatched or unowned baseline is exit 2 and can
+    never read as success.
+
+Every case builds its input in a temporary directory and asserts on
+machine-readable output. **Nothing here mutates a tracked file**, and no mutated
+copy is ever written inside the repo.
 
 Run:  python3 scripts/selftest_runner.py --spec-dir /path/to/spec
 """
@@ -28,6 +42,7 @@ from rdflib import BNode
 
 REPO = Path(__file__).resolve().parent.parent
 RUNNER = REPO / "scripts" / "run_conformance.py"
+GATE = REPO / "scripts" / "check_baseline.py"
 
 # The fixture the positive-direction mutation tests operate on. Chosen because
 # clinical:MedicationShape is one of the most constrained shapes in the suite,
@@ -281,34 +296,225 @@ def case_malformed_shapes_aborts(spec_dir, tmp):
     return "malformed shapes file -> exit 2, named the file"
 
 
+def pinned_commit() -> str:
+    text = (REPO / "scripts" / "SPEC_PIN").read_text(encoding="utf-8")
+    return next(l.split("=", 1)[1].strip() for l in text.splitlines() if l.startswith("commit="))
+
+
 def case_spec_pin_is_enforced(spec_dir, tmp):
-    """A spec checkout that is not at the pinned commit must be refused."""
+    """A spec checkout that is not at the pinned commit must be refused.
+
+    The refusal is staged rather than hoped for. An earlier version of this case
+    asserted the refusal only when the caller's own spec checkout happened to sit
+    off the pin, and took a weaker "matches the pin, accepted" branch otherwise —
+    which became the normal state as soon as the pin was advanced to spec main,
+    so the assertion that matters silently stopped running. Here the drifted
+    checkout is built: the spec ontologies are copied into a throwaway git repo
+    whose HEAD is a fresh commit and therefore cannot equal the pin.
+    """
     fixtures = stage_fixture(tmp, POSITIVE_FIXTURE)
+    drifted = stage_spec(tmp, spec_dir)
+    git = ["git", "-c", "user.email=selftest@example.invalid", "-c", "user.name=selftest",
+           "-c", "commit.gpgsign=false", "-C", str(drifted)]
+    for cmd in (["init", "--quiet"], ["add", "-A"], ["commit", "--quiet", "-m", "throwaway"]):
+        subprocess.run(git + cmd, capture_output=True, text=True, check=True)
+    head = subprocess.run(git + ["rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+    commit = pinned_commit()
+    if not head:
+        raise SelfTestFailure("could not stage a drifted spec checkout; git produced no HEAD")
+    if head == commit:
+        raise SelfTestFailure("staged checkout collided with the pin, which cannot happen")
+
     proc = subprocess.run(
-        [
-            sys.executable, str(RUNNER),
-            "--spec-dir", str(spec_dir),
-            "--fixtures-dir", str(fixtures),
-            "--quiet",
-        ],
+        [sys.executable, str(RUNNER), "--spec-dir", str(drifted),
+         "--fixtures-dir", str(fixtures), "--quiet"],
         capture_output=True, text=True,
         env={**os.environ, "CASCADE_SPEC_DIR": ""},
     )
-    pinned = (REPO / "scripts" / "SPEC_PIN").read_text(encoding="utf-8")
-    commit = next(l.split("=", 1)[1].strip() for l in pinned.splitlines() if l.startswith("commit="))
-    head = subprocess.run(
-        ["git", "-C", str(spec_dir), "rev-parse", "HEAD"],
+    if proc.returncode != 2 or "SPEC_PIN" not in proc.stderr:
+        raise SelfTestFailure(
+            f"spec at {head[:7]} differs from pin {commit[:7]} but the runner returned "
+            f"{proc.returncode} instead of refusing: {proc.stderr[:200]!r}"
+        )
+
+    # And the inverse: the same checkout must be accepted with --allow-spec-drift,
+    # or the refusal above could be any unrelated abort.
+    ok = subprocess.run(
+        [sys.executable, str(RUNNER), "--spec-dir", str(drifted),
+         "--fixtures-dir", str(fixtures), "--quiet", "--allow-spec-drift"],
         capture_output=True, text=True,
-    ).stdout.strip()
-    if head and head != commit:
-        if proc.returncode != 2 or "SPEC_PIN" not in proc.stderr:
-            raise SelfTestFailure(
-                f"spec at {head} differs from pin {commit} but the runner did not refuse it"
-            )
-        return f"drifted spec checkout ({head[:7]}) refused"
-    if proc.returncode == 2 and "SPEC_PIN" in proc.stderr:
-        raise SelfTestFailure("spec checkout matches the pin but the runner refused it anyway")
-    return f"spec checkout matches pin {commit[:7]}, accepted"
+        env={**os.environ, "CASCADE_SPEC_DIR": ""},
+    )
+    if ok.returncode == 2:
+        raise SelfTestFailure(
+            f"--allow-spec-drift did not lift the refusal: {ok.stderr[:200]!r}"
+        )
+    return f"staged drifted checkout ({head[:7]}) refused; --allow-spec-drift lifts it"
+
+
+# --------------------------------------------------------------------------
+# Baseline gate cases
+# --------------------------------------------------------------------------
+
+def write_baseline(tmp: Path, entries, spec_pin="PIN", name="baseline.json") -> Path:
+    path = tmp / name
+    path.write_text(json.dumps({
+        "$comment": "selftest",
+        "specPin": spec_pin,
+        "entries": [
+            {"fixture": f, "reason": r, "ownedBy": o, "detail": "selftest"}
+            for f, r, o in entries
+        ],
+    }, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def write_results(tmp: Path, fixtures, spec_pin="PIN", checks=42, name="results.json") -> Path:
+    """A minimal but structurally faithful run_conformance.py --json payload."""
+    path = tmp / name
+    failed = sum(1 for _p, _r, outcome in fixtures if outcome != "pass")
+    path.write_text(json.dumps({
+        "specPin": spec_pin,
+        "constraintChecks": checks,
+        "counts": {
+            "passed": len(fixtures) - failed, "failed": failed,
+            "skipped": 0, "total": len(fixtures),
+        },
+        "fixtures": [
+            {"path": p, "id": p, "polarity": "positive", "outcome": outcome,
+             "reason": reason, "constraintChecks": 7, "types": [], "violations": [], "detail": ""}
+            for p, reason, outcome in fixtures
+        ],
+    }, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def run_gate(results: Path, baseline: Path) -> tuple[int, str]:
+    proc = subprocess.run(
+        [sys.executable, str(GATE), "--results", str(results), "--baseline", str(baseline)],
+        capture_output=True, text=True,
+    )
+    return proc.returncode, proc.stdout + proc.stderr
+
+
+def case_ratchet_holds_when_nothing_changed(spec_dir, tmp):
+    """Control. An unchanged tree is green — and the baseline was really compared."""
+    results = write_results(tmp, [("a.json", "OK", "pass"), ("b.json", "UNSHAPED", "fail")])
+    baseline = write_baseline(tmp, [("b.json", "UNSHAPED", "spec")])
+    code, out = run_gate(results, baseline)
+    if code != 0:
+        raise SelfTestFailure(f"unchanged tree should hold the ratchet, got {code}:\n{out}")
+    if "baseline entries      : 1" not in out or "still failing as known: 1" not in out:
+        raise SelfTestFailure(
+            "the gate went green without showing that it compared a non-empty baseline. "
+            f"An empty or unread baseline must never read as success:\n{out}"
+        )
+    return "unchanged tree -> RATCHET HELD, 1 baseline entry compared and matched"
+
+
+def case_new_failure_fails_the_ratchet(spec_dir, tmp):
+    """Direction one: a failure that is not in the baseline must go red, by name."""
+    results = write_results(tmp, [
+        ("b.json", "UNSHAPED", "fail"),
+        ("intruder.json", "VIOLATIONS", "fail"),
+    ])
+    baseline = write_baseline(tmp, [("b.json", "UNSHAPED", "spec")])
+    code, out = run_gate(results, baseline)
+    if code != 1:
+        raise SelfTestFailure(f"a new failure must fail the gate, got exit {code}:\n{out}")
+    if "intruder.json" not in out or "REGRESSION" not in out:
+        raise SelfTestFailure(f"gate failed without naming the new failure:\n{out}")
+    return "unbaselined failure -> exit 1, REGRESSION, names intruder.json"
+
+
+def case_unexpected_pass_fails_the_ratchet(spec_dir, tmp):
+    """Direction two, and the reason this mechanism is not a suppression list.
+
+    A baselined failure that starts passing must go red, so the list shrinks by
+    a deliberate edit rather than quietly describing a world that has moved on.
+    """
+    results = write_results(tmp, [("b.json", "OK", "pass"), ("c.json", "UNSHAPED", "fail")])
+    baseline = write_baseline(tmp, [
+        ("b.json", "UNSHAPED", "spec"),
+        ("c.json", "UNSHAPED", "spec"),
+    ])
+    code, out = run_gate(results, baseline)
+    if code != 1:
+        raise SelfTestFailure(
+            f"a baselined fixture that now passes must fail the gate, got exit {code}. "
+            f"Without this the baseline is a suppression list:\n{out}"
+        )
+    if "IMPROVEMENT NOT RECORDED" not in out or "b.json" not in out:
+        raise SelfTestFailure(f"gate failed without telling the author to remove b.json:\n{out}")
+    if "Remove these entries" not in out:
+        raise SelfTestFailure(f"gate did not say what to do about it:\n{out}")
+    return "baselined fixture now passes -> exit 1, IMPROVEMENT NOT RECORDED, names b.json"
+
+
+def case_changed_reason_fails_the_ratchet(spec_dir, tmp):
+    """The key is (fixture, reason). A fixture that fails differently is a new fact."""
+    results = write_results(tmp, [("b.json", "VIOLATIONS", "fail")])
+    baseline = write_baseline(tmp, [("b.json", "UNSHAPED", "spec")])
+    code, out = run_gate(results, baseline)
+    if code != 1:
+        raise SelfTestFailure(
+            f"UNSHAPED -> VIOLATIONS on an already-failing fixture must fail the gate, "
+            f"got exit {code}. Keying on the fixture alone is how a ratchet starts lying:\n{out}"
+        )
+    if "UNSHAPED -> VIOLATIONS" not in out:
+        raise SelfTestFailure(f"gate did not report the reason change:\n{out}")
+    return "same fixture, different reason -> exit 1, reports UNSHAPED -> VIOLATIONS"
+
+
+def case_unusable_baseline_is_never_success(spec_dir, tmp):
+    """Missing, malformed, pin-mismatched or unowned: all exit 2, never green."""
+    results = write_results(tmp, [("b.json", "UNSHAPED", "fail")])
+    checks = []
+
+    code, out = run_gate(results, tmp / "does-not-exist.json")
+    checks.append(("missing", code, "not found" in out))
+
+    bad = tmp / "malformed.json"
+    bad.write_text("{ this is not json", encoding="utf-8")
+    code2, out2 = run_gate(results, bad)
+    checks.append(("malformed", code2, "could not be read" in out2))
+
+    noentries = tmp / "noentries.json"
+    noentries.write_text(json.dumps({"specPin": "PIN"}) + "\n", encoding="utf-8")
+    code3, out3 = run_gate(results, noentries)
+    checks.append(("no entries list", code3, "no `entries`" in out3))
+
+    drifted = write_baseline(tmp, [("b.json", "UNSHAPED", "spec")],
+                             spec_pin="OTHER", name="drifted.json")
+    code4, out4 = run_gate(results, drifted)
+    checks.append(("pin mismatch", code4, "re-measured" in out4))
+
+    unowned = write_baseline(tmp, [("b.json", "UNSHAPED", "UNASSIGNED")], name="unowned.json")
+    code5, out5 = run_gate(results, unowned)
+    checks.append(("unassigned owner", code5, "graveyard" in out5))
+
+    empty_run = write_results(tmp, [], checks=0, name="emptyrun.json")
+    baseline = write_baseline(tmp, [("b.json", "UNSHAPED", "spec")])
+    code6, out6 = run_gate(empty_run, baseline)
+    checks.append(("degenerate run", code6, "zero executed fixtures" in out6))
+
+    # A run produced with --allow-spec-drift validated against shapes the pin
+    # does not name, while still reporting the pinned SHA. Ratcheting it would
+    # compare a baseline to evidence about a different vocabulary.
+    drifted_run = json.loads(results.read_text(encoding="utf-8"))
+    drifted_run["specDrifted"] = True
+    drifted_run["specHead"] = "deadbeef"
+    drifted_path = tmp / "driftedrun.json"
+    drifted_path.write_text(json.dumps(drifted_run, indent=2) + "\n", encoding="utf-8")
+    code7, out7 = run_gate(drifted_path, baseline)
+    checks.append(("drifted run", code7, "--allow-spec-drift" in out7))
+
+    for label, code, explained in checks:
+        if code != 2:
+            raise SelfTestFailure(f"{label} baseline returned exit {code}, expected 2")
+        if not explained:
+            raise SelfTestFailure(f"{label} aborted without explaining itself")
+    return f"{len(checks)} unusable-baseline cases all exit 2 and say why"
 
 
 CASES = [
@@ -321,6 +527,11 @@ CASES = [
     ("empty shapes graph aborts the run", case_empty_shapes_aborts),
     ("malformed shapes file aborts the run", case_malformed_shapes_aborts),
     ("spec pin is enforced", case_spec_pin_is_enforced),
+    ("ratchet holds when nothing changed", case_ratchet_holds_when_nothing_changed),
+    ("new failure fails the ratchet", case_new_failure_fails_the_ratchet),
+    ("unexpected pass fails the ratchet", case_unexpected_pass_fails_the_ratchet),
+    ("changed failure reason fails the ratchet", case_changed_reason_fails_the_ratchet),
+    ("unusable baseline is never success", case_unusable_baseline_is_never_success),
 ]
 
 

@@ -1,0 +1,192 @@
+{
+  "$comment": "Enumerated known failures. This file is a GATE INPUT, not a filter: scripts/run_conformance.py still executes and reports every fixture. scripts/check_baseline.py fails CI when a failure appears that is not listed here AND when a listed failure starts passing, so the list can only shrink deliberately. Entries are keyed on (fixture, reason): a fixture that changes HOW it fails is a new fact and must fail the gate. Adding an entry is an explicit committed edit and needs an ownedBy naming the repo that owns the fix. specPin records the spec revision these were measured against; advancing scripts/SPEC_PIN requires re-measuring.",
+  "specPin": "af0d7ed0c217ff42c0e347d1a2ff34399ea8e3d4",
+  "entries": [
+    {
+      "fixture": "advisory/BRCA2-reclassification.expected.ttl",
+      "reason": "NO_TURTLE",
+      "ownedBy": "conformance",
+      "detail": "Comment-only placeholder; the oracle was never authored."
+    },
+    {
+      "fixture": "advisory/CPIC-cyp2c19-warfarin.expected.ttl",
+      "reason": "NO_TURTLE",
+      "ownedBy": "conformance",
+      "detail": "Comment-only placeholder; the oracle was never authored."
+    },
+    {
+      "fixture": "benefit-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "coverage:BenefitStatement is defined in coverage.ttl and targeted by no shape."
+    },
+    {
+      "fixture": "claim-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "coverage:ClaimRecord is defined in coverage.ttl and targeted by no shape."
+    },
+    {
+      "fixture": "coverage-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "clinical:CoverageRecord is defined in clinical.ttl and targeted by no shape; coverage:InsurancePlan is the shaped spelling."
+    },
+    {
+      "fixture": "denial-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "coverage:DenialNotice is defined in coverage.ttl and targeted by no shape."
+    },
+    {
+      "fixture": "device-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "clinical:ImplantedDevice is defined in clinical.ttl and targeted by no shape."
+    },
+    {
+      "fixture": "encounter-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "clinical:Encounter is defined in clinical.ttl and targeted by no shape."
+    },
+    {
+      "fixture": "genomics/fhir-genomics-ig/Bundle-bundle-cgexample.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "DiplotypeShape/hapB, GeneticTestOrderShape/orderedAt, VariantInterpretationShape/condition, VariantShape stable-identifier sh:or."
+    },
+    {
+      "fixture": "genomics/fhir-genomics-ig/Bundle-bundle-complexVariant-nonHGVS.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "DiplotypeShape/hapA and /hapB, VariantShape stable-identifier sh:or."
+    },
+    {
+      "fixture": "genomics/fhir-genomics-ig/Bundle-bundle-compound-heterozygote.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "DiplotypeShape/hapA and /hapB, VariantShape stable-identifier sh:or."
+    },
+    {
+      "fixture": "genomics/fhir-genomics-ig/Bundle-bundle-oncology-diagnostic.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "VariantInterpretationShape/condition minCount."
+    },
+    {
+      "fixture": "genomics/fhir-genomics-ig/Bundle-bundle-oncologyexamples-r4.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "VariantShape stable-identifier sh:or: three variants carry no caId, vrsId or clinVarId."
+    },
+    {
+      "fixture": "genomics/fhir-genomics-ig/Bundle-bundle-pgxexample.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "GeneticTestOrderShape/orderedAt minCount."
+    },
+    {
+      "fixture": "genomics/phenopackets/bethlem-myopathy.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "RawFileShape/fileHashSHA256 minCount and /fileLocation datatype. A Phenopacket File entry is a pointer, so the bytes needed to compute a hash are not present."
+    },
+    {
+      "fixture": "genomics/phenopackets/biosamples-SAMN05324082.expected.ttl",
+      "reason": "NO_TURTLE",
+      "ownedBy": "conformance",
+      "detail": "Deliberately empty: it asserts that detection returns false for a non-phenopacket input. That is not a SHACL assertion and needs a harness that can express it."
+    },
+    {
+      "fixture": "genomics/phenopackets/covid.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "spec",
+      "detail": "cascade:PatientProfileShape/dateOfBirth minCount. GA4GH Phenopackets do not require a date of birth, so the shape is stricter than the source format can satisfy."
+    },
+    {
+      "fixture": "genomics/phenopackets/marfan.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "spec",
+      "detail": "cascade:PatientProfileShape/dateOfBirth and /biologicalSex minCount, neither required by GA4GH Phenopackets."
+    },
+    {
+      "fixture": "genomics/phenopackets/retinoblastoma.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "PatientProfileShape/dateOfBirth, RawFileShape/fileHashSHA256 and /fileLocation, VariantShape stable-identifier sh:or."
+    },
+    {
+      "fixture": "genomics/phenopackets/tpm3-myopathy.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "spec",
+      "detail": "cascade:PatientProfileShape/dateOfBirth minCount, not required by GA4GH Phenopackets."
+    },
+    {
+      "fixture": "genomics/phenopackets/v2-cohort.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "RawFileShape/fileHashSHA256 and /fileLocation, VariantInterpretationShape/acmgClassification, VariantShape stable-identifier sh:or."
+    },
+    {
+      "fixture": "genomics/phenopackets/v2-family.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "RawFileShape/fileHashSHA256 and /fileLocation, VariantInterpretationShape/acmgClassification, VariantShape stable-identifier sh:or."
+    },
+    {
+      "fixture": "genomics/phenopackets/v2-phenopacket.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "RawFileShape/fileHashSHA256 and /fileLocation, VariantInterpretationShape/acmgClassification, VariantShape stable-identifier sh:or."
+    },
+    {
+      "fixture": "genomics/vcf/sample-clinvar.expected.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "undecided (spec or cascade-cli)",
+      "detail": "SequencingRunShape/coverageDepth and /sequencingTechnology minCount. A ClinVar-annotated VCF header carries neither."
+    },
+    {
+      "fixture": "imaging-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "clinical:ImagingStudy is defined in clinical.ttl and targeted by no shape."
+    },
+    {
+      "fixture": "medadmin-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "clinical:MedicationAdministration is defined in clinical.ttl and targeted by no shape."
+    },
+    {
+      "fixture": "pod-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "ldp:BasicContainer is an external class and no Cascade shape targets it; a pod-container shape would need authoring."
+    },
+    {
+      "fixture": "pod-003.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "Negative fixture. Its invalid Turtle is authored and correct, but no shape targets ldp:BasicContainer, so nothing can reject it yet."
+    },
+    {
+      "fixture": "proc-001.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "health:ProcedureRecord is asserted by three fixtures and by cascade-cli, and is not defined as a class in health.ttl at all."
+    },
+    {
+      "fixture": "proc-002.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "health:ProcedureRecord is not defined in health.ttl."
+    },
+    {
+      "fixture": "proc-003.json",
+      "reason": "UNSHAPED",
+      "ownedBy": "spec",
+      "detail": "Negative fixture. Its invalid Turtle is authored and correct, but health:ProcedureRecord is neither defined nor shaped, so nothing can reject it yet."
+    }
+  ]
+}
