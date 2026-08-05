@@ -1,5 +1,15 @@
 # Reference Patient Pod: Alex Rivera
 
+> **Canonical location.** This pod is maintained in the `conformance` repository,
+> at `reference-patient-pod/`. That is the only copy anyone should edit.
+>
+> It is also published at <https://cascadeprotocol.org/reference-patient-pod/>.
+> That published copy is **generated**: `cascadeprotocol.org/scripts/sync-reference-pod.sh`
+> copies this directory into the website and keeps the two byte-identical, and
+> running that same script with `--check` fails if they ever drift apart. Edits
+> made to the published copy are not edits to the pod; they are drift, and the
+> check exists to find them.
+
 ## Patient Narrative
 
 **Alex Rivera** is a 52-year-old male (DOB: August 15, 1973) living in Portland, Oregon. He works a desk job and maintains a moderate exercise routine, visiting the gym approximately three times per week. His emergency contact is his spouse, Maria Rivera.

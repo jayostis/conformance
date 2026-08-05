@@ -560,7 +560,9 @@ Test data is derived from two sources:
 
 1. **Reference Patient Pod** (`reference-patient-pod/`): Realistic synthetic patient data for Alex Rivera, a 52-year-old male with hypertension, diabetes, asthma, and hyperlipidemia. Positive fixtures extract real records from these TTL files.
 
-2. **SHACL Shapes Files** (`docs/*/v1/*.shapes.ttl`): Machine-readable validation constraints. Negative fixtures are systematically derived by violating each `sh:Violation`-severity constraint.
+   **This repository is the pod's canonical home.** `cascade-cli` reads it from here. `cascadeprotocol.org` publishes a generated copy at `/reference-patient-pod/`, kept byte-identical by that repo's `scripts/sync-reference-pod.sh` and guarded by its `--check` mode. Change the pod here; a change made anywhere else is drift.
+
+2. **SHACL Shapes Files** (`../spec/ontologies/*/v1/*.shapes.ttl`, at the revision named in `scripts/SPEC_PIN`): Machine-readable validation constraints. Negative fixtures are systematically derived by violating each `sh:Violation`-severity constraint.
 
 ## Adding New Fixtures
 
