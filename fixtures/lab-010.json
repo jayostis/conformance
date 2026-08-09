@@ -1,0 +1,29 @@
+{
+  "id": "lab-010",
+  "description": "Negative: interpretation 'quite high', which is in neither the HL7 v3 ObservationInterpretation code system nor the retained legacy words, is rejected",
+  "dataType": "LabResult",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:1ab0-0010-aaaa-bbbb-ccccddddeeee",
+    "type": "LabResultRecord",
+    "testName": "Serum potassium",
+    "resultValue": "5.9",
+    "resultUnit": "mmol/L",
+    "interpretation": "quite high",
+    "performedDate": "2031-03-22T11:05:00Z",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:1ab0-0010-aaaa-bbbb-ccccddddeeee> a health:LabResultRecord ;\n    health:testName \"Serum potassium\" ;\n    health:resultValue \"5.9\" ;\n    health:resultUnit \"mmol/L\" ;\n    health:interpretation \"quite high\" ;\n    health:performedDate \"2031-03-22T11:05:00Z\"^^xsd:dateTime ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": [
+    "negative",
+    "clinical",
+    "enum-constraint"
+  ],
+  "notes": "Fully synthetic. The counterpart to lab-008 and lab-009: health v2.6 replaced an invented five-member enum with a ratified code system, and this fixture is what proves the constraint still constrains rather than having been deleted. Free text is still rejected.",
+  "shaclConstraintViolated": "health:LabResultRecordShape requires health:interpretation to be a code from the HL7 v3 ObservationInterpretation code system, the data-absent-reason code 'unknown', or a retained legacy word (sh:in)"
+}
