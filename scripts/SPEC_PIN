@@ -11,5 +11,5 @@
 # `scripts/run_conformance.py`), and record the resulting counts in the PR.
 
 repo=https://github.com/the-cascade-protocol/spec
-commit=af0d7ed0c217ff42c0e347d1a2ff34399ea8e3d4
-vocab=core=3.4 health=2.5 clinical=1.13 coverage=1.3 checkup=3.2 pots=1.4
+commit=3ebf93b7f67da461da349e4a6914ed84f0cda04b
+vocab=core=3.4 health=2.6 clinical=1.14 coverage=1.4 checkup=3.3 pots=1.4

@@ -1,0 +1,34 @@
+{
+  "id": "lab-008",
+  "description": "Antimicrobial susceptibility result whose interpretation is the HL7 v3 ObservationInterpretation code 'I' (Intermediate), which has no member of the five-word enum health v2.5 accepted",
+  "dataType": "LabResult",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:1ab0-0008-aaaa-bbbb-ccccddddeeee",
+    "type": "LabResultRecord",
+    "testName": "Ampicillin susceptibility",
+    "resultValue": "4",
+    "resultUnit": "ug/mL",
+    "interpretation": "I",
+    "performedDate": "2031-04-17T08:15:00Z",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "testCode": "http://loinc.org/rdf#18864-9",
+    "labCategory": "Microbiology",
+    "specimenType": "Whole Blood",
+    "performingLab": "Northbrook Synthetic Reference Laboratory",
+    "sourceRecordId": "synthetic-lab-2031-0417-008"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:1ab0-0008-aaaa-bbbb-ccccddddeeee> a health:LabResultRecord ;\n    health:testName \"Ampicillin susceptibility\" ;\n    health:resultValue \"4\" ;\n    health:resultUnit \"ug/mL\" ;\n    health:interpretation \"I\" ;\n    health:performedDate \"2031-04-17T08:15:00Z\"^^xsd:dateTime ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:testCode <http://loinc.org/rdf#18864-9> ;\n    health:labCategory \"Microbiology\" ;\n    health:specimenType \"Whole Blood\" ;\n    health:performingLab \"Northbrook Synthetic Reference Laboratory\" ;\n    health:sourceRecordId \"synthetic-lab-2031-0417-008\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": [
+    "happy-path",
+    "clinical",
+    "ehr-import",
+    "enum-constraint"
+  ],
+  "notes": "Fully synthetic. Susceptibility reporting (S/I/R) is ordinary laboratory output and ordinary FHIR: 'I' is a code in http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation, which FHIR R4 binds Observation.interpretation to. Under health v2.5 this record was a Violation. health v2.6 accepts the code system's 49 selectable codes."
+}

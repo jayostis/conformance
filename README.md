@@ -1,7 +1,7 @@
 # Cascade Protocol Conformance Test Suite
 
-Version: 1.1
-Date: 2026-08-03
+Version: 1.2
+Date: 2026-08-08
 
 ## Overview
 
@@ -17,7 +17,7 @@ Every count below is derived from the fixture files themselves, not maintained b
 |---|---|---|---|
 | Medication | `med-` | 11 | Prescription drugs, OTC medications |
 | Condition | `cond-` | 7 | Medical conditions, diagnoses |
-| Lab Result | `lab-` | 7 | Laboratory test observations |
+| Lab Result | `lab-` | 10 | Laboratory test observations |
 | Vital Sign | `vital-` | 7 | Clinical vital sign observations |
 | Allergy | `allergy-` | 6 | Allergies and intolerances |
 | Patient Profile | `profile-` | 5 | Demographics and identity |
@@ -35,10 +35,10 @@ Every count below is derived from the fixture files themselves, not maintained b
 | Claim Record | `claim-` | 1 | Insurance claim records |
 | Denial Notice | `denial-` | 1 | Coverage denial notices |
 | Implanted Device | `device-` | 1 | Implanted medical devices |
-| Encounter | `encounter-` | 1 | Clinical encounters and visits |
+| Encounter | `encounter-` | 3 | Clinical encounters and visits |
 | Imaging Study | `imaging-` | 1 | Imaging studies and results |
 | Medication Administration | `medadmin-` | 1 | Medication administration events |
-| **Total** | | **78** | 23 data types |
+| **Total** | | **83** | 23 data types |
 
 ### RDF fixtures (`fixtures/**/*.ttl`)
 
@@ -138,29 +138,35 @@ The runner also refuses a checkout that sits at the pinned commit but has uncomm
 
 ## Current status
 
-As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.4, health 2.5, clinical 1.13):
+As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.4, health 2.6, clinical 1.14, coverage 1.4, checkup 3.3):
 
 ```
-passed  87
-failed  31
+passed  93
+failed  30
 skipped  0
-total   118        61,391 constraint checks evaluated
+total   123        61,570 constraint checks evaluated
 ```
 
 The first execution of these fixtures, against the older `spec` revision the pin
 originally named, was **43 passed / 68 failed / 0 skipped / 111 total**. Three things
-moved it: 18 fixtures started passing on their own when `spec` defined and shaped the
-classes they had always asserted; 19 were fixed here; 7 were added. No fixture that
-passed has since failed. The remaining 31 break down as:
+moved it: 19 fixtures started passing on their own when `spec` defined and shaped the
+classes they had always asserted; 19 were fixed here; 12 were added. No fixture that
+passed has since failed. The remaining 30 break down as:
 
 | Reason | Count | Owned by | Notes |
 |---|---|---|---|
 | `VIOLATIONS` | 15 | `spec` (3), undecided (12) | Conversion oracles under `fixtures/genomics/`. Each `.expected.ttl` records what the importer currently emits from the neighbouring `.input.json`, so a violation means either the importer must emit more or the shape must ask less. Three are settled — GA4GH Phenopackets do not carry a date of birth or a biological sex, so `cascade:PatientProfileShape` is stricter than the source format can satisfy. The other twelve need triage one at a time. |
-| `UNSHAPED` | 13 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `health:ProcedureRecord` (`proc-001/002/003`, not defined in `health.ttl` at all), `clinical:Encounter`, `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `clinical:CoverageRecord`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. Two are negative fixtures whose Turtle is authored and correct; they go live the moment a shape exists. |
+| `UNSHAPED` | 12 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `health:ProcedureRecord` (`proc-001/002/003`, not defined in `health.ttl` at all), `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `clinical:CoverageRecord`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. Two are negative fixtures whose Turtle is authored and correct; they go live the moment a shape exists. |
 | `NO_TURTLE` | 3 | `conformance` | Comment-only placeholder `.ttl` files: two unauthored advisory oracles, and `genomics/phenopackets/biosamples-SAMN05324082.expected.ttl`, which is deliberately empty because it asserts `detect() === false` — not a SHACL assertion, so it needs a different home. |
 
-Each of the 31 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
+Each of the 30 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
 constraint it violates and the repo that owns the fix.
+
+`clinical:Encounter` was on the `UNSHAPED` list until clinical v1.14 shaped it.
+`encounter-001` had been reporting `conforms=true` while evaluating **zero**
+constraints; it now evaluates 29, and its baseline entry is removed. That is the
+shape of every entry on this list: the fixture was always correct, and the thing
+missing was a shape.
 
 ### What a green CI run means
 
@@ -515,13 +521,13 @@ Both approaches are acceptable. The conformance suite verifies the outcome (inva
 
 ## Coverage Matrix
 
-Categories per data type, for the 71 record fixtures. Each fixture carries exactly one of these five tags, so the columns sum to the row total. Counts are derived from the fixtures' own `tags` arrays.
+Categories per data type, for the 76 record fixtures. Each fixture carries exactly one of these five tags, so the columns sum to the row total. Counts are derived from the fixtures' own `tags` arrays.
 
 | Data Type | Happy Path | Full Fields | Multi-Code | Provenance | Negative | Total |
 |---|---|---|---|---|---|---|
 | Medication | 2 | 1 | 2 | 3 | 3 | 11 |
 | Condition | 2 | 1 | 1 | 1 | 2 | 7 |
-| Lab Result | 2 | 1 | 1 | 1 | 2 | 7 |
+| Lab Result | 3 | 1 | 2 | 1 | 3 | 10 |
 | Vital Sign | 2 | 1 | 1 | 1 | 2 | 7 |
 | Allergy | 2 | 1 | -- | 1 | 2 | 6 |
 | Patient Profile | 1 | 1 | -- | 1 | 2 | 5 |
@@ -536,12 +542,19 @@ Categories per data type, for the 71 record fixtures. Each fixture carries exact
 | Claim Record | 1 | -- | -- | -- | -- | 1 |
 | Denial Notice | 1 | -- | -- | -- | -- | 1 |
 | Implanted Device | 1 | -- | -- | -- | -- | 1 |
-| Encounter | 1 | -- | -- | -- | -- | 1 |
+| Encounter | 2 | -- | -- | -- | 1 | 3 |
 | Imaging Study | 1 | -- | -- | -- | -- | 1 |
 | Medication Administration | 1 | -- | -- | -- | -- | 1 |
-| **Total** | **27** | **10** | **5** | **10** | **20** | **71** |
+| **Total** | **29** | **10** | **6** | **10** | **22** | **76** |
 
 The 40 RDF fixtures are not tagged this way; their split is 33 positive and 7 negative, tabulated above.
+
+This matrix has never covered every record fixture: rows for `DailyActivitySnapshot`,
+`DailyVitalReading` and `DailySleepSnapshot` are absent, and `social-001` and
+`dailyactivity-001` each carry two category tags rather than one, so 76 of the 83 record
+fixtures are represented here. That predates this table's current numbers and is left as
+it stands rather than quietly re-derived; the fixture counts in the tables at the top of
+this file are the complete ones.
 
 ### Tag Descriptions
 

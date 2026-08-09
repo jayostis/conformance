@@ -1,0 +1,38 @@
+{
+  "id": "lab-009",
+  "description": "Lab result carrying two categories and two LOINC codings (FHIR Observation.category and CodeableConcept.coding are both 0..*), interpretation 'unknown' from data-absent-reason, and a date-precision performedDate",
+  "dataType": "LabResult",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:1ab0-0009-aaaa-bbbb-ccccddddeeee",
+    "type": "LabResultRecord",
+    "testName": "Vitamin D, 25-hydroxy",
+    "resultValue": "22",
+    "resultUnit": "ng/mL",
+    "interpretation": "unknown",
+    "performedDate": "2031-02-09",
+    "dataProvenance": "ClinicalGenerated",
+    "schemaVersion": "1.3",
+    "testCode": [
+      "http://loinc.org/rdf#14635-7",
+      "http://loinc.org/rdf#1989-3"
+    ],
+    "labCategory": [
+      "Chemistry",
+      "Endocrinology Panel"
+    ],
+    "referenceRange": "30 - 100",
+    "sourceRecordId": "synthetic-lab-2031-0209-009"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:1ab0-0009-aaaa-bbbb-ccccddddeeee> a health:LabResultRecord ;\n    health:testName \"Vitamin D, 25-hydroxy\" ;\n    health:resultValue \"22\" ;\n    health:resultUnit \"ng/mL\" ;\n    health:interpretation \"unknown\" ;\n    health:performedDate \"2031-02-09\"^^xsd:date ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    health:testCode <http://loinc.org/rdf#14635-7>, <http://loinc.org/rdf#1989-3> ;\n    health:labCategory \"Chemistry\", \"Endocrinology Panel\" ;\n    health:referenceRange \"30 - 100\" ;\n    health:sourceRecordId \"synthetic-lab-2031-0209-009\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": [
+    "multi-code",
+    "clinical",
+    "ehr-import"
+  ],
+  "notes": "Fully synthetic. Three things health v2.5 rejected at once: a second labCategory, a second testCode, and the interpretation sentinel importers write when the source Observation carried none ('unknown', from http://terminology.hl7.org/CodeSystem/data-absent-reason). The date-precision performedDate exercises the health v2.6 xsd:date alternative; FHIR's dateTime primitive is explicitly partial-precision and C-CDA effectiveTime commonly is."
+}

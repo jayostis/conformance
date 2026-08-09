@@ -1,0 +1,27 @@
+{
+  "id": "encounter-003",
+  "description": "Negative: an Encounter with no cascade:schemaVersion is rejected by the clinical:EncounterShape added in clinical v1.14",
+  "dataType": "Encounter",
+  "vocabulary": "clinical",
+  "input": {
+    "id": "urn:uuid:enc0-0003-aaaa-bbbb-ccccddddeeee",
+    "type": "Encounter",
+    "encounterType": "Telephone follow-up",
+    "encounterClass": "VR",
+    "encounterStatus": "finished",
+    "encounterStart": "2031-07-21T14:30:00Z",
+    "dataProvenance": "ClinicalGenerated"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:enc0-0003-aaaa-bbbb-ccccddddeeee> a clinical:Encounter ;\n    clinical:encounterType \"Telephone follow-up\" ;\n    clinical:encounterClass \"VR\" ;\n    clinical:encounterStatus \"finished\" ;\n    clinical:encounterStart \"2031-07-21T14:30:00Z\"^^xsd:dateTime ;\n    cascade:dataProvenance cascade:ClinicalGenerated .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": false,
+  "tags": [
+    "negative",
+    "clinical",
+    "required-field"
+  ],
+  "notes": "Fully synthetic. The negative counterpart the Encounter class never had. A shape that only ever accepts is indistinguishable from no shape at all, which is exactly the state clinical:Encounter was in before v1.14.",
+  "shaclConstraintViolated": "clinical:EncounterShape requires cascade:schemaVersion (sh:minCount 1)"
+}

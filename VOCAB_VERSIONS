@@ -15,9 +15,24 @@
 # scripts/SPEC_PIN, not from this file. If the two disagree, SPEC_PIN wins and
 # the rows below describe a vocabulary CI is not executing, so keep them in step:
 # SPEC_PIN's `vocab=` line must repeat the versions below verbatim. As of
-# 2026-08-03 both read core=3.4 health=2.5 clinical=1.13 coverage=1.3
-# checkup=3.2 pots=1.4, and the pin is spec af0d7ed.
+# 2026-08-03 both read core=3.4 health=2.6 clinical=1.14 coverage=1.4
+# checkup=3.3 pots=1.4, and the pin is spec af0d7ed.
 #
+# 2026-08-08 batch: health 2.6 / clinical 1.14 / coverage 1.4 / checkup 3.3.
+# Shapes-only alignment to ratified standards (spec PR the-cascade-protocol/spec#16).
+# Five fixtures added, and one KNOWN_FAILURES entry removed rather than re-explained:
+#   lab-008  interpretation "I", a HL7 v3 ObservationInterpretation susceptibility
+#            code with no member of the five-word enum health v2.5 accepted.
+#   lab-009  two labCategory values, two testCode values, interpretation "unknown"
+#            (data-absent-reason), and a date-precision performedDate.
+#   lab-010  NEGATIVE. Free text is still rejected: the enum was widened to a
+#            ratified code system, not deleted.
+#   encounter-002  exercises the new clinical:EncounterShape, with a
+#            date-precision period and a v3-ActCode encounterClass abbreviation.
+#   encounter-003  NEGATIVE. The counterpart clinical:Encounter never had.
+# encounter-001 was a KNOWN_FAILURES entry with reason UNSHAPED: it reported
+# conforming while evaluating ZERO constraints, because clinical:Encounter had no
+# shape. It now evaluates 29, so the entry is gone.
 core=3.4
 # core=3.4: cascade:ExportManifest modelled on dcat:Dataset and cascade:RecordSummary
 #   on void:Dataset, both now defined and shaped. Fixtures: pod-002 (valid manifest
