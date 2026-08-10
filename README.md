@@ -42,7 +42,7 @@ Every count below is derived from the fixture files themselves, not maintained b
 
 ### RDF fixtures (`fixtures/**/*.ttl`)
 
-40 further fixtures are Turtle files rather than JSON records. They carry their polarity in the filename (`*.INVALID.ttl` is a negative fixture, everything else is positive) and are executed by the same runner.
+46 further fixtures are Turtle files rather than JSON records. They carry their polarity in the filename (`*.INVALID.ttl` is a negative fixture, everything else is positive) and are executed by the same runner.
 
 | Directory | Count | Positive | Negative | What it covers |
 |---|---|---|---|---|
@@ -53,14 +53,14 @@ Every count below is derived from the fixture files themselves, not maintained b
 | `genomics/clinvar/` | 4 | 4 | 0 | ClinVar VCV conversion oracles |
 | `advisory/` | 2 | 2 | 0 | Advisory reclassification oracles (advisory v1-draft) |
 | `clinical/` | 1 | 1 | 0 | Social history in Turtle form |
-| `core/` | 1 | 1 | 0 | AIExtracted provenance in Turtle form |
+| `core/` | 7 | 5 | 2 | AIExtracted provenance, and the core v3.5 ORIGIN axis (`cascade:sourceIdentity`): one fixture per value scheme, the two-transport-one-system invariant, and two negatives |
 | `genomics/vcf/` | 1 | 1 | 0 | VCF conversion oracle |
 | `genomics/vrs/` | 1 | 1 | 0 | GA4GH VRS allele conversion oracle |
-| **Total** | **40** | **33** | **7** | |
+| **Total** | **46** | **37** | **9** | |
 
-**Grand total: 118 executable fixtures.**
+**Grand total: 129 executable fixtures.**
 
-A further 93 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
+A further 94 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
 ## Running the suite
 
@@ -138,19 +138,19 @@ The runner also refuses a checkout that sits at the pinned commit but has uncomm
 
 ## Current status
 
-As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.4, health 2.6, clinical 1.14, coverage 1.4, checkup 3.3):
+As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.5, health 2.6, clinical 1.14, coverage 1.4, checkup 3.3):
 
 ```
-passed  93
+passed  99
 failed  30
 skipped  0
-total   123        61,570 constraint checks evaluated
+total   129        61,822 constraint checks evaluated
 ```
 
 The first execution of these fixtures, against the older `spec` revision the pin
 originally named, was **43 passed / 68 failed / 0 skipped / 111 total**. Three things
 moved it: 19 fixtures started passing on their own when `spec` defined and shaped the
-classes they had always asserted; 19 were fixed here; 12 were added. No fixture that
+classes they had always asserted; 19 were fixed here; 18 were added. No fixture that
 passed has since failed. The remaining 30 break down as:
 
 | Reason | Count | Owned by | Notes |
@@ -161,6 +161,12 @@ passed has since failed. The remaining 30 break down as:
 
 Each of the 30 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
 constraint it violates and the repo that owns the fix.
+
+The six fixtures added for core v3.5 were measured in both directions before they
+were committed. Against the previous pin (`spec` 9461fa9, core 3.4) the two negatives
+report `NO_VIOLATION` — nothing rejects them, because `cascade:SourceIdentityShape`
+does not exist there. Against the pin now named, both are rejected and all four
+positives pass. A negative fixture that has never been observed red is not a test.
 
 `clinical:Encounter` was on the `UNSHAPED` list until clinical v1.14 shaped it.
 `encounter-001` had been reporting `conforms=true` while evaluating **zero**
