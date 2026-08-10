@@ -15,10 +15,9 @@
 # scripts/SPEC_PIN, not from this file. If the two disagree, SPEC_PIN wins and
 # the rows below describe a vocabulary CI is not executing, so keep them in step:
 # SPEC_PIN's `vocab=` line must repeat the versions below verbatim. As of
-# 2026-08-09 both read core=3.5 health=2.6 clinical=1.14 coverage=1.4
-# checkup=3.3 pots=1.4. NOTE: the pin currently names a spec BRANCH commit
-# (the-cascade-protocol/spec PR #17, core v3.5), not a commit on spec `main`;
-# see scripts/SPEC_PIN for why and for what must happen before this merges.
+# 2026-08-10 both read core=3.5 health=2.6 clinical=1.14 coverage=1.4
+# checkup=3.3 pots=1.4, and the pin is the spec PR #17 merge commit d162f68
+# (tag vocab/core-v3.5).
 #
 # 2026-08-08 batch: health 2.6 / clinical 1.14 / coverage 1.4 / checkup 3.3.
 # Shapes-only alignment to ratified standards (spec PR the-cascade-protocol/spec#16).

@@ -10,20 +10,14 @@
 # VOCAB_VERSIONS line below, run `make -C . conformance` (or
 # `scripts/run_conformance.py`), and record the resulting counts in the PR.
 
-# TEMPORARY PIN — points at a BRANCH commit, not `main`.
-#
-# core v3.5 (`cascade:sourceIdentity`, `cascade:SourceIdentityShape`) is authored
-# on spec branch `feat/core-source-identity` and not yet merged. The two negative
-# fixtures added with it (`core/source-identity-unprefixed.INVALID.ttl`,
-# `core/source-identity-repeated.INVALID.ttl`) are rejected by nothing under the
-# previous pin, because the shape that rejects them does not exist there —
-# measured, both report NO_VIOLATION against 9461fa9 and PASS against the commit
-# below. Pinning here is what makes them mean something now.
-#
-# BEFORE THIS PR MERGES: re-pin to the merge commit of the-cascade-protocol/spec
-# PR #17 on `main`, re-run the suite, and confirm the counts are unchanged
-# (99 passed / 30 known failures / 129 total).
+# Pinned at the MERGE commit of the-cascade-protocol/spec PR #17 on `main`
+# (core v3.5, tag `vocab/core-v3.5`). While that PR was open this file briefly
+# pinned its branch commit 422108f — the two negative source-identity fixtures
+# are rejected by nothing under the previous pin (measured: NO_VIOLATION against
+# 9461fa9), so pinning ahead was what made them mean something. Re-measured at
+# this commit before merging: 99 passed / 30 known failures / 129 total,
+# unchanged.
 
 repo=https://github.com/the-cascade-protocol/spec
-commit=422108f1afeb96e094999460212776db4b74e764
+commit=d162f686fdd3d74742ada2c956dcee93ef52e944
 vocab=core=3.5 health=2.6 clinical=1.14 coverage=1.4 checkup=3.3 pots=1.4
