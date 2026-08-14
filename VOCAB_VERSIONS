@@ -15,8 +15,9 @@
 # scripts/SPEC_PIN, not from this file. If the two disagree, SPEC_PIN wins and
 # the rows below describe a vocabulary CI is not executing, so keep them in step:
 # SPEC_PIN's `vocab=` line must repeat the versions below verbatim. As of
-# 2026-08-09 both read core=3.4 health=2.6 clinical=1.14 coverage=1.4
-# checkup=3.3 pots=1.4, and the pin is spec 9461fa9.
+# 2026-08-10 both read core=3.5 health=2.6 clinical=1.14 coverage=1.4
+# checkup=3.3 pots=1.4, and the pin is the spec PR #17 merge commit d162f68
+# (tag vocab/core-v3.5).
 #
 # 2026-08-08 batch: health 2.6 / clinical 1.14 / coverage 1.4 / checkup 3.3.
 # Shapes-only alignment to ratified standards (spec PR the-cascade-protocol/spec#16).
@@ -33,7 +34,19 @@
 # encounter-001 was a KNOWN_FAILURES entry with reason UNSHAPED: it reported
 # conforming while evaluating ZERO constraints, because clinical:Encounter had no
 # shape. It now evaluates 29, so the entry is gone.
-core=3.4
+core=3.5
+# core=3.5: the ORIGIN axis. cascade:sourceIdentity, a canonical
+#   transport-independent organization identity, scheme-prefixed org: / ns: /
+#   transport:; cascade:SourceIdentityShape constrains its value wherever it
+#   appears and never requires its presence. Fixtures: core/source-identity-org,
+#   -namespace and -transport (one per scheme), -two-transports-one-system (the
+#   invariant: two transports of one system, differing LABEL and INGESTION,
+#   identical ORIGIN), -unprefixed.INVALID (sh:pattern) and -repeated.INVALID
+#   (sh:maxCount). Both negatives were measured RED against core 3.4, where the
+#   shape does not exist. See fixtures/core/INVENTORY.md.
+#   NOT covered by a negative fixture, deliberately: absence of the property,
+#   which is not a finding in v3.5. The other 122 fixtures omit it and pass,
+#   which exercises that compatibility claim rather than asserting it.
 # core=3.4: cascade:ExportManifest modelled on dcat:Dataset and cascade:RecordSummary
 #   on void:Dataset, both now defined and shaped. Fixtures: pod-002 (valid manifest
 #   carrying a RecordSummary; ExportManifestShape and RecordSummaryShape both fire),

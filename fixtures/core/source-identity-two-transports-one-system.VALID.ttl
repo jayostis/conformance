@@ -1,0 +1,50 @@
+# core v3.5 — the invariant the ORIGIN axis exists for.
+#
+# ONE synthetic health system, exporting twice. The first record came out of its
+# FHIR endpoint, whose registrable domain is meridianhealth.example. The second
+# came out of a C-CDA document of the same system, whose custodian organization
+# is named "Meridian Health System". Nothing about either document is wrong, and
+# the two derivation rules do not meet:
+#
+#   - the LABEL axis (clinical:sourceEHR) differs, because each transport worded
+#     the organization the way its own document worded it. That is allowed: the
+#     label is a display value and its semantics are unchanged;
+#   - the INGESTION axis (cascade:sourceSystem) differs, because the patient
+#     downloaded the two exports separately;
+#   - the ORIGIN axis (cascade:sourceIdentity) is IDENTICAL, because the slug
+#     normalization reduces both "meridianhealth.example" and "Meridian Health
+#     System" to the same leading distinctive token.
+#
+# That last line is the whole fixture. A consumer grouping by ORIGIN sees one
+# health system; a consumer grouping by either of the other two axes sees two.
+#
+# Fully synthetic: invented organization, invented endpoint, invented values.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Half one: through the system's FHIR endpoint.
+<urn:uuid:5c1de001-0000-4000-8000-00000000000a> a health:LabResultRecord ;
+    health:testName "Hemoglobin A1c" ;
+    health:resultValue "7.4" ;
+    health:resultUnit "%" ;
+    health:performedDate "2031-02-11"^^xsd:date ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    cascade:sourceIdentity "org:meridian" ;
+    clinical:sourceEHR "meridianhealth.example" ;
+    cascade:sourceSystem "meridian-fhir-export" .
+
+# Half two: through a C-CDA document of the SAME system.
+<urn:uuid:5c1de001-0000-4000-8000-00000000000b> a health:LabResultRecord ;
+    health:testName "Hemoglobin A1c" ;
+    health:resultValue "7.4" ;
+    health:resultUnit "%" ;
+    health:performedDate "2031-02-11"^^xsd:date ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    cascade:sourceIdentity "org:meridian" ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:sourceSystem "meridian-ccda-summary" .

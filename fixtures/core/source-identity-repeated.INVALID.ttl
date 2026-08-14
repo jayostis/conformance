@@ -1,0 +1,24 @@
+# core v3.5 — NEGATIVE. Two origins on one record.
+#
+# A record came from exactly one organization. Two values here is a producer
+# stamping the identity twice from two derivations without reconciling them, and
+# a consumer keying reconciliation on the axis would have to pick one
+# arbitrarily. cascade:SourceIdentityShape rejects it on sh:maxCount.
+#
+# Note that both values are individually well formed, so nothing but the
+# cardinality constraint catches this.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:5c1de001-0000-4000-8000-000000000005> a health:LabResultRecord ;
+    health:testName "Creatinine" ;
+    health:resultValue "1.1" ;
+    health:resultUnit "mg/dL" ;
+    health:performedDate "2031-04-06"^^xsd:date ;
+    cascade:dataProvenance cascade:ClinicalGenerated ;
+    cascade:schemaVersion "1.3" ;
+    cascade:sourceIdentity "org:meridian", "ns:2.16.840.1.113883.19.5.99991.1" .

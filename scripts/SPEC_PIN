@@ -10,6 +10,14 @@
 # VOCAB_VERSIONS line below, run `make -C . conformance` (or
 # `scripts/run_conformance.py`), and record the resulting counts in the PR.
 
+# Pinned at the MERGE commit of the-cascade-protocol/spec PR #17 on `main`
+# (core v3.5, tag `vocab/core-v3.5`). While that PR was open this file briefly
+# pinned its branch commit 422108f — the two negative source-identity fixtures
+# are rejected by nothing under the previous pin (measured: NO_VIOLATION against
+# 9461fa9), so pinning ahead was what made them mean something. Re-measured at
+# this commit before merging: 99 passed / 30 known failures / 129 total,
+# unchanged.
+
 repo=https://github.com/the-cascade-protocol/spec
-commit=9461fa95f7fb10596e1d73268ec875c9c5e31a9f
-vocab=core=3.4 health=2.6 clinical=1.14 coverage=1.4 checkup=3.3 pots=1.4
+commit=d162f686fdd3d74742ada2c956dcee93ef52e944
+vocab=core=3.5 health=2.6 clinical=1.14 coverage=1.4 checkup=3.3 pots=1.4
