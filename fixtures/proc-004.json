@@ -1,0 +1,26 @@
+{
+  "id": "proc-004",
+  "description": "Migration window: procedure carrying its name only on the deprecated health:procedureName spelling",
+  "dataType": "Procedure",
+  "vocabulary": "clinical",
+  "input": {
+    "id": "urn:uuid:proc-0004-aaaa-bbbb-ccccddddeeee",
+    "type": "Procedure",
+    "healthProcedureName": "Screening Colonoscopy",
+    "procedureDate": "2025-03-11T09:00:00Z",
+    "status": "completed",
+    "dataProvenance": "EHRVerified",
+    "schemaVersion": "1.3"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:proc-0004-aaaa-bbbb-ccccddddeeee> a clinical:Procedure ;\n    health:procedureName \"Screening Colonoscopy\" ;\n    clinical:procedureDate \"2025-03-11T09:00:00Z\"^^xsd:dateTime ;\n    clinical:status \"completed\" ;\n    cascade:dataProvenance cascade:EHRVerified ;\n    cascade:schemaVersion \"1.3\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": [
+    "migration",
+    "clinical",
+    "ehr-import"
+  ],
+  "notes": "This is exactly what a C-CDA import path emits today: a record typed clinical:Procedure whose name is written to health:procedureName, a predicate no Cascade vocabulary defines. Under clinical v1.14 it FAILED clinical:ProcedureShape's name requirement while carrying a name. clinical v1.15 satisfies that requirement through an sh:or over both spellings, so the record validates without being rewritten. It also raises a WARNING from clinical:ProcedureNameSpellingShape, which this suite does not observe: extract_violations() keeps only sh:Violation results. The warning is the signal that the window is still open, and it is verified in cascade-cli rather than here. When the window closes this fixture becomes a NEGATIVE and its expectation must be inverted, not deleted."
+}

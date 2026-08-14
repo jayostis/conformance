@@ -1,6 +1,6 @@
 {
   "$comment": "Enumerated known failures. This file is a GATE INPUT, not a filter: scripts/run_conformance.py still executes and reports every fixture. scripts/check_baseline.py fails CI when a failure appears that is not listed here AND when a listed failure starts passing, so the list can only shrink deliberately. Entries are keyed on (fixture, reason): a fixture that changes HOW it fails is a new fact and must fail the gate. Adding an entry is an explicit committed edit and needs an ownedBy naming the repo that owns the fix. specPin records the spec revision these were measured against; advancing scripts/SPEC_PIN requires re-measuring.",
-  "specPin": "d162f686fdd3d74742ada2c956dcee93ef52e944",
+  "specPin": "728f9ae39fb78b9f417a13b0fe22b13555a62208",
   "entries": [
     {
       "fixture": "advisory/BRCA2-reclassification.expected.ttl",
@@ -163,24 +163,6 @@
       "reason": "UNSHAPED",
       "ownedBy": "spec",
       "detail": "Negative fixture. Its invalid Turtle is authored and correct, but no shape targets ldp:BasicContainer, so nothing can reject it yet."
-    },
-    {
-      "fixture": "proc-001.json",
-      "reason": "UNSHAPED",
-      "ownedBy": "spec",
-      "detail": "health:ProcedureRecord is asserted by three fixtures and by cascade-cli, and is not defined as a class in health.ttl at all."
-    },
-    {
-      "fixture": "proc-002.json",
-      "reason": "UNSHAPED",
-      "ownedBy": "spec",
-      "detail": "health:ProcedureRecord is not defined in health.ttl."
-    },
-    {
-      "fixture": "proc-003.json",
-      "reason": "UNSHAPED",
-      "ownedBy": "spec",
-      "detail": "Negative fixture. Its invalid Turtle is authored and correct, but health:ProcedureRecord is neither defined nor shaped, so nothing can reject it yet."
     }
   ]
 }

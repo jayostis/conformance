@@ -34,7 +34,7 @@
 # encounter-001 was a KNOWN_FAILURES entry with reason UNSHAPED: it reported
 # conforming while evaluating ZERO constraints, because clinical:Encounter had no
 # shape. It now evaluates 29, so the entry is gone.
-core=3.5
+core=3.6
 # core=3.5: the ORIGIN axis. cascade:sourceIdentity, a canonical
 #   transport-independent organization identity, scheme-prefixed org: / ns: /
 #   transport:; cascade:SourceIdentityShape constrains its value wherever it
@@ -54,7 +54,7 @@ core=3.5
 #   ExportManifestShape / cascade:schemaVersion / sh:minCount).
 #   NOT covered: cascade:InteractionScenario has a shape and no fixture.
 # core=3.3: cascade:AIAsserted provenance leaf (ungrounded general-AI content, subClassOf ConsumerGenerated) + cascade:ProxyAgent caregiver-proxy actor (ProxyAgentShape requires actsForPatient, proxyRelationship, proxyGrantedAt). Fixtures: social-002, proxy-001, proxy-002.
-health=2.6
+health=2.7
 # health=2.6: interpretation aligned to the HL7 v3 ObservationInterpretation code
 #   system (plus data-absent-reason "unknown" and the retained v2.5 words);
 #   labCategory, testCode, icd10Code, snomedCode multi-valued per FHIR
@@ -79,7 +79,7 @@ health=2.6
 #   Note: health:SocialHistoryRecordShape declares only sh:Info-severity constraints,
 #   so no fixture can be rejected by it and the health: spelling has no negative
 #   counterpart. social-003 covers the clinical: spelling instead.
-clinical=1.14
+clinical=1.15
 # clinical=1.14: clinical:EncounterShape exists for the first time (encounter-001
 #   moved from a KNOWN_FAILURES UNSHAPED entry to evaluating 29 constraints);
 #   fixtures encounter-002 (date-precision period, v3-ActCode class) and

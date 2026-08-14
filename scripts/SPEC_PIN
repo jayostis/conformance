@@ -6,6 +6,17 @@
 # on spec `main`, so a run that passed yesterday can pass today for a
 # different reason.
 #
+# ############ TEMPORARY BRANCH PIN -- MUST BE RE-PINNED BEFORE MERGE ############
+# The commit below is the HEAD of the spec BRANCH that carries core v3.6 /
+# health v2.7 / clinical v1.15. It is NOT on spec main yet. Once the spec PR
+# merges, re-pin this to the spec MERGE COMMIT and its tags
+# (vocab/core-v3.6, vocab/health-v2.7, vocab/clinical-v1.15), re-run the suite,
+# and confirm the counts in this repo's PR body are unchanged. CI clones
+# `commit=` from the public spec repo, so CI on this branch cannot pass until
+# that re-pin happens; that is deliberate and is the signal that the merge order
+# is spec first, this repo second.
+# ###############################################################################
+#
 # To re-pin: check out the new spec revision, put its full SHA and its
 # VOCAB_VERSIONS line below, run `make -C . conformance` (or
 # `scripts/run_conformance.py`), and record the resulting counts in the PR.
@@ -19,5 +30,5 @@
 # unchanged.
 
 repo=https://github.com/the-cascade-protocol/spec
-commit=d162f686fdd3d74742ada2c956dcee93ef52e944
-vocab=core=3.5 health=2.6 clinical=1.14 coverage=1.4 checkup=3.3 pots=1.4
+commit=728f9ae39fb78b9f417a13b0fe22b13555a62208
+vocab=core=3.6 health=2.7 clinical=1.15 coverage=1.4 checkup=3.3 pots=1.4

@@ -1,8 +1,8 @@
 {
   "description": "Cross-SDK test vectors for Cascade Protocol Deterministic UUID (CDP-UUID)",
-  "algorithm": "SHA-1 of input string, formatted as UUID5 layout — see deterministicUuid() in cascade-cli/src/lib/fhir-converter/types.ts",
-  "version": "1.0",
-  "date": "2026-03-27",
+  "algorithm": "SHA-1 of input string, formatted as UUID5 layout \u2014 see deterministicUuid() in cascade-cli/src/lib/fhir-converter/types.ts",
+  "version": "1.1",
+  "date": "2026-08-14",
   "primitiveVectors": [
     {
       "label": "sanity-check-hello",
@@ -53,5 +53,180 @@
       "identityString": "MedicationRequest::normalizedName=metformin|patient=urn:uuid:patient-smith|startDate=2019-06-01",
       "expectedUri": "urn:uuid:d4db9260-e8d8-59ab-aea9-ee09974cd9fd"
     }
-  ]
+  ],
+  "multiValuedFieldVectors": [
+    {
+      "label": "condition-hypertension-scalar-baseline",
+      "comment": "Restates the pre-existing contentHashedUriVectors entry 'condition-hypertension' as explicit scalar fields. Its expectedUri MUST equal that entry's, byte for byte.",
+      "proves": [
+        "scalar-agreement"
+      ],
+      "resourceType": "Condition",
+      "contentFields": {
+        "icd10Code": "I10",
+        "patient": "urn:uuid:patient-smith",
+        "snomedCode": "38341003"
+      },
+      "canonicalIdentityString": "Condition::icd10Code=I10|patient=urn:uuid:patient-smith|snomedCode=38341003",
+      "expectedUri": "urn:uuid:e7794fe1-1684-5095-a3d6-cb8c1d1f7c4b"
+    },
+    {
+      "label": "condition-hypertension-one-element-sequences",
+      "comment": "The SAME record with each code field spelled as a one-element sequence, which is what health v2.6 / clinical v1.14 made possible. Its expectedUri MUST equal the scalar baseline above. This is the proof that making the code fields 0..* moved no identity that had already been written.",
+      "proves": [
+        "scalar-agreement"
+      ],
+      "resourceType": "Condition",
+      "contentFields": {
+        "icd10Code": [
+          "I10"
+        ],
+        "patient": "urn:uuid:patient-smith",
+        "snomedCode": [
+          "38341003"
+        ]
+      },
+      "canonicalIdentityString": "Condition::icd10Code=I10|patient=urn:uuid:patient-smith|snomedCode=38341003",
+      "expectedUri": "urn:uuid:e7794fe1-1684-5095-a3d6-cb8c1d1f7c4b"
+    },
+    {
+      "label": "condition-dual-coded-source-order",
+      "comment": "A dual-coded diabetes problem-list entry as one export happened to order the codings.",
+      "proves": [
+        "order-independence"
+      ],
+      "resourceType": "Condition",
+      "contentFields": {
+        "icd10Code": [
+          "E11.65",
+          "E11.9"
+        ],
+        "patient": "urn:uuid:patient-smith",
+        "snomedCode": [
+          "73211009",
+          "44054006"
+        ]
+      },
+      "canonicalIdentityString": "Condition::icd10Code=E11.65,E11.9|patient=urn:uuid:patient-smith|snomedCode=44054006,73211009",
+      "expectedUri": "urn:uuid:3e70e77f-a276-5908-a095-3d82301d1348"
+    },
+    {
+      "label": "condition-dual-coded-shuffled",
+      "comment": "The SAME record from a second export that listed both coding arrays in the opposite order. FHIR CodeableConcept.coding is a set, so this is the same record and its expectedUri MUST equal the entry above.",
+      "proves": [
+        "order-independence"
+      ],
+      "resourceType": "Condition",
+      "contentFields": {
+        "icd10Code": [
+          "E11.9",
+          "E11.65"
+        ],
+        "patient": "urn:uuid:patient-smith",
+        "snomedCode": [
+          "44054006",
+          "73211009"
+        ]
+      },
+      "canonicalIdentityString": "Condition::icd10Code=E11.65,E11.9|patient=urn:uuid:patient-smith|snomedCode=44054006,73211009",
+      "expectedUri": "urn:uuid:3e70e77f-a276-5908-a095-3d82301d1348"
+    },
+    {
+      "label": "condition-dual-coded-with-duplicates",
+      "comment": "The SAME record from an export that repeated codings, which real bundles do when a resource is assembled from several sources. Its expectedUri MUST equal the two entries above.",
+      "proves": [
+        "duplicate-independence"
+      ],
+      "resourceType": "Condition",
+      "contentFields": {
+        "icd10Code": [
+          "E11.9",
+          "E11.65",
+          "E11.9"
+        ],
+        "patient": "urn:uuid:patient-smith",
+        "snomedCode": [
+          "44054006",
+          "73211009",
+          "44054006",
+          "73211009"
+        ]
+      },
+      "canonicalIdentityString": "Condition::icd10Code=E11.65,E11.9|patient=urn:uuid:patient-smith|snomedCode=44054006,73211009",
+      "expectedUri": "urn:uuid:3e70e77f-a276-5908-a095-3d82301d1348"
+    },
+    {
+      "label": "observation-empty-members-dropped",
+      "comment": "Members that are empty after trimming are discarded, so a field holding one real code and two blanks canonicalizes to that one code. Its expectedUri MUST equal the pre-existing 'observation-glucose' entry.",
+      "proves": [
+        "scalar-agreement"
+      ],
+      "resourceType": "Observation",
+      "contentFields": {
+        "date": "2024-01-10",
+        "loincCode": [
+          "2339-0",
+          "",
+          "  "
+        ],
+        "patient": "urn:uuid:patient-smith"
+      },
+      "canonicalIdentityString": "Observation::date=2024-01-10|loincCode=2339-0|patient=urn:uuid:patient-smith",
+      "expectedUri": "urn:uuid:6514e8ed-e89f-5eef-83a4-cff337d824ae"
+    },
+    {
+      "label": "observation-all-members-empty",
+      "comment": "A sequence with no surviving member is treated as an ABSENT field, exactly as a null scalar is, so loincCode drops out of the identity string entirely.",
+      "proves": [
+        "scalar-agreement"
+      ],
+      "resourceType": "Observation",
+      "contentFields": {
+        "date": "2024-01-10",
+        "loincCode": [
+          "",
+          "   "
+        ],
+        "patient": "urn:uuid:patient-smith"
+      },
+      "canonicalIdentityString": "Observation::date=2024-01-10|patient=urn:uuid:patient-smith",
+      "expectedUri": "urn:uuid:2c33e863-6d10-5062-9f0b-bf92d69aa717"
+    },
+    {
+      "label": "condition-codepoint-sort-not-locale",
+      "comment": "Sorting is by Unicode code point, not locale collation: uppercase sorts before lowercase, so this canonicalizes to 'B02,Z01,a01' and NOT to the locale-aware 'a01,B02,Z01'. A locale-dependent order would make identity depend on the machine.",
+      "proves": [
+        "order-independence"
+      ],
+      "resourceType": "Condition",
+      "contentFields": {
+        "patient": "urn:uuid:patient-smith",
+        "snomedCode": [
+          "Z01",
+          "a01",
+          "B02"
+        ]
+      },
+      "canonicalIdentityString": "Condition::patient=urn:uuid:patient-smith|snomedCode=B02,Z01,a01",
+      "expectedUri": "urn:uuid:e590569a-10fb-5463-b024-8263ead93f9a"
+    }
+  ],
+  "multiValuedFieldRule": {
+    "statedIn": "core v3.6, normatively, on cascade:cascadeUri in ontologies/core/v1/core.ttl",
+    "rule": [
+      "discard members that are null or empty after trimming, and trim each survivor",
+      "deduplicate",
+      "sort ascending by Unicode code point",
+      "join with a single separator character the implementation fixes and documents; U+002C COMMA is recommended and required of new implementations",
+      "a one-element sequence canonicalizes to exactly the bare scalar form",
+      "a sequence with no surviving member is treated as an absent field"
+    ],
+    "invariants": {
+      "order-independence": "Shuffling the members of a multi-valued identity input MUST NOT change the identifier.",
+      "scalar-agreement": "A field holding exactly one value MUST mint the same identifier whether spelled as a scalar or a one-element sequence.",
+      "duplicate-independence": "Repeating a member MUST NOT change the identifier."
+    },
+    "separatorNote": "expectedUri values here are computed with the recommended U+002C separator. An implementation that already ships a different fixed separator at an existing identity site KEEPS it (changing it re-mints every identifier that site ever produced) and satisfies this vector set by checking the three INVARIANTS rather than the literal expectedUri.",
+    "scopeLimit": "This rule governs identity inputs whose source element is a SET (FHIR CodeableConcept.coding, and the code fields made 0..* in health v2.6 / clinical v1.14). It MUST NOT be applied to an input whose source order carries meaning: FHIR name[0] is the primary name, and a component or note list is a sequence, not a set. Sorting there merges records the source deliberately distinguished."
+  }
 }

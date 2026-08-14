@@ -1,0 +1,28 @@
+{
+  "id": "absent-001",
+  "description": "Happy path: lab result with no value, carrying a ratified reason for the absence",
+  "dataType": "LabResult",
+  "vocabulary": "core",
+  "input": {
+    "id": "urn:uuid:absent01-aaaa-bbbb-cccc-ddddeeeeffff",
+    "type": "LabResultRecord",
+    "testName": "Serum Potassium",
+    "loincCode": "http://loinc.org/rdf#2823-3",
+    "performedDate": "2026-02-14T08:00:00Z",
+    "dataAbsentReason": "not-performed",
+    "dataProvenance": "EHRVerified",
+    "schemaVersion": "1.3"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:absent01-aaaa-bbbb-cccc-ddddeeeeffff> a health:LabResultRecord ;\n    health:testName \"Serum Potassium\" ;\n    health:loincCode <http://loinc.org/rdf#2823-3> ;\n    health:performedDate \"2026-02-14T08:00:00Z\"^^xsd:dateTime ;\n    cascade:dataAbsentReason \"not-performed\" ;\n    cascade:dataProvenance cascade:EHRVerified ;\n    cascade:schemaVersion \"1.3\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": [
+    "happy-path",
+    "clinical",
+    "ehr-import",
+    "data-absence"
+  ],
+  "notes": "core v3.6. The record has no value and says why, using the code FHIR R4 binds Observation.dataAbsentReason to. Before v3.6 this predicate had no definition and no shape, so an importer that wanted to preserve a C-CDA nullFlavor had nowhere to put it and the reason was dropped. Every reason then looked identical to every other."
+}
