@@ -3,7 +3,16 @@
   "title": "Cascade Protocol Conformance Fixture",
   "description": "Schema for conformance test fixtures that validate SDK serialization of Cascade Protocol health data types to RDF/Turtle.",
   "type": "object",
-  "required": ["id", "description", "dataType", "vocabulary", "input", "expectedOutput", "shouldAccept", "tags"],
+  "required": [
+    "id",
+    "description",
+    "dataType",
+    "vocabulary",
+    "input",
+    "expectedOutput",
+    "shouldAccept",
+    "tags"
+  ],
   "properties": {
     "id": {
       "type": "string",
@@ -16,12 +25,45 @@
     },
     "dataType": {
       "type": "string",
-      "enum": ["Medication", "Condition", "Allergy", "LabResult", "VitalSign", "PatientProfile", "Immunization", "Coverage", "PodStructure", "Procedure", "FamilyHistory", "ActivitySnapshot", "SleepSnapshot", "DailyVitalReading", "DailyActivitySnapshot", "DailySleepSnapshot", "Encounter", "MedicationAdministration", "ImplantedDevice", "ImagingStudy", "ClaimRecord", "BenefitStatement", "DenialNotice", "AppealRecord", "SocialHistoryRecord", "ProxyAgent"],
+      "enum": [
+        "Medication",
+        "Condition",
+        "Allergy",
+        "LabResult",
+        "VitalSign",
+        "PatientProfile",
+        "Immunization",
+        "Coverage",
+        "PodStructure",
+        "Procedure",
+        "FamilyHistory",
+        "ActivitySnapshot",
+        "SleepSnapshot",
+        "DailyVitalReading",
+        "DailyActivitySnapshot",
+        "DailySleepSnapshot",
+        "Encounter",
+        "MedicationAdministration",
+        "ImplantedDevice",
+        "ImagingStudy",
+        "ClaimRecord",
+        "BenefitStatement",
+        "DenialNotice",
+        "AppealRecord",
+        "SocialHistoryRecord",
+        "ProxyAgent"
+      ],
       "description": "The Cascade Protocol data type under test"
     },
     "vocabulary": {
       "type": "string",
-      "enum": ["health", "clinical", "core", "coverage", "cascade"],
+      "enum": [
+        "health",
+        "clinical",
+        "core",
+        "coverage",
+        "cascade"
+      ],
       "description": "The primary Cascade Protocol vocabulary namespace used"
     },
     "input": {
@@ -37,11 +79,17 @@
         },
         "validationMode": {
           "type": "string",
-          "enum": ["shacl-valid", "exact-match"],
+          "enum": [
+            "shacl-valid",
+            "exact-match"
+          ],
           "description": "How to validate: 'shacl-valid' checks SHACL constraints pass, 'exact-match' requires normalized triple-by-triple equivalence"
         }
       },
-      "required": ["turtle", "validationMode"]
+      "required": [
+        "turtle",
+        "validationMode"
+      ]
     },
     "shouldAccept": {
       "type": "boolean",
@@ -78,7 +126,10 @@
           "proxy",
           "caregiver",
           "ai-extracted",
-          "ai-asserted"
+          "ai-asserted",
+          "data-absence",
+          "cardinality-constraint",
+          "migration"
         ]
       },
       "description": "Tags classifying the fixture for filtering and coverage reporting"
@@ -93,9 +144,15 @@
     }
   },
   "if": {
-    "properties": { "shouldAccept": { "const": false } }
+    "properties": {
+      "shouldAccept": {
+        "const": false
+      }
+    }
   },
   "then": {
-    "required": ["shaclConstraintViolated"]
+    "required": [
+      "shaclConstraintViolated"
+    ]
   }
 }

@@ -1,0 +1,29 @@
+{
+  "id": "lab-012",
+  "description": "Lab result carrying a laboratory's local abnormality flag verbatim alongside a ratified reading",
+  "dataType": "LabResult",
+  "vocabulary": "health",
+  "input": {
+    "id": "urn:uuid:lab012-aaaa-bbbb-cccc-ddddeeeeffff",
+    "type": "LabResultRecord",
+    "testName": "Ferritin",
+    "value": "412",
+    "unit": "ng/mL",
+    "performedDate": "2026-02-14T08:00:00Z",
+    "interpretation": "A",
+    "interpretationSourceCode": "ZQ7",
+    "dataProvenance": "EHRVerified",
+    "schemaVersion": "1.3"
+  },
+  "expectedOutput": {
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:lab012-aaaa-bbbb-cccc-ddddeeeeffff> a health:LabResultRecord ;\n    health:testName \"Ferritin\" ;\n    health:value \"412\" ;\n    health:unit \"ng/mL\" ;\n    health:performedDate \"2026-02-14T08:00:00Z\"^^xsd:dateTime ;\n    health:interpretation \"A\" ;\n    health:interpretationSourceCode \"ZQ7\" ;\n    cascade:dataProvenance cascade:EHRVerified ;\n    cascade:schemaVersion \"1.3\" .\n",
+    "validationMode": "shacl-valid"
+  },
+  "shouldAccept": true,
+  "tags": [
+    "happy-path",
+    "clinical",
+    "ehr-import"
+  ],
+  "notes": "health v2.7. ZQ7 is a laboratory's local flag and is in neither bound value set. Before v2.7 an importer had two options and both lost: drop it, or write it to health:interpretation where it then failed the sh:in. The pair states the ratified reading (A, Abnormal) for a consumer that reads only the bound property, and keeps what the source actually said for one that needs it. The property is deliberately unconstrained -- no value set, no pattern -- because constraining a verbatim carbon copy recreates the loss it exists to prevent."
+}

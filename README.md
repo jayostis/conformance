@@ -58,7 +58,7 @@ Every count below is derived from the fixture files themselves, not maintained b
 | `genomics/vrs/` | 1 | 1 | 0 | GA4GH VRS allele conversion oracle |
 | **Total** | **46** | **37** | **9** | |
 
-**Grand total: 129 executable fixtures.**
+**Grand total: 136 executable fixtures.**
 
 A further 94 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
@@ -138,25 +138,25 @@ The runner also refuses a checkout that sits at the pinned commit but has uncomm
 
 ## Current status
 
-As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.5, health 2.6, clinical 1.14, coverage 1.4, checkup 3.3):
+As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.6, health 2.7, clinical 1.15, coverage 1.4, checkup 3.3):
 
 ```
-passed  99
-failed  30
+passed  109
+failed  27
 skipped  0
-total   129        61,822 constraint checks evaluated
+total   136        62,198 constraint checks evaluated
 ```
 
 The first execution of these fixtures, against the older `spec` revision the pin
 originally named, was **43 passed / 68 failed / 0 skipped / 111 total**. Three things
 moved it: 19 fixtures started passing on their own when `spec` defined and shaped the
-classes they had always asserted; 19 were fixed here; 18 were added. No fixture that
-passed has since failed. The remaining 30 break down as:
+classes they had always asserted; 22 were fixed here; 25 were added. No fixture that
+passed has since failed. The remaining 27 break down as:
 
 | Reason | Count | Owned by | Notes |
 |---|---|---|---|
 | `VIOLATIONS` | 15 | `spec` (3), undecided (12) | Conversion oracles under `fixtures/genomics/`. Each `.expected.ttl` records what the importer currently emits from the neighbouring `.input.json`, so a violation means either the importer must emit more or the shape must ask less. Three are settled — GA4GH Phenopackets do not carry a date of birth or a biological sex, so `cascade:PatientProfileShape` is stricter than the source format can satisfy. The other twelve need triage one at a time. |
-| `UNSHAPED` | 12 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `health:ProcedureRecord` (`proc-001/002/003`, not defined in `health.ttl` at all), `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `clinical:CoverageRecord`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. Two are negative fixtures whose Turtle is authored and correct; they go live the moment a shape exists. |
+| `UNSHAPED` | 9 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `clinical:CoverageRecord`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. `proc-001/002/003` left this row at core 3.6 / health 2.7 / clinical 1.15: they asserted `health:ProcedureRecord`, which `health.ttl` never defined, and clinical v1.15 ruled `clinical:` the canonical procedure spelling, so they were retargeted onto `clinical:Procedure` and all three now run against real constraints. |
 | `NO_TURTLE` | 3 | `conformance` | Comment-only placeholder `.ttl` files: two unauthored advisory oracles, and `genomics/phenopackets/biosamples-SAMN05324082.expected.ttl`, which is deliberately empty because it asserts `detect() === false` — not a SHACL assertion, so it needs a different home. |
 
 Each of the 30 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
@@ -582,6 +582,10 @@ Test data is derived from two sources:
    **This repository is the pod's canonical home.** `cascade-cli` reads it from here. `cascadeprotocol.org` publishes a generated copy at `/reference-patient-pod/`, kept byte-identical by that repo's `scripts/sync-reference-pod.sh` and guarded by its `--check` mode. Change the pod here; a change made anywhere else is drift.
 
 2. **SHACL Shapes Files** (`../spec/ontologies/*/v1/*.shapes.ttl`, at the revision named in `scripts/SPEC_PIN`): Machine-readable validation constraints. Negative fixtures are systematically derived by violating each `sh:Violation`-severity constraint.
+
+   **This suite observes `sh:Violation` only, and that is a real coverage boundary.** The runner passes `allow_warnings=True` to pyshacl and `extract_violations()` discards every result whose `sh:resultSeverity` is not `sh:Violation`. So a constraint published at `sh:Warning` or `sh:Info` cannot be exercised here at all: no negative fixture can be written against it, because the fixture would report zero violations and the runner would score it as a failure forever. Deleting such a constraint from `spec` outright leaves this suite completely green, which was confirmed by mutation rather than assumed.
+
+   This matters because the ratchet pattern the vocabularies use — publish a new constraint at `sh:Warning`, raise it to `sh:Violation` a release later once the warning is observably absent from conforming output — puts every constraint in its *first* release outside this suite's reach. Two such constraints exist at the pinned revision: `clinical:VitalSignShape`'s interpretation value set and `clinical:ProcedureNameSpellingShape`. Their behaviour is verified against the real validator elsewhere, and each becomes testable here on the release that raises it to `sh:Violation`. When that happens, add the negative fixture in the same change that raises the severity.
 
 ## Adding New Fixtures
 
