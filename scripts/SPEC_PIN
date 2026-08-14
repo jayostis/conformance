@@ -6,29 +6,20 @@
 # on spec `main`, so a run that passed yesterday can pass today for a
 # different reason.
 #
-# ############ TEMPORARY BRANCH PIN -- MUST BE RE-PINNED BEFORE MERGE ############
-# The commit below is the HEAD of the spec BRANCH that carries core v3.6 /
-# health v2.7 / clinical v1.15. It is NOT on spec main yet. Once the spec PR
-# merges, re-pin this to the spec MERGE COMMIT and its tags
-# (vocab/core-v3.6, vocab/health-v2.7, vocab/clinical-v1.15), re-run the suite,
-# and confirm the counts in this repo's PR body are unchanged. CI clones
-# `commit=` from the public spec repo, so CI on this branch cannot pass until
-# that re-pin happens; that is deliberate and is the signal that the merge order
-# is spec first, this repo second.
-# ###############################################################################
-#
 # To re-pin: check out the new spec revision, put its full SHA and its
 # VOCAB_VERSIONS line below, run `make -C . conformance` (or
 # `scripts/run_conformance.py`), and record the resulting counts in the PR.
 
-# Pinned at the MERGE commit of the-cascade-protocol/spec PR #17 on `main`
-# (core v3.5, tag `vocab/core-v3.5`). While that PR was open this file briefly
-# pinned its branch commit 422108f — the two negative source-identity fixtures
-# are rejected by nothing under the previous pin (measured: NO_VIOLATION against
-# 9461fa9), so pinning ahead was what made them mean something. Re-measured at
-# this commit before merging: 99 passed / 30 known failures / 129 total,
-# unchanged.
+# Pinned at the MERGE commit of the-cascade-protocol/spec PR #18 on `main`
+# (core v3.6 / health v2.7 / clinical v1.15; tags `vocab/core-v3.6`,
+# `vocab/health-v2.7`, `vocab/clinical-v1.15`). While that PR was open this
+# file briefly pinned its branch commit 728f9ae -- the five new negative and
+# ratchet fixtures are rejected by nothing under the previous pin (measured
+# RED-first against d162f68), so pinning ahead was what made them mean
+# something. Re-measured at this merge commit before merging this repo's PR:
+# 109 passed / 27 known failures / 0 skipped / 136 total, unchanged from the
+# branch-pin measurement.
 
 repo=https://github.com/the-cascade-protocol/spec
-commit=728f9ae39fb78b9f417a13b0fe22b13555a62208
+commit=d37901e9c1e9aeb775ea0e1690eaaa50114df57a
 vocab=core=3.6 health=2.7 clinical=1.15 coverage=1.4 checkup=3.3 pots=1.4

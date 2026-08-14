@@ -1,6 +1,6 @@
 {
   "$comment": "Enumerated known failures. This file is a GATE INPUT, not a filter: scripts/run_conformance.py still executes and reports every fixture. scripts/check_baseline.py fails CI when a failure appears that is not listed here AND when a listed failure starts passing, so the list can only shrink deliberately. Entries are keyed on (fixture, reason): a fixture that changes HOW it fails is a new fact and must fail the gate. Adding an entry is an explicit committed edit and needs an ownedBy naming the repo that owns the fix. specPin records the spec revision these were measured against; advancing scripts/SPEC_PIN requires re-measuring.",
-  "specPin": "728f9ae39fb78b9f417a13b0fe22b13555a62208",
+  "specPin": "d37901e9c1e9aeb775ea0e1690eaaa50114df57a",
   "entries": [
     {
       "fixture": "advisory/BRCA2-reclassification.expected.ttl",
