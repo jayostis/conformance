@@ -106,7 +106,8 @@ python3 scripts/run_conformance.py --spec-dir <spec@d37901e> --allow-spec-drift 
 
 # GREEN: against the pin now named in scripts/SPEC_PIN (clinical v1.16).
 python3 scripts/run_conformance.py --spec-dir <spec@pin> --select 'clinical/*'
-#   10 of 11 pass; status-laboratoryreport-in-progress.WARN.ttl fails as recorded above.
+#   11 passed / 1 failed / 12 total (the 12th is the legacy social-history fixture);
+#   status-laboratoryreport-in-progress.WARN.ttl is the failure, as recorded above.
 ```
 
 The positive fixtures are not proven by passing — they pass under both pins,
