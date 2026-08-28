@@ -17,7 +17,7 @@ Every count below is derived from the fixture files themselves, not maintained b
 |---|---|---|---|
 | Medication | `med-` | 11 | Prescription drugs, OTC medications |
 | Condition | `cond-` | 7 | Medical conditions, diagnoses |
-| Lab Result | `lab-` | 10 | Laboratory test observations |
+| Lab Result | `lab-` | 13 | Laboratory test observations |
 | Vital Sign | `vital-` | 7 | Clinical vital sign observations |
 | Allergy | `allergy-` | 6 | Allergies and intolerances |
 | Patient Profile | `profile-` | 5 | Demographics and identity |
@@ -25,7 +25,7 @@ Every count below is derived from the fixture files themselves, not maintained b
 | Pod Structure | `pod-` | 4 | LDP containers and manifests |
 | Immunization | `imm-` | 3 | Vaccine records |
 | Family History | `fam-` | 3 | Family medical history |
-| Procedure | `proc-` | 3 | Procedures and surgical history |
+| Procedure | `proc-` | 4 | Procedures and surgical history |
 | Social History | `social-` | 3 | Social/behavioral history: consumer-reported (health v2.4) and EHR-extracted (clinical v1.8) |
 | Daily Activity Snapshot | `dailyactivity-` | 2 | One day of activity metrics from a wearable (health v2.5) |
 | Daily Sleep Snapshot | `dailysleep-` | 2 | One night of sleep metrics from a wearable (health v2.5) |
@@ -38,7 +38,8 @@ Every count below is derived from the fixture files themselves, not maintained b
 | Encounter | `encounter-` | 3 | Clinical encounters and visits |
 | Imaging Study | `imaging-` | 1 | Imaging studies and results |
 | Medication Administration | `medadmin-` | 1 | Medication administration events |
-| **Total** | | **83** | 23 data types |
+| Data Absence | `absent-` | 3 | A record whose primary value is absent for a stated reason (`cascade:dataAbsentReason`, core v3.6) |
+| **Total** | | **90** | 24 data types |
 
 ### RDF fixtures (`fixtures/**/*.ttl`)
 
@@ -54,9 +55,9 @@ The third exists because Cascade shapes report a value that existing data alread
 
 | Directory | Count | Positive | Negative | Warn | What it covers |
 |---|---|---|---|---|---|
-| `clinical/` | 11 | 6 | 2 | 3 | Social history in Turtle form, and the `clinical` v1.16 batch: encounter facts and participation, the two document status axes and the two attribution axes, and three of the five `clinical:status` binding sets |
+| `core/` | 15 | 6 | 8 | 1 | AIExtracted provenance; the `core` v3.5 ORIGIN axis (`cascade:sourceIdentity`); and the `core` v3.7 `cascade:Attachment` store — one negative per Violation constraint, three path/digest negatives, and the media-type warning |
+| `clinical/` | 12 | 7 | 2 | 3 | Social history in Turtle form, and the `clinical` v1.16 batch: encounter facts and participation, the two document status axes and the two attribution axes, and three of the five `clinical:status` binding sets |
 | `genomics/phenopackets/` | 9 | 9 | 0 | 0 | GA4GH Phenopacket conversion oracles |
-| `core/` | 15 | 7 | 8 | 1 | AIExtracted provenance; the `core` v3.5 ORIGIN axis (`cascade:sourceIdentity`); and the `core` v3.7 `cascade:Attachment` store — one negative per Violation constraint, three path/digest negatives, and the media-type warning |
 | `genomics/fhir-genomics-ig/` | 7 | 7 | 0 | 0 | HL7 Genomics Reporting IG bundle conversion oracles |
 | `evidence/` | 7 | 3 | 4 | 0 | Assertion facet / evidence grounding rules (evidence v1-draft) |
 | `workbench/` | 7 | 4 | 3 | 0 | Filing, notes and follow-ups (workbench v1-draft) |
@@ -68,7 +69,7 @@ The third exists because Cascade shapes report a value that existing data alread
 | `genomics/vrs/` | 1 | 1 | 0 | 0 | GA4GH VRS allele conversion oracle |
 | **Total** | **71** | **47** | **18** | **6** | |
 
-**Grand total: 161 executable fixtures.**
+**Grand total: 161 executable fixtures** (90 JSON + 71 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
 
 A further 94 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
