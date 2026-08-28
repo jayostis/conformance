@@ -42,23 +42,33 @@ Every count below is derived from the fixture files themselves, not maintained b
 
 ### RDF fixtures (`fixtures/**/*.ttl`)
 
-46 further fixtures are Turtle files rather than JSON records. They carry their polarity in the filename (`*.INVALID.ttl` is a negative fixture, everything else is positive) and are executed by the same runner.
+71 further fixtures are Turtle files rather than JSON records. They carry their polarity in the filename and are executed by the same runner. There are **three** polarities:
 
-| Directory | Count | Positive | Negative | What it covers |
-|---|---|---|---|---|
-| `genomics/phenopackets/` | 9 | 9 | 0 | GA4GH Phenopacket conversion oracles |
-| `genomics/fhir-genomics-ig/` | 7 | 7 | 0 | HL7 Genomics Reporting IG bundle conversion oracles |
-| `evidence/` | 7 | 3 | 4 | Assertion facet / evidence grounding rules (evidence v1-draft) |
-| `workbench/` | 7 | 4 | 3 | Filing, notes and follow-ups (workbench v1-draft) |
-| `genomics/clinvar/` | 4 | 4 | 0 | ClinVar VCV conversion oracles |
-| `advisory/` | 2 | 2 | 0 | Advisory reclassification oracles (advisory v1-draft) |
-| `clinical/` | 1 | 1 | 0 | Social history in Turtle form |
-| `core/` | 7 | 5 | 2 | AIExtracted provenance, and the core v3.5 ORIGIN axis (`cascade:sourceIdentity`): one fixture per value scheme, the two-transport-one-system invariant, and two negatives |
-| `genomics/vcf/` | 1 | 1 | 0 | VCF conversion oracle |
-| `genomics/vrs/` | 1 | 1 | 0 | GA4GH VRS allele conversion oracle |
-| **Total** | **46** | **37** | **9** | |
+| Suffix | Polarity | The claim |
+|---|---|---|
+| `*.VALID.ttl`, or no suffix | positive | No `sh:Violation`. |
+| `*.INVALID.ttl` | negative | At least one `sh:Violation`; something rejects it. |
+| `*.WARN.ttl` | warn | At least one `sh:Warning` **and** no `sh:Violation`; something notices it and nothing rejects it. |
 
-**Grand total: 136 executable fixtures.**
+The third exists because Cascade shapes report a value that existing data already carries at `sh:Warning` rather than rejecting it — the ratchet `core` v3.5 wrote down, and which `clinical` v1.16 applied to five `clinical:status` bindings. Neither of the other two polarities can state that claim: `.INVALID.ttl` fails such a fixture with `NO_VIOLATION`, and `.VALID.ttl` passes it while reporting nothing about the warning, which is the same silence the binding was added to end.
+
+| Directory | Count | Positive | Negative | Warn | What it covers |
+|---|---|---|---|---|---|
+| `clinical/` | 11 | 6 | 2 | 3 | Social history in Turtle form, and the `clinical` v1.16 batch: encounter facts and participation, the two document status axes and the two attribution axes, and three of the five `clinical:status` binding sets |
+| `genomics/phenopackets/` | 9 | 9 | 0 | 0 | GA4GH Phenopacket conversion oracles |
+| `core/` | 15 | 7 | 8 | 1 | AIExtracted provenance; the `core` v3.5 ORIGIN axis (`cascade:sourceIdentity`); and the `core` v3.7 `cascade:Attachment` store — one negative per Violation constraint, three path/digest negatives, and the media-type warning |
+| `genomics/fhir-genomics-ig/` | 7 | 7 | 0 | 0 | HL7 Genomics Reporting IG bundle conversion oracles |
+| `evidence/` | 7 | 3 | 4 | 0 | Assertion facet / evidence grounding rules (evidence v1-draft) |
+| `workbench/` | 7 | 4 | 3 | 0 | Filing, notes and follow-ups (workbench v1-draft) |
+| `health/` | 4 | 2 | 0 | 2 | The two `clinical:status` binding sets that `health.shapes.ttl` owns (`health` v2.8) |
+| `genomics/clinvar/` | 4 | 4 | 0 | 0 | ClinVar VCV conversion oracles |
+| `advisory/` | 2 | 2 | 0 | 0 | Advisory reclassification oracles (advisory v1-draft) |
+| `coverage/` | 2 | 1 | 1 | 0 | `coverage:status` (`coverage` v1.5) |
+| `genomics/vcf/` | 1 | 1 | 0 | 0 | VCF conversion oracle |
+| `genomics/vrs/` | 1 | 1 | 0 | 0 | GA4GH VRS allele conversion oracle |
+| **Total** | **71** | **47** | **18** | **6** | |
+
+**Grand total: 161 executable fixtures.**
 
 A further 94 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
@@ -101,8 +111,9 @@ So the runner computes, independently of the SHACL engine, how many constraint p
 
 | Reason | Meaning |
 |---|---|
-| `VIOLATIONS` | Positive fixture; the shapes reported at least one `sh:Violation` |
+| `VIOLATIONS` | Positive or warn fixture; the shapes reported at least one `sh:Violation` |
 | `NO_VIOLATION` | Negative fixture; the shapes reported none, so nothing rejected it |
+| `NO_WARNING` | Warn fixture; the shapes reported no `sh:Warning`, so nothing noticed it |
 | `UNSHAPED` | No shape targets any subject, so zero constraints ran |
 | `NO_TURTLE` | The fixture declares no RDF body, so there is nothing to validate |
 | `PARSE_ERROR` | The fixture's RDF does not parse |
@@ -111,7 +122,7 @@ So the runner computes, independently of the SHACL engine, how many constraint p
 
 The runner aborts the whole run (exit 2) rather than reporting anything if the shapes graph is empty, if a shapes or ontology file fails to parse, if no shape declares a constraint, or if zero constraints were evaluated across the entire suite. Each of those is a way a runner can report PASS while testing nothing.
 
-`scripts/selftest_runner.py` is the proof that the above holds. It mutates fixtures, shapes and baselines in temporary directories and asserts the runner and the gate notice: that breaking one constraint produces exactly one violation naming that constraint, that repairing a negative fixture is reported as unexpectedly conforming, that deleting a shape yields `UNSHAPED` rather than `PASS`, that a drifted `spec` checkout is refused, and that the ratchet fails **in both directions** — on a failure the baseline does not list, and on a baselined failure that starts passing. No mutated copy is ever written inside the repository. Run it with `python3 scripts/selftest_runner.py --spec-dir ../spec`.
+`scripts/selftest_runner.py` is the proof that the above holds. It mutates fixtures, shapes and baselines in temporary directories and asserts the runner and the gate notice: that breaking one constraint produces exactly one violation naming that constraint, that repairing a negative fixture is reported as unexpectedly conforming, that repairing what a warn fixture warns about is reported as `NO_WARNING`, that a warn fixture which trips a Violation fails rather than passing, that deleting a shape yields `UNSHAPED` rather than `PASS`, that a drifted `spec` checkout is refused, and that the ratchet fails **in both directions** — on a failure the baseline does not list, and on a baselined failure that starts passing. No mutated copy is ever written inside the repository. Run it with `python3 scripts/selftest_runner.py --spec-dir ../spec`.
 
 ### The spec pin
 
@@ -134,33 +145,57 @@ The runner also refuses a checkout that sits at the pinned commit but has uncomm
 `.github/workflows/conformance.yml` runs on every push to `main` and every pull request, in two jobs:
 
 - **runner mutation tests** runs `scripts/selftest_runner.py`. This job is green and must stay green. If it goes red, no result from the other job means anything.
-- **fixture suite** runs every fixture, prints the whole report, then ratchets it against `KNOWN_FAILURES.json`. The suite itself is still red and the report still names all 31 failures; the job is green only while nothing has got worse and nothing has got better without the record being updated. See [What a green CI run means](#what-a-green-ci-run-means).
+- **fixture suite** runs every fixture, prints the whole report, then ratchets it against `KNOWN_FAILURES.json`. The suite itself is still red and the report still names all 28 failures; the job is green only while nothing has got worse and nothing has got better without the record being updated. See [What a green CI run means](#what-a-green-ci-run-means).
 
 ## Current status
 
-As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.6, health 2.7, clinical 1.15, coverage 1.4, checkup 3.3):
+As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.7, health 2.8, clinical 1.16, coverage 1.5, checkup 3.3):
 
 ```
-passed  109
-failed  27
-skipped  0
-total   136        62,198 constraint checks evaluated
+passed  133
+failed   28
+skipped   0
+total   161        63,281 constraint checks evaluated
 ```
 
 The first execution of these fixtures, against the older `spec` revision the pin
 originally named, was **43 passed / 68 failed / 0 skipped / 111 total**. Three things
 moved it: 19 fixtures started passing on their own when `spec` defined and shaped the
-classes they had always asserted; 22 were fixed here; 25 were added. No fixture that
-passed has since failed. The remaining 27 break down as:
+classes they had always asserted; 22 were fixed here; 50 were added. No fixture that
+passed has since failed. The remaining 28 break down as:
 
 | Reason | Count | Owned by | Notes |
 |---|---|---|---|
-| `VIOLATIONS` | 15 | `spec` (3), undecided (12) | Conversion oracles under `fixtures/genomics/`. Each `.expected.ttl` records what the importer currently emits from the neighbouring `.input.json`, so a violation means either the importer must emit more or the shape must ask less. Three are settled — GA4GH Phenopackets do not carry a date of birth or a biological sex, so `cascade:PatientProfileShape` is stricter than the source format can satisfy. The other twelve need triage one at a time. |
+| `VIOLATIONS` | 16 | `spec` (4), undecided (12) | Fifteen are conversion oracles under `fixtures/genomics/`; the sixteenth is `clinical/status-laboratoryreport-in-progress.WARN.ttl`, described under [A defect the v1.16 batch found](#a-defect-the-v116-batch-found) below. Each `.expected.ttl` records what the importer currently emits from the neighbouring `.input.json`, so a violation means either the importer must emit more or the shape must ask less. Three are settled — GA4GH Phenopackets do not carry a date of birth or a biological sex, so `cascade:PatientProfileShape` is stricter than the source format can satisfy. The other twelve need triage one at a time. |
 | `UNSHAPED` | 9 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `clinical:CoverageRecord`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. `proc-001/002/003` left this row at core 3.6 / health 2.7 / clinical 1.15: they asserted `health:ProcedureRecord`, which `health.ttl` never defined, and clinical v1.15 ruled `clinical:` the canonical procedure spelling, so they were retargeted onto `clinical:Procedure` and all three now run against real constraints. |
 | `NO_TURTLE` | 3 | `conformance` | Comment-only placeholder `.ttl` files: two unauthored advisory oracles, and `genomics/phenopackets/biosamples-SAMN05324082.expected.ttl`, which is deliberately empty because it asserts `detect() === false` — not a SHACL assertion, so it needs a different home. |
 
-Each of the 30 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
+Each of the 28 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
 constraint it violates and the repo that owns the fix.
+
+### A defect the v1.16 batch found
+
+`clinical` v1.16 states that all five of its `clinical:status` bindings are
+`sh:Warning`, so an out-of-set status is reported and never rejected. That holds on
+`clinical:ClinicalDocumentShape` and **fails on every class that reaches it through
+`sh:node`**. SHACL defines conformance as an *empty* result set, so a nested
+`sh:Warning` makes the value node non-conforming and the outer `sh:node` constraint
+then reports a `sh:Violation` at its own default severity.
+
+All six document subtypes are affected — `LaboratoryReport`, `ProgressNote`,
+`DischargeSummary`, `ConsultationNote`, `ImagingReport`, `VisitSummary` — and the
+escalation applies to `clinical:documentReferenceStatus` as well as to
+`clinical:status`. On `ProgressNote` the underlying warning is not even reported, only
+an opaque `NodeConstraintComponent`, so a reader cannot tell which field was wrong.
+
+Reproduced on two independent engines, which is what rules out an implementation
+quirk: pyshacl 0.30.1 (this runner) and cascade-cli 0.17.0 (rdf-validate-shacl) agree
+on the verdict, and both agree the `ClinicalDocument` twin is only warned.
+
+`clinical/status-laboratoryreport-in-progress.WARN.ttl` asserts what the release
+*says* rather than what the shapes currently do, and is baselined under `ownedBy:
+spec`. The ratchet fails in both directions, so when `spec` fixes the severity the
+entry must be removed in the same commit.
 
 The six fixtures added for core v3.5 were measured in both directions before they
 were committed. Against the previous pin (`spec` 9461fa9, core 3.4) the two negatives

@@ -64,6 +64,25 @@ NEGATIVE_REPAIR = 'cascade:proxyScope "read-only" ;\n    cascade:proxyRelationsh
 # is made.
 COMPANION_FIXTURE = "profile-001.json"
 
+# The `.WARN.` fixture the warning-polarity tests operate on. Chosen because it
+# is a single node whose warning comes from a shape of its own
+# (cascade:AttachmentMediaTypeShape) while every Violation-severity constraint on
+# it lives in a different shape (cascade:AttachmentShape), so "repair the
+# warning" and "introduce a violation" are two independent one-line mutations and
+# neither can be mistaken for the other.
+WARN_FIXTURE = "core/attachment-no-media-type.WARN.ttl"
+WARN_EXPECTED_SHAPE = "cascade:AttachmentMediaTypeShape"
+# Repairing what the fixture is warning about: state the media type.
+WARN_REPAIR_ANCHOR = '    cascade:hashAlgorithm "sha-256" ;'
+WARN_REPAIR = (
+    '    cascade:hashAlgorithm "sha-256" ;\n'
+    '    cascade:attachmentMediaType "application/pdf" ;'
+)
+# Introducing a Violation alongside the warning: uppercase the digest, which
+# cascade:contentHash's sh:pattern rejects.
+WARN_VIOLATE_FROM = "8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471"
+WARN_VIOLATE_TO = "8DD3C6B5F593B25CB9DC0094D67323D16C3BBC9584EDA019726A38DD2CC7A471"
+
 
 class SelfTestFailure(AssertionError):
     pass
@@ -110,6 +129,25 @@ def stage_fixture(tmp: Path, name: str, transform=None, companion: str | None = 
         if transform is not None and candidate == name:
             doc["expectedOutput"]["turtle"] = transform(doc["expectedOutput"]["turtle"])
         (fixtures / candidate).write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+    return fixtures
+
+
+def stage_ttl_fixture(tmp: Path, relpath: str, transform=None) -> Path:
+    """Copy one `.ttl` fixture into an isolated tree, optionally mutating it.
+
+    Kept separate from stage_fixture() rather than folded into it: a JSON fixture
+    carries its polarity in `shouldAccept` and its Turtle in a field, while a
+    `.ttl` fixture carries its polarity in its FILENAME and is its own body. The
+    filename is load-bearing here, so it is preserved verbatim including the
+    `.WARN.` infix the polarity is read from.
+    """
+    fixtures = tmp / "fixtures"
+    dest = fixtures / relpath
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    body = (REPO / "fixtures" / relpath).read_text(encoding="utf-8")
+    if transform is not None:
+        body = transform(body)
+    dest.write_text(body, encoding="utf-8")
     return fixtures
 
 
@@ -197,6 +235,95 @@ def case_repaired_negative_is_reported(spec_dir, tmp):
             f"conforming (NO_VIOLATION), got {entry['outcome']}/{entry['reason']}"
         )
     return "repaired negative reported as NO_VIOLATION (unexpectedly conforming)"
+
+
+def case_unmutated_warn_passes(spec_dir, tmp):
+    """Control for the warning mutations: the `.WARN.` fixture as authored passes.
+
+    A pass here is only meaningful if it is a pass for the RIGHT reason, so this
+    also asserts that the warning exists, that it names the shape that issued it,
+    and that nothing rejected the record. A `.WARN.` fixture that passed with an
+    empty warning list would be the vacuous green this runner exists to prevent.
+    """
+    fixtures = stage_ttl_fixture(tmp, WARN_FIXTURE)
+    code, payload, _ = run_runner(spec_dir, fixtures)
+    entry = result_for(payload, WARN_FIXTURE)
+    if entry["polarity"] != "warn":
+        raise SelfTestFailure(
+            f"a filename carrying '.WARN.' must be read as warn polarity, "
+            f"got {entry['polarity']!r}"
+        )
+    if entry["outcome"] != "pass":
+        raise SelfTestFailure(f"{WARN_FIXTURE} should pass unmutated, got {entry['reason']}")
+    if not entry["warnings"]:
+        raise SelfTestFailure(
+            "a warn fixture that passes must have been warned about something. "
+            "An empty warning list is a pass that asserted nothing."
+        )
+    if entry["violations"]:
+        raise SelfTestFailure(
+            f"a warn fixture must NOT be rejected, got violations: {entry['violations']}"
+        )
+    if not any(WARN_EXPECTED_SHAPE in w for w in entry["warnings"]):
+        raise SelfTestFailure(
+            f"warning did not name {WARN_EXPECTED_SHAPE!r}, got {entry['warnings']}"
+        )
+    if code != 0:
+        raise SelfTestFailure(f"expected exit 0 on an all-pass tree, got {code}")
+    return f"warned by {WARN_EXPECTED_SHAPE}, 0 violations, {entry['constraintChecks']} checks"
+
+
+def case_repaired_warn_is_reported(spec_dir, tmp):
+    """Repair what the warn fixture is warning about: it must be flagged.
+
+    This is the mutation that makes the whole `.WARN.` polarity mean something.
+    Without it, a fixture nothing warns about would sail through as a pass, which
+    is the failure mode a two-polarity runner had for warning-severity
+    constraints: `.VALID.ttl` passes whether or not anything fires.
+    """
+    fixtures = stage_ttl_fixture(
+        tmp, WARN_FIXTURE,
+        transform=lambda t: t.replace(WARN_REPAIR_ANCHOR, WARN_REPAIR, 1),
+    )
+    code, payload, _ = run_runner(spec_dir, fixtures)
+    entry = result_for(payload, WARN_FIXTURE)
+    if entry["outcome"] != "fail" or entry["reason"] != "NO_WARNING":
+        raise SelfTestFailure(
+            "repairing the warned-about property should be reported as NO_WARNING, "
+            f"got {entry['outcome']}/{entry['reason']} with warnings {entry['warnings']}"
+        )
+    if code == 0:
+        raise SelfTestFailure("runner exited 0 on a tree containing a failure")
+    return "repaired warn fixture reported as NO_WARNING (nothing noticed it)"
+
+
+def case_warn_fixture_that_violates_is_caught(spec_dir, tmp):
+    """The other half: a warn fixture must be REPORTED, never REJECTED.
+
+    A `.WARN.` fixture that also trips a Violation is not evidence about the
+    warning. The record would be thrown out, and the value the fixture exists to
+    exercise never reaches a reader, so a runner that accepted it would let a
+    Violation-severity regression hide inside a warning fixture.
+    """
+    fixtures = stage_ttl_fixture(
+        tmp, WARN_FIXTURE,
+        transform=lambda t: t.replace(WARN_VIOLATE_FROM, WARN_VIOLATE_TO),
+    )
+    code, payload, _ = run_runner(spec_dir, fixtures)
+    entry = result_for(payload, WARN_FIXTURE)
+    if entry["outcome"] != "fail" or entry["reason"] != "VIOLATIONS":
+        raise SelfTestFailure(
+            "a warn fixture that trips a Violation must fail with VIOLATIONS, "
+            f"got {entry['outcome']}/{entry['reason']}"
+        )
+    if not entry["warnings"]:
+        raise SelfTestFailure(
+            "the warning should still be reported alongside the violation, so the "
+            "report says what the fixture was for"
+        )
+    if code == 0:
+        raise SelfTestFailure("runner exited 0 on a tree containing a failure")
+    return "warn fixture carrying a Violation fails with VIOLATIONS, warning still reported"
 
 
 def case_absent_shape_is_not_a_pass(spec_dir, tmp):
@@ -522,6 +649,9 @@ CASES = [
     ("one broken constraint is caught and named", case_positive_mutation_is_caught),
     ("unrepaired negative fixture passes", case_unrepaired_negative_passes),
     ("repaired negative is reported as conforming", case_repaired_negative_is_reported),
+    ("unmutated warn fixture passes, warned and unrejected", case_unmutated_warn_passes),
+    ("repaired warn is reported as NO_WARNING", case_repaired_warn_is_reported),
+    ("warn fixture that violates fails with VIOLATIONS", case_warn_fixture_that_violates_is_caught),
     ("absent shape yields UNSHAPED, not PASS", case_absent_shape_is_not_a_pass),
     ("unparseable fixture is an error", case_unparseable_fixture_is_an_error),
     ("empty shapes graph aborts the run", case_empty_shapes_aborts),

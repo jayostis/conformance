@@ -1,0 +1,36 @@
+# core v3.7 — WARNING. An attachment that does not say what its bytes are.
+#
+# THIS FIXTURE IS `.WARN.` AND NOT `.INVALID.`, AND THE DIFFERENCE IS THE
+# RELEASE'S OWN RULING. Media type is split across two shapes on purpose so that
+# its two severities are unambiguous:
+#
+#   the FORM of the value is a Violation, in cascade:AttachmentShape -- two
+#   media types on one set of bytes is a defect, and a value that is not
+#   type/subtype is not a media type;
+#
+#   the PRESENCE of the value is a Warning, in cascade:AttachmentMediaTypeShape
+#   -- stored bytes with no stated type are awkward to render but not lost, and
+#   a missing one must not invalidate the record that points at them.
+#
+# So "attachment with no media type" belongs with the four path-and-digest
+# negatives by subject matter and with the five clinical:status fixtures by
+# severity. Filing it as `.INVALID.ttl` would fail with NO_VIOLATION and would
+# assert something core v3.7 explicitly declined to say.
+#
+# The three Violation-severity facts are all present and correct here, so this
+# node DOES do its job: a consumer can find the bytes and verify them. It just
+# has to guess how to render them, which is the whole of the harm.
+#
+# Fully synthetic apart from the digest, which is a real hash of a synthetic
+# string.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+
+<urn:uuid:a77a0307-0000-4000-8000-0000000000a8> a cascade:Attachment ;
+    cascade:attachmentPath
+        "attachments/sha-256/8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:contentHash
+        "8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:hashAlgorithm "sha-256" ;
+    cascade:byteSize 184320 ;
+    cascade:attachmentTitle "Scanned outside records — source format unknown" .

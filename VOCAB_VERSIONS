@@ -15,9 +15,42 @@
 # scripts/SPEC_PIN, not from this file. If the two disagree, SPEC_PIN wins and
 # the rows below describe a vocabulary CI is not executing, so keep them in step:
 # SPEC_PIN's `vocab=` line must repeat the versions below verbatim. As of
-# 2026-08-10 both read core=3.5 health=2.6 clinical=1.14 coverage=1.4
-# checkup=3.3 pots=1.4, and the pin is the spec PR #17 merge commit d162f68
-# (tag vocab/core-v3.5).
+# 2026-08-28 both read core=3.7 health=2.8 clinical=1.16 coverage=1.5
+# checkup=3.3 pots=1.4, and the pin is the spec PR #31 merge commit 678ae0d
+# (tags vocab/core-v3.7, vocab/health-v2.8, vocab/clinical-v1.16,
+# vocab/coverage-v1.5, all four on that commit).
+#
+# 2026-08-27 batch: core 3.7 / health 2.8 / clinical 1.16 / coverage 1.5
+# (spec PR the-cascade-protocol/spec#31, merge commit 678ae0d; tags
+# vocab/core-v3.7, vocab/health-v2.8, vocab/clinical-v1.16, vocab/coverage-v1.5,
+# all four on that same commit). 25 fixtures added across four directories, 24
+# of which pass; the 25th is a defect this batch FOUND in the release and is
+# enumerated in KNOWN_FAILURES.json under ownedBy "spec" (see below). Suite goes
+# 109/136 to 133/161. The pre-existing 136 score identically at both pins,
+# fixture for fixture and reason for reason, which is the release's "additive and
+# strictly widening" claim measured rather than quoted.
+#
+# A THIRD FIXTURE POLARITY EXISTS AS OF THIS BATCH. Five of this release's
+# rulings are sh:Warning bindings, per the ratchet core v3.5 wrote down: a value
+# existing data already carries is REPORTED, never rejected. A two-polarity
+# runner cannot assert that -- .INVALID.ttl fails such a fixture with
+# NO_VIOLATION and .VALID.ttl passes it while asserting nothing -- so
+# `<slug>.WARN.ttl` was added, meaning "at least one sh:Warning AND no
+# sh:Violation". It is strictly an added assertion and cannot turn a failing
+# fixture into a passing one. Three new mutation tests in
+# scripts/selftest_runner.py hold it up, and all three were observed RED against
+# a deliberately neutered runner before being committed.
+#
+# THE DEFECT FOUND: clinical v1.16 says all five clinical:status bindings are
+# sh:Warning. That holds on clinical:ClinicalDocumentShape and fails on every
+# class reaching it through sh:node, because SHACL defines conformance as an
+# EMPTY result set, so a nested sh:Warning makes the value node non-conforming
+# and the outer sh:node constraint reports a sh:Violation at its own default
+# severity. All six document subtypes are affected, for
+# clinical:documentReferenceStatus as well as clinical:status. Reproduced on two
+# independent engines (pyshacl 0.30.1 and cascade-cli 0.17.0). The fixture
+# clinical/status-laboratoryreport-in-progress.WARN.ttl asserts what the release
+# SAYS and is baselined until spec fixes the severity.
 #
 # 2026-08-08 batch: health 2.6 / clinical 1.14 / coverage 1.4 / checkup 3.3.
 # Shapes-only alignment to ratified standards (spec PR the-cascade-protocol/spec#16).
@@ -34,7 +67,24 @@
 # encounter-001 was a KNOWN_FAILURES entry with reason UNSHAPED: it reported
 # conforming while evaluating ZERO constraints, because clinical:Encounter had no
 # shape. It now evaluates 29, so the entry is gone.
-core=3.6
+core=3.7
+# core=3.7: cascade:Attachment, the content-addressed document store. Bytes live
+#   under attachments/{algorithm}/{digest} and the Turtle carries a small node
+#   with the media type, digest, algorithm and a pod-relative path.
+#   cascade:AttachmentShape requires the three facts without which the node
+#   cannot do its job (path, contentHash, hashAlgorithm), all at sh:Violation;
+#   cascade:AttachmentMediaTypeShape checks PRESENCE of a media type at
+#   sh:Warning; cascade:HasAttachmentEdgeShape is open-world and requires an IRI
+#   object. Fixtures: core/attachment-linked-report.VALID (the full node plus the
+#   record that points at it, so the edge shape fires too), one negative per
+#   Violation constraint (-no-path, -no-content-hash, -no-hash-algorithm), three
+#   path/digest negatives (-absolute-path, -parent-traversal-path,
+#   -uppercase-digest) and -no-media-type.WARN. All seven non-positive fixtures
+#   were measured UNSHAPED with 0 constraint checks against core 3.6, where the
+#   class is targeted by no shape. See fixtures/core/INVENTORY.md.
+#   NOT covered: encryption at rest and sync behaviour for attachments/ are
+#   implementation-defined in v3.7, so there is nothing for a shape to check and
+#   no fixture asserts anything about them.
 # core=3.5: the ORIGIN axis. cascade:sourceIdentity, a canonical
 #   transport-independent organization identity, scheme-prefixed org: / ns: /
 #   transport:; cascade:SourceIdentityShape constrains its value wherever it
@@ -54,7 +104,23 @@ core=3.6
 #   ExportManifestShape / cascade:schemaVersion / sh:minCount).
 #   NOT covered: cascade:InteractionScenario has a shape and no fixture.
 # core=3.3: cascade:AIAsserted provenance leaf (ungrounded general-AI content, subClassOf ConsumerGenerated) + cascade:ProxyAgent caregiver-proxy actor (ProxyAgentShape requires actsForPatient, proxyRelationship, proxyGrantedAt). Fixtures: social-002, proxy-001, proxy-002.
-health=2.7
+health=2.8
+# health=2.8: health.shapes.ttl v1.5 declares clinical:status on two health:
+#   record shapes -- the predicate is clinical: on purpose, being the domain-free
+#   status carrier both import paths already write. health:LabResultRecordShape
+#   binds Observation.status (8 codes); health:AllergyRecordShape binds
+#   AllergyIntolerance.clinicalStatus (3 codes) and clinical:verificationStatus
+#   (4 codes). Both status bindings are sh:Warning. Fixtures:
+#   health/status-labresult-final.VALID + -completed.WARN,
+#   health/status-allergy-inactive.VALID + -entered-in-error.WARN.
+#   The allergy WARN fixture is the load-bearing one: "entered-in-error" is legal
+#   under three of the release's five status value sets and excluded from this
+#   one BY CHOICE, because admitting it beside "inactive" and "resolved" would
+#   merge "no longer reacts" with "was never real". It is what fails if someone
+#   later completes the set to four to match its siblings.
+#   Both WARN fixtures measured NO_WARNING against health 2.7.
+#   See fixtures/health/INVENTORY.md.
+#   health: itself adds NO TERM in v2.8; it gains three shape bindings only.
 # health=2.6: interpretation aligned to the HL7 v3 ObservationInterpretation code
 #   system (plus data-absent-reason "unknown" and the retained v2.5 words);
 #   labCategory, testCode, icd10Code, snomedCode multi-valued per FHIR
@@ -79,7 +145,39 @@ health=2.7
 #   Note: health:SocialHistoryRecordShape declares only sh:Info-severity constraints,
 #   so no fixture can be rejected by it and the health: spelling has no negative
 #   counterpart. social-003 covers the clinical: spelling instead.
-clinical=1.15
+clinical=1.16
+# clinical=1.16: 15 new terms (14 properties, 1 class) plus five clinical:status
+#   bindings. Fixtures in fixtures/clinical/, all against the v1.16 shapes:
+#   - encounter-inpatient-full.VALID: all three Encounter.class Coding members,
+#     two encounterReason values, both hospitalization fields, TWO participations
+#     in DIFFERENT roles as clinical:EncounterParticipant nodes, and TWO
+#     businessIdentifier values in FHIR {system}|{value} token form alongside one
+#     sourceRecordId (the two identifier spaces, kept apart).
+#   - encounter-participant-standalone.VALID: the new class on its own, since
+#     shapes here target classes and pods are validated file by file.
+#   - encounter-participant-two-names.INVALID (sh:maxCount on participantName)
+#     and encounter-two-admit-sources.INVALID (sh:maxCount on admitSource): both
+#     violate a cardinality THIS release chose, on properties that did not exist
+#     under v1.15. Both measured UNSHAPED / NO_VIOLATION there.
+#   - document-two-statuses-two-authors.VALID: clinical:status and
+#     clinical:documentReferenceStatus carrying DIFFERENT facts, two
+#     documentAuthorName values, one authenticatorName naming a third person.
+#   - the three clinical: status binding sets, one PASS and one WARN each:
+#     VitalSign (Observation.status, 8), ClinicalDocument (the ten-code
+#     diagnostic-report set) and LaboratoryReport (DiagnosticReport.status, 10).
+#     The ClinicalDocument and LaboratoryReport PASS cases use "appended" and
+#     "corrected" DELIBERATELY: both are absent from composition-status, so each
+#     passes only under the wider set the release chose and would fail if the
+#     binding were narrowed without the subtype shapes v1.16 names as next.
+#   NOT PASSING, and it is the release that is wrong rather than the fixture:
+#   status-laboratoryreport-in-progress.WARN is baselined in KNOWN_FAILURES.json
+#   under ownedBy "spec". sh:node inheritance escalates every nested sh:Warning
+#   to an outer sh:Violation, so the six document subtypes REJECT a status the
+#   release says is only reported. See the note at the top of this file.
+#   NOT covered: clinical:observationStatus's v1.16 deprecation is ontology
+#   metadata, not a SHACL constraint, so no fixture can assert it. Nor can the
+#   two dropped rdfs:domain declarations (clinical:providerName,
+#   clinical:verificationStatus) -- no shape ever encoded either.
 # clinical=1.14: clinical:EncounterShape exists for the first time (encounter-001
 #   moved from a KNOWN_FAILURES UNSHAPED entry to evaluating 29 constraints);
 #   fixtures encounter-002 (date-precision period, v3-ActCode class) and
@@ -94,7 +192,21 @@ clinical=1.15
 #   SocialHistoryRecordShape (clinical/social-history-smoking.ttl, social-003).
 # clinical=1.9: cascade:AIExtracted added to the dataProvenance sh:in enum on every clinical record shape; an AIExtracted Medication is now SHACL-valid. Fixtures: med-011.
 # clinical=1.8: Medication RDF type and predicates migrated from health: to clinical: namespace
-coverage=1.4
+coverage=1.5
+# coverage=1.5: coverage:status. FHIR R4 Coverage.status, required binding to
+#   fm-status (active | cancelled | draft | entered-in-error), at sh:Violation --
+#   the severity follows the BINDING STRENGTH of the source element, which is the
+#   rule coverage v1.4 set in this same shape, and which is why coverageType's
+#   value two constraints above is only a Warning. Fixtures:
+#   coverage/coverage-status-active.VALID and
+#   coverage/coverage-status-terminated.INVALID ("terminated" is the payer-portal
+#   word for a plan that has ended; the fm-status spelling is "cancelled"), the
+#   latter measured NO_VIOLATION against coverage 1.4.
+#   NOT covered by a negative fixture, deliberately: ABSENCE of coverage:status,
+#   which the shape does not require because no producer has had the chance to
+#   write it. The four coverage-00*.json fixtures all omit it and all still pass,
+#   which exercises that compatibility claim four times.
+#   See fixtures/coverage/INVENTORY.md.
 # coverage=1.4: coverageType's closed enum moved to a Warning-severity vocabulary
 #   shape per FHIR's extensible binding on Coverage.type; subscriberRelationship
 #   completed to the ratified seven-code subscriber-relationship system. Exercised

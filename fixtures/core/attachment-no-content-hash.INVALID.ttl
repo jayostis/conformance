@@ -1,0 +1,28 @@
+# core v3.7 — NEGATIVE. An attachment with no digest. Violation constraint 2 of 3.
+#
+# The path resolves and the algorithm is named, so this node looks like it
+# works, and that is exactly why the constraint is a Violation rather than a
+# warning. Without a digest nothing distinguishes the right bytes from any other
+# bytes at that path: a re-import that wrote a different document to the same
+# filename is undetectable, and the content addressing the whole arrangement
+# rests on has quietly become an ordinary file reference.
+#
+# Note that the path here still ENDS in a digest-shaped segment, because the
+# convention is `attachments/{algorithm}/{digest}`. That is not a substitute for
+# the property. A path is a string a producer chose; cascade:contentHash is the
+# assertion a consumer checks the bytes against, and a shape that read the
+# digest out of the filename would be trusting the producer to keep name and
+# content in agreement, which is the thing this design refuses to do.
+#
+# Rejected by cascade:AttachmentShape / cascade:contentHash / sh:minCount 1.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+
+<urn:uuid:a77a0307-0000-4000-8000-0000000000a3> a cascade:Attachment ;
+    cascade:attachmentPath
+        "attachments/sha-256/8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:hashAlgorithm "sha-256" ;
+    cascade:attachmentMediaType "application/pdf" ;
+    cascade:attachmentTitle "Comprehensive Metabolic Panel — signed report" .

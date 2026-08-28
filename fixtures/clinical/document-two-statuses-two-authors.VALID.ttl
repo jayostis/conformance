@@ -1,0 +1,68 @@
+# clinical v1.16 — the two status axes and the two attribution axes, on one
+# document, all four saying different things.
+#
+# THE TWO STATUSES ARE NOT THE SAME FACT, AND ENTERED-IN-ERROR IS WHY.
+# clinical:status here carries DocumentReference.docStatus: whether the CONTENT
+# is final. clinical:documentReferenceStatus carries DocumentReference.status:
+# whether the pod's POINTER to the document is current. Through v1.15 both were
+# written to clinical:status, and the ambiguity landed precisely where it costs
+# most, because "entered-in-error" is in BOTH value sets and means the reference
+# was filed in error in one and the clinical content is repudiated in the other.
+# This document is "final" content behind a "current" pointer, which is the
+# ordinary case and the one that shows the two axes are independent.
+#
+# TWO AUTHORS AND ONE AUTHENTICATOR, WHICH ARE ALSO NOT THE SAME FACT.
+# DocumentReference.author is 0..*, and clinical:providerName is sh:maxCount 1
+# on the document shapes, so every author after the first was being discarded.
+# clinical:documentAuthorName is repeatable and both authors survive here.
+# DocumentReference.authenticator is 0..1 and is who SIGNED the note, routinely
+# not who wrote it -- it is the part that carries clinical and legal weight, and
+# on this document it is a third person who appears in neither author slot.
+# clinical:providerName is present too, at its single permitted value, so the
+# fixture shows the repeatable list coexisting with the predicate whose
+# maxCount caused the loss rather than replacing it.
+#
+# Composition.attester's mode and time are deliberately absent: they are not
+# modelled in v1.16, because DocumentReference is what both import paths read
+# and it carries neither.
+#
+# A business identifier is carried alongside fhirResourceId for the same reason
+# as on the encounter: the logical id and the published identifier are different
+# spaces and do not join.
+#
+# Fully synthetic: invented health system, clinicians, OIDs (HL7 example arc).
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:d0c00116-0000-4000-8000-000000000001> a clinical:ClinicalDocument ;
+    clinical:displayName "Cardiology Consultation Note" ;
+    clinical:documentDate "2031-03-06"^^xsd:date ;
+
+    # --- axis 1: the CONTENT is final (DocumentReference.docStatus) ---
+    clinical:status "final" ;
+
+    # --- axis 2: the POINTER is current (DocumentReference.status) ---
+    clinical:documentReferenceStatus "current" ;
+
+    # --- axis 3: who WROTE it, 0..* and both kept (v1.16) ---
+    clinical:documentAuthorName "Owen Castellan, MD" ;
+    clinical:documentAuthorName "Priya Nandakumar, NP" ;
+
+    # --- axis 4: who SIGNED it, 0..1, and a third person (v1.16) ---
+    clinical:authenticatorName "Marcus Ilbery, MD" ;
+
+    # The single-valued predicate whose maxCount caused the author loss. It is
+    # kept, and it is not one of the two authors: it is the responsible provider.
+    clinical:providerName "Alina Rooke, MD" ;
+
+    clinical:fhirResourceId "DocumentReference/dr-55210" ;
+    clinical:fhirResourceType "DocumentReference" ;
+    clinical:businessIdentifier "urn:oid:2.16.840.1.113883.19.5.99991.2|DOC-88120" ;
+
+    clinical:importedAt "2031-03-09T08:12:44-05:00"^^xsd:dateTime ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:sourceIdentity "org:meridian" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

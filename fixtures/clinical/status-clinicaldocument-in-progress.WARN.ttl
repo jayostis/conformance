@@ -1,0 +1,38 @@
+# clinical v1.16 — WARNING. A document status outside the ten-code set.
+#
+# "in-progress" is the realistic wrong value: it is a genuine FHIR code, on
+# Task.status and Procedure.status, and it is what a converter writes when it
+# maps a workflow state onto a document without checking which value set the
+# document's own status is bound to. It is in neither composition-status nor
+# diagnostic-report-status, so it is out of set under the wider binding and
+# under the narrower one alike -- which means this fixture keeps meaning what it
+# means if the ratchet later narrows clinical:ClinicalDocumentShape to
+# composition-status for the DocumentReference-derived subtypes.
+#
+# sh:Warning, not sh:Violation, per the core v3.5 ratchet: existing pods already
+# carry clinical:status and v1.16 is the first release to bind its value, so a
+# value is reported and never rejected. See the sibling
+# status-vitalsign-completed.WARN.ttl for why `.WARN.` is the only filename that
+# states this claim correctly.
+#
+# clinical:documentReferenceStatus is left VALID here on purpose. The two status
+# axes are independent, and a fixture that broke both would not show which one
+# the warning came from.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:d0c00116-0000-4000-8000-000000000003> a clinical:ClinicalDocument ;
+    clinical:displayName "Discharge Instructions" ;
+    clinical:documentDate "2031-03-07"^^xsd:date ;
+    clinical:status "in-progress" ;
+    clinical:documentReferenceStatus "current" ;
+    clinical:fhirResourceId "DocumentReference/dr-55990" ;
+    clinical:fhirResourceType "DocumentReference" ;
+    clinical:importedAt "2031-03-09T08:12:44-05:00"^^xsd:dateTime ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

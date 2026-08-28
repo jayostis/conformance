@@ -7,7 +7,7 @@ Downstream SDKs (sdk-typescript, sdk-python) and tools (cascade-cli) must pass a
 
 ## Key Architecture
 
-- `fixtures/` — JSON fixture files, one per record instance. Named `{type}-{id}.json`. Also 40 `.ttl` fixtures in subdirectories, with polarity in the filename (`*.INVALID.ttl`).
+- `fixtures/` — JSON fixture files, one per record instance. Named `{type}-{id}.json`. Also 71 `.ttl` fixtures in subdirectories, with polarity in the filename. **Three** polarities: `*.VALID.ttl` (or no suffix) must produce no `sh:Violation`; `*.INVALID.ttl` must produce at least one; `*.WARN.ttl` must produce at least one `sh:Warning` **and** no `sh:Violation`. The third exists because Cascade shapes report a value existing data already carries at `sh:Warning` rather than rejecting it (the `core` v3.5 ratchet, applied by `clinical` v1.16 to five `clinical:status` bindings), and neither of the other two polarities can state that claim: `.INVALID.ttl` fails such a fixture with `NO_WARNING`'s sibling `NO_VIOLATION`, and `.VALID.ttl` passes it while asserting nothing about the warning.
 - `schema/fixture-schema.json` — JSON Schema for the fixture format (includes `dataType` enum).
 - `scripts/run_conformance.py` — executes every fixture against the SHACL shapes from a pinned `spec` checkout. `scripts/SPEC_PIN` names the commit.
 - `scripts/selftest_runner.py` — mutation tests proving the runner can fail.
@@ -25,10 +25,10 @@ python3 scripts/run_conformance.py --spec-dir ../spec --json results.json
 python3 scripts/check_baseline.py --results results.json
 ```
 
-Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.4 / health 2.5 /
-clinical 1.13), which is what CI executes: **87 passed / 31 failed / 0 skipped /
-118 total**, 61,391 constraint checks, and all 31 are enumerated in
-`KNOWN_FAILURES.json`, so the ratchet holds and the job is green.
+Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.7 / health 2.8 /
+clinical 1.16 / coverage 1.5), which is what CI executes: **133 passed / 28
+failed / 0 skipped / 161 total**, 63,281 constraint checks, and all 28 are
+enumerated in `KNOWN_FAILURES.json`, so the ratchet holds and the job is green.
 
 The result depends on which `spec` revision you point it at, so **always say which**,
 and never quote a number obtained with `--allow-spec-drift` as the suite's result.
@@ -101,11 +101,18 @@ spec tag → conformance fixtures added → SDK releases
 
 Check `VOCAB_VERSIONS` at the repo root. Compare against `spec/VOCAB_VERSIONS` to see what's missing.
 
-### Vocabulary coverage (as of 2026-08-03)
+### Vocabulary coverage (as of 2026-08-28)
 
-Covered up to core=3.4, health=2.5, clinical=1.13, coverage=1.3. Read the comments in
+Covered up to core=3.7, health=2.8, clinical=1.16, coverage=1.5. Read the comments in
 `VOCAB_VERSIONS`: each row now names what a fixture actually exercises and what it does
 not, measured by recording which node shapes matched a focus node across the whole suite.
+- core v3.7 / health v2.8 / clinical v1.16 / coverage v1.5: 25 fixtures across
+  `fixtures/clinical/`, `fixtures/health/`, `fixtures/coverage/` and `fixtures/core/`.
+  The pre-existing 136 score identically at the old and new pins, which measures the
+  release's "additive and strictly widening" claim rather than quoting it. One of the
+  25 is baselined: it found a real defect in the release, where `sh:node` inheritance
+  escalates a nested `sh:Warning` into an outer `sh:Violation` on all six document
+  subtypes. See `README.md`, "A defect the v1.16 batch found".
 - core v3.4: `cascade:ExportManifest` and `cascade:RecordSummary` shaped (`pod-002` valid, `pod-004` negative).
 - health v2.5: five record classes and three daily-snapshot classes shaped. 26 existing fixtures that had evaluated zero constraints became live; `dailyvital-*`, `dailyactivity-*`, `dailysleep-*` added.
 - clinical v1.13: four duplicated record classes deprecated. Deprecation is not a SHACL constraint, so no fixture asserts it; the clinical fixtures are executed against the v1.13 shapes.
@@ -117,7 +124,7 @@ evaluates zero constraints and the runner reports it `UNSHAPED`. A **negative** 
 for any of them is impossible until a shape exists: there is no constraint to violate.
 
 - `health:ProcedureRecord` — asserted by `proc-001/002/003`, not defined in `health.ttl`
-- `clinical:Encounter`, `clinical:MedicationAdministration`, `clinical:ImplantedDevice`, `clinical:ImagingStudy` — defined in `clinical.ttl`, no shape
+- `clinical:MedicationAdministration`, `clinical:ImplantedDevice`, `clinical:ImagingStudy` — defined in `clinical.ttl`, no shape. (`clinical:Encounter` left this list at clinical v1.14, and `clinical:EncounterParticipant` was shaped from birth in v1.16.)
 - `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `coverage:AppealRecord` — defined in `coverage.ttl`, no shape
 - `clinical:CoverageRecord` — asserted by `coverage-001`; `coverage:InsurancePlan` is the shaped spelling
 - `ldp:BasicContainer` — asserted by `pod-001`/`pod-003`, external vocabulary, no Cascade shape

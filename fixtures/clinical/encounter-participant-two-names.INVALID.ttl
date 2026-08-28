@@ -1,0 +1,27 @@
+# clinical v1.16 — NEGATIVE. One participation, two individuals.
+#
+# FHIR R4 Encounter.participant.individual is 0..1: a participation is ONE
+# person's part in a visit. Two names on one participation is what a merge of
+# two source participations looks like after the role has been used as the join
+# key, and it is the specific corruption clinical:EncounterParticipantShape
+# exists to stop -- the shape requires no field at all, and constrains
+# cardinality precisely because that is where the damage happens.
+#
+# It is not recoverable downstream. A reader given two names under one role
+# cannot tell which clinician the specialty belongs to, and the record now
+# asserts something about a person who was not in the room.
+#
+# Both values are individually well formed and the role, role code and specialty
+# are all correct, so nothing but sh:maxCount catches this. Rejected by
+# clinical:EncounterParticipantShape / clinical:participantName / sh:maxCount 1.
+#
+# Fully synthetic.
+
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+
+<urn:uuid:e0c00116-0000-4000-8000-000000000011> a clinical:EncounterParticipant ;
+    clinical:participantName "Alina Rooke, MD" ;
+    clinical:participantName "Owen Castellan, MD" ;
+    clinical:participantRole "attending" ;
+    clinical:participantRoleCode "ATND" ;
+    clinical:participantSpecialty "Internal Medicine" .

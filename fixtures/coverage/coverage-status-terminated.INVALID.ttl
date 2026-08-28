@@ -1,0 +1,49 @@
+# coverage v1.5 — NEGATIVE. A plan status outside fm-status.
+#
+# WHY THIS ONE IS A VIOLATION WHEN THE FIVE clinical:status FIXTURES ARE ONLY
+# WARNINGS. The severity follows the BINDING STRENGTH of the element the data is
+# converted from, which is the rule coverage v1.4 established in this same
+# shape. FHIR binds Coverage.status with REQUIRED strength, so a value from
+# outside the value set is not conformant at source and there is no conformant
+# producer to protect. It also binds Coverage.type EXTENSIBLY, which is why
+# coverage:coverageType's value two constraints above is checked only at
+# sh:Warning -- the two severities in one shape are not an inconsistency, they
+# are the rule being applied.
+#
+# The other half of the argument is that nothing is lost by rejecting it. The
+# ratchet exists to avoid turning existing data red; no pod has ever carried
+# coverage:status, because it did not exist before v1.5.
+#
+# FHIR marks Coverage.status a modifier element, and that is what makes the
+# check worth having: a cancelled plan read as an active one is a WRONG answer
+# to "am I covered", not a missing one.
+#
+# "terminated" is the realistic wrong value. It is the word payer systems and
+# member portals use for a plan that has ended, and a converter that passes the
+# payer's own vocabulary through writes it. The fm-status spelling is
+# "cancelled".
+#
+# Everything else on this record is valid -- including coverage:coverageType,
+# which is in the warning-severity vocabulary and so contributes no violation --
+# so exactly one constraint rejects it:
+# coverage:InsurancePlanShape / coverage:status / sh:in.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix coverage: <https://ns.cascadeprotocol.org/coverage/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:c0000105-0000-4000-8000-000000000002> a coverage:InsurancePlan ;
+    coverage:providerName "Kestrel Mutual Health" ;
+    coverage:planName "Kestrel Select PPO" ;
+    coverage:memberId "KM-40118823" ;
+    coverage:groupNumber "GRP-77120" ;
+    coverage:coverageType "PPO" ;
+    coverage:planType "ppo" ;
+    coverage:subscriberRelationship "self" ;
+    coverage:status "terminated" ;
+    coverage:effectiveStart "2031-01-01"^^xsd:date ;
+    coverage:effectiveEnd "2031-09-30"^^xsd:date ;
+    cascade:dataProvenance cascade:PatientReported ;
+    cascade:schemaVersion "1.4" .

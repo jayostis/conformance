@@ -10,16 +10,30 @@
 # VOCAB_VERSIONS line below, run `make -C . conformance` (or
 # `scripts/run_conformance.py`), and record the resulting counts in the PR.
 
-# Pinned at the MERGE commit of the-cascade-protocol/spec PR #18 on `main`
-# (core v3.6 / health v2.7 / clinical v1.15; tags `vocab/core-v3.6`,
-# `vocab/health-v2.7`, `vocab/clinical-v1.15`). While that PR was open this
-# file briefly pinned its branch commit 728f9ae -- the five new negative and
-# ratchet fixtures are rejected by nothing under the previous pin (measured
-# RED-first against d162f68), so pinning ahead was what made them mean
-# something. Re-measured at this merge commit before merging this repo's PR:
-# 109 passed / 27 known failures / 0 skipped / 136 total, unchanged from the
-# branch-pin measurement.
+# Pinned at the MERGE commit of the-cascade-protocol/spec PR #31 on `main`
+# (core v3.7 / health v2.8 / clinical v1.16 / coverage v1.5; tags
+# `vocab/core-v3.7`, `vocab/health-v2.8`, `vocab/clinical-v1.16`,
+# `vocab/coverage-v1.5`, all four of which point at this same commit).
+#
+# WHAT MOVING THE PIN DID TO THE PRE-EXISTING SUITE: nothing. The 136 fixtures
+# that existed before this batch score 109 passed / 27 failed against BOTH the
+# previous pin and this one, fixture for fixture and reason for reason. The
+# release is additive and strictly widening, and that claim is now measured here
+# rather than taken from the changelog.
+#
+# WHAT THE PIN IS CARRYING THAT THE PREVIOUS ONE COULD NOT: the 25 fixtures added
+# in this PR exercise vocabulary that does not exist at d37901e. Measured
+# RED-first against that commit, 19 of the 25 fail there -- every negative and
+# every warning fixture among them reports NO_VIOLATION / NO_WARNING, because the
+# constraint they are about had not been authored. See the Verification section
+# of each INVENTORY.md for the per-fixture measurement.
+#
+# Re-measured at this commit with the batch in place:
+# 133 passed / 28 known failures / 0 skipped / 161 total.
+# The 28th known failure is new and is owned by `spec`; it is
+# clinical/status-laboratoryreport-in-progress.WARN.ttl, and
+# KNOWN_FAILURES.json states the defect.
 
 repo=https://github.com/the-cascade-protocol/spec
-commit=d37901e9c1e9aeb775ea0e1690eaaa50114df57a
-vocab=core=3.6 health=2.7 clinical=1.15 coverage=1.4 checkup=3.3 pots=1.4
+commit=678ae0db6e1b8a7da0f77a848af0724bc0257f05
+vocab=core=3.7 health=2.8 clinical=1.16 coverage=1.5 checkup=3.3 pots=1.4

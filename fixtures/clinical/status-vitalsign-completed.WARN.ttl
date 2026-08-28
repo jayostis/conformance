@@ -1,0 +1,38 @@
+# clinical v1.16 — WARNING. A vital sign status outside Observation.status.
+#
+# WHY THIS IS .WARN. AND NOT .INVALID.
+# The binding is sh:Warning, per the ratchet core v3.5 wrote down: a value that
+# existing data already carries is REPORTED, never rejected, and the severity is
+# raised only after a release in which the warning is observably absent from
+# conforming output. So the correct assertion here is not "this is rejected" --
+# it is not, and a fixture claiming so would be wrong about the release. The
+# assertion is that something FIRES, at Warning severity, and that nothing
+# rejects the record. `.WARN.ttl` asserts both halves.
+#
+# Filing this as `.INVALID.ttl` would fail with NO_VIOLATION; filing it as
+# `.VALID.ttl` would pass while reporting nothing, which is the exact silence
+# clinical v1.16 exists to end.
+#
+# "completed" is the realistic wrong value, not an invented one: it is the
+# status word FHIR uses on workflow resources (Procedure.status,
+# MedicationRequest.status) and a converter that reaches for a general-purpose
+# "this is done" code writes it here. It is in no Observation.status value set.
+#
+# The record is otherwise entirely valid, so the warning is attributable to the
+# status alone.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:57a00116-0000-4000-8000-000000000002> a clinical:VitalSign ;
+    clinical:vitalType "Blood Pressure" ;
+    clinical:component1Value "128" ;
+    clinical:component2Value "78" ;
+    clinical:unit "mm[Hg]" ;
+    clinical:status "completed" ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

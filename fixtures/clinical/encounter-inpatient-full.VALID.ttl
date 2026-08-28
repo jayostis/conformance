@@ -1,0 +1,103 @@
+# clinical v1.16 — every encounter fact the release added, on one visit.
+#
+# An inpatient admission, chosen because it is the case the new fields exist
+# for: admitSource and dischargeDisposition are, per the release note, the only
+# structured signal separating an admission from an office visit, and neither is
+# meaningful on an ambulatory encounter.
+#
+# WHAT THIS FIXTURE ASSERTS, ONE CLAIM PER GROUP
+#
+#   class Coding, all three members.  Through v1.15 only the CODE survived, so a
+#   local class code arrived unreadable and unmappable. encounterClassDisplay
+#   and encounterClassSystem restore the other two members of the
+#   Encounter.class Coding.
+#
+#   reason, admitSource, dischargeDisposition.  Verbatim source text, and
+#   encounterReason is written TWICE because Encounter.reasonCode is 0..* and a
+#   single-valued predicate was discarding every reason after the first. None of
+#   the three carries a value set, deliberately: FHIR binds reasonCode and
+#   admitSource PREFERRED and dischargeDisposition EXAMPLE.
+#
+#   TWO participants in DIFFERENT roles, as clinical:EncounterParticipant nodes.
+#   The structure is the whole point of the ruling. A flat family of
+#   role-qualified predicates (an attending name, a consultant name) cannot
+#   represent two participants in the SAME role, and cannot carry a local role
+#   code from an extensibly-bound source vocabulary at all.
+#
+#   TWO business identifiers in the ratified {system}|{value} token form,
+#   alongside ONE sourceRecordId.  These are two different identifier spaces:
+#   sourceRecordId is the server-assigned logical id (FHIR Resource.id) and
+#   holds exactly one value; businessIdentifier is the visit number the source
+#   publishes for the real-world contact (FHIR .identifier, 0..*). Through v1.15
+#   both were written to sourceRecordId, which is why a second identifier had
+#   nowhere to go. Both spaces are populated here so that a reader can see they
+#   do not join.
+#
+# The subject is an IRI because clinical:EncounterShape requires sh:nodeKind
+# sh:IRI: a blank-node encounter is unreachable by the clinical:hasEncounter
+# edge the class exists to serve.
+#
+# Fully synthetic: invented hospital, clinicians, OIDs (under the HL7 example
+# arc), visit numbers and dates.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:e0c00116-0000-4000-8000-000000000001> a clinical:Encounter ;
+    # --- Encounter.class, all three Coding members (v1.16) ---
+    clinical:encounterClass "IMP" ;
+    clinical:encounterClassDisplay "inpatient encounter" ;
+    clinical:encounterClassSystem
+        "http://terminology.hl7.org/CodeSystem/v3-ActCode"^^xsd:anyURI ;
+
+    clinical:encounterStatus "finished" ;
+    clinical:encounterType "Inpatient Admission" ;
+    clinical:encounterStart "2031-03-04T21:40:00-05:00"^^xsd:dateTime ;
+    clinical:encounterEnd "2031-03-07T14:05:00-05:00"^^xsd:dateTime ;
+
+    # --- why the visit happened, repeatable (v1.16) ---
+    clinical:encounterReason "Shortness of breath on exertion" ;
+    clinical:encounterReason "Peripheral oedema, three-day history" ;
+
+    # --- the two Encounter.hospitalization fields (v1.16) ---
+    clinical:admitSource "Transfer from another hospital" ;
+    clinical:dischargeDisposition "Discharged to home under care of a home health service" ;
+
+    # --- participation as a structure, two roles (v1.16) ---
+    clinical:hasParticipant <urn:uuid:e0c00116-0000-4000-8000-00000000000a> ;
+    clinical:hasParticipant <urn:uuid:e0c00116-0000-4000-8000-00000000000b> ;
+
+    clinical:providerName "Alina Rooke, MD" ;
+    clinical:facilityName "Meridian Regional Hospital" ;
+
+    # --- the two identifier spaces, kept apart (v1.16) ---
+    clinical:sourceRecordId "enc-7712" ;
+    clinical:businessIdentifier "urn:oid:2.16.840.1.113883.19.5.99991.1|VN-4471180" ;
+    clinical:businessIdentifier
+        "https://fhir.meridianhealth.example/visit-number|MRD-2031-0455" ;
+
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:sourceIdentity "org:meridian" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .
+
+# Participation 1: the attending. ATND is from HL7 v3 ParticipationType, which
+# encounter-participant-type draws on; it is carried as a code AND as the
+# source's own wording, because the binding is extensible and a consumer that
+# does not recognise the code still has something to show.
+<urn:uuid:e0c00116-0000-4000-8000-00000000000a> a clinical:EncounterParticipant ;
+    clinical:participantName "Alina Rooke, MD" ;
+    clinical:participantRole "attending" ;
+    clinical:participantRoleCode "ATND" ;
+    clinical:participantSpecialty "Internal Medicine" .
+
+# Participation 2: a consultant, a DIFFERENT role on the same visit. Specialty
+# is recorded on the participation rather than on the person because in FHIR it
+# is a property of the role (PractitionerRole.specialty): it is the specialty
+# the clinician acted in on this visit that describes the visit.
+<urn:uuid:e0c00116-0000-4000-8000-00000000000b> a clinical:EncounterParticipant ;
+    clinical:participantName "Owen Castellan, MD" ;
+    clinical:participantRole "consulting physician" ;
+    clinical:participantRoleCode "CON" ;
+    clinical:participantSpecialty "Cardiology" .

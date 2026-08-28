@@ -1,0 +1,24 @@
+# core v3.7 — NEGATIVE. An attachment with no path. Violation constraint 1 of 3.
+#
+# The digest and the algorithm are both present and both well formed, so the
+# node can say exactly WHICH bytes it means and nothing else is wrong with it.
+# It still cannot do its job, because there is nothing to open: a content
+# address is not a location, and a consumer holding this node has a verifier
+# with nothing to verify.
+#
+# Rejected by cascade:AttachmentShape / cascade:attachmentPath / sh:minCount 1.
+#
+# cascade:attachmentMediaType is present so that the only finding is the missing
+# path. Leaving it out would additionally raise the sh:Warning from
+# cascade:AttachmentMediaTypeShape, which is a different fixture.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+
+<urn:uuid:a77a0307-0000-4000-8000-0000000000a2> a cascade:Attachment ;
+    cascade:contentHash
+        "8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:hashAlgorithm "sha-256" ;
+    cascade:attachmentMediaType "application/pdf" ;
+    cascade:attachmentTitle "Comprehensive Metabolic Panel — signed report" .

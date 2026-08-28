@@ -1,0 +1,41 @@
+# clinical v1.16 — a clinical:EncounterParticipant on its own.
+#
+# WHY A STANDALONE NODE IS A SEPARATE FIXTURE.
+# clinical:EncounterParticipantShape carries sh:targetClass, not a reachability
+# rule, so it constrains a participation wherever one appears. Validating one
+# only as a child of an encounter would leave that untested, and Cascade pods
+# are validated FILE BY FILE: a participation written to a different file from
+# its encounter must still be checked, and under per-file validation it arrives
+# exactly like this, with nothing pointing at it.
+#
+# It carries no encounter reference for the same reason. Adding one would make
+# the fixture depend on a node that is not here, which is the shape of a
+# cross-file edge the v1.11 ruling deliberately stopped constraining.
+#
+# WHAT PASSES HERE AND WHY THAT IS THE CLAIM. The shape requires NO field:
+# FHIR makes every sub-element of Encounter.participant optional
+# (participant.type 0..*, participant.individual 0..1), so a minCount would fail
+# conformant source data. What it does check is cardinality and datatype, so
+# that a participation cannot carry two names or two specialties -- which is
+# where a merge of two records silently corrupts one. This node carries one of
+# each and passes; its INVALID twin carries two names and does not.
+#
+# The role code is repeated because Encounter.participant.type is 0..*, and the
+# second code is a LOCAL one: an extensible binding means a server may send a
+# code from outside encounter-participant-type and still be conformant, and the
+# shape binds no value set precisely so that code is kept rather than dropped.
+#
+# The node is an IRI here, but the shape does not require one: unlike an
+# Encounter, nothing points at a participation from another file, so a blank
+# node a serializer writes for a structural sub-node is legal.
+#
+# Fully synthetic.
+
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+
+<urn:uuid:e0c00116-0000-4000-8000-000000000010> a clinical:EncounterParticipant ;
+    clinical:participantName "Priya Nandakumar, NP" ;
+    clinical:participantRole "primary performer" ;
+    clinical:participantRoleCode "PPRF" ;
+    clinical:participantRoleCode "MRD-ROLE-NP" ;
+    clinical:participantSpecialty "Nurse Practitioner, Acute Care" .

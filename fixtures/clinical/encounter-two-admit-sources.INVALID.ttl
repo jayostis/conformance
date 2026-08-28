@@ -1,0 +1,47 @@
+# clinical v1.16 — NEGATIVE. Two admission sources on one encounter.
+#
+# FHIR R4 Encounter.hospitalization.admitSource is 0..1. A visit was admitted
+# from ONE place, and two values here mean two source records were folded
+# together without reconciling them -- after which "was this a transfer or a
+# direct admission?" has two answers and a reader cannot tell which admission
+# the discharge disposition belongs to.
+#
+# WHAT MAKES THIS THE RIGHT NEGATIVE FOR THIS RELEASE. clinical v1.16 added
+# nine encounter predicates. Only encounterReason, hasParticipant and
+# businessIdentifier are repeatable; admitSource and dischargeDisposition are
+# 0..1 in the source and are asserted so here. A fixture that violated a
+# constraint the release did not add would not be evidence about the release, so
+# this one violates the cardinality the release itself chose, on a property that
+# did not exist under clinical v1.15.
+#
+# Everything else on this encounter is valid, including a well-formed
+# participation and a well-formed business identifier, so exactly one constraint
+# rejects it: clinical:EncounterShape / clinical:admitSource / sh:maxCount 1.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:e0c00116-0000-4000-8000-000000000002> a clinical:Encounter ;
+    clinical:encounterClass "IMP" ;
+    clinical:encounterClassDisplay "inpatient encounter" ;
+    clinical:encounterClassSystem
+        "http://terminology.hl7.org/CodeSystem/v3-ActCode"^^xsd:anyURI ;
+    clinical:encounterStatus "finished" ;
+    clinical:encounterStart "2031-05-19T02:10:00-05:00"^^xsd:dateTime ;
+    clinical:encounterEnd "2031-05-21T11:30:00-05:00"^^xsd:dateTime ;
+    clinical:encounterReason "Chest pain, atypical" ;
+
+    # THE DEFECT: two admission sources on one admission.
+    clinical:admitSource "Transfer from another hospital" ;
+    clinical:admitSource "Emergency department admission" ;
+
+    clinical:dischargeDisposition "Discharged to home" ;
+    clinical:facilityName "Meridian Regional Hospital" ;
+    clinical:sourceRecordId "enc-8034" ;
+    clinical:businessIdentifier "urn:oid:2.16.840.1.113883.19.5.99991.1|VN-4471902" ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

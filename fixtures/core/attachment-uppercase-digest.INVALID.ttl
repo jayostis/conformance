@@ -1,0 +1,36 @@
+# core v3.7 — NEGATIVE. An uppercase hex digest.
+#
+# THIS IS NOT A CONSTRAINT ABOUT TASTE, AND THE VALUE HERE IS THE SAME DIGEST AS
+# THE VALID FIXTURE'S, CASED DIFFERENTLY. That is the point: the two strings
+# denote the identical bytes, and if both spellings were accepted the store
+# would hold one document under two names. Cross-source deduplication and
+# idempotent re-import both follow from the file's name BEING its digest, and
+# both stop working the moment one digest has two spellings.
+#
+# The second half is the filesystem. This string is a FILENAME, and a
+# case-insensitive filesystem -- which is the default on macOS, where this
+# project's reference implementations run -- will happily open the lowercase
+# file when asked for the uppercase one, so the two spellings collide on one
+# machine and do not on another. A defect that depends on which laptop ran the
+# import is worse than one that always happens.
+#
+# The same clause is why base64 is not accepted either: its alphabet contains
+# "/", which would fabricate a path separator inside a filename, and it is
+# case-sensitive in a place where the filesystem may not be.
+#
+# The path is left lowercase and well formed, so the digest property is the only
+# thing rejected and the fixture cannot pass for the wrong reason. Rejected by
+# cascade:AttachmentShape / cascade:contentHash / sh:pattern.
+#
+# Fully synthetic apart from the digest, which is a real hash of a synthetic
+# string.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+
+<urn:uuid:a77a0307-0000-4000-8000-0000000000a7> a cascade:Attachment ;
+    cascade:attachmentPath
+        "attachments/sha-256/8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:contentHash
+        "8DD3C6B5F593B25CB9DC0094D67323D16C3BBC9584EDA019726A38DD2CC7A471" ;
+    cascade:hashAlgorithm "sha-256" ;
+    cascade:attachmentMediaType "application/pdf" .

@@ -1,0 +1,30 @@
+# core v3.7 — NEGATIVE. An attachment with no algorithm. Violation constraint
+# 3 of 3, and the least obvious of the three.
+#
+# The path is there and the digest is there, so a reader might call this
+# complete. It is not, and the shapes file states why in one line: without the
+# algorithm the digest cannot be RECOMPUTED, and a digest that cannot be
+# recomputed cannot be checked, which makes the previous requirement decorative.
+# The node would then assert integrity it does not provide.
+#
+# The digest length does not rescue it. cascade:contentHash is constrained to
+# lowercase hex of at least 32 characters and NOT to a fixed length, precisely
+# so the algorithm can be replaced; a 64-character value is consistent with
+# SHA-256 and also with several other functions, so guessing from the length is
+# not a check, it is an assumption. Nor does the path: the `{algorithm}` segment
+# is a producer's filing choice, and RFC 6920 registry tokens are what
+# cascade:hashAlgorithm is for.
+#
+# Rejected by cascade:AttachmentShape / cascade:hashAlgorithm / sh:minCount 1.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+
+<urn:uuid:a77a0307-0000-4000-8000-0000000000a4> a cascade:Attachment ;
+    cascade:attachmentPath
+        "attachments/sha-256/8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:contentHash
+        "8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:attachmentMediaType "application/pdf" ;
+    cascade:attachmentTitle "Comprehensive Metabolic Panel — signed report" .
