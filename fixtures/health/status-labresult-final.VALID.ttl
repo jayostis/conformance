@@ -1,0 +1,34 @@
+# health v2.8 — clinical:status on a health:LabResultRecord, IN
+# Observation.status.
+#
+# THE PREDICATE IS clinical: ON A health: RECORD, AND THAT IS THE POINT.
+# health.shapes.ttl v1.5 declares clinical:status on health:LabResultRecordShape
+# rather than minting a health: spelling for it, because clinical:status is the
+# domain-free status carrier both import paths already write and a second
+# spelling would give one fact two predicates. This fixture is filed under
+# fixtures/health/ because health:LabResultRecordShape is the shape that owns
+# the constraint, not because of the predicate's namespace.
+#
+# A lab result record is converted from a FHIR Observation, so the value set is
+# Observation.status: eight codes, required binding, verbatim.
+#
+# "final" is the value here; the pair's WARN half differs from it in exactly one
+# respect, membership of the value set.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:1ab00208-0000-4000-8000-000000000001> a health:LabResultRecord ;
+    health:testName "Hemoglobin A1c" ;
+    health:testCode "4548-4" ;
+    health:resultValue "6.8" ;
+    health:resultUnit "%" ;
+    health:performedDate "2031-04-18"^^xsd:date ;
+    clinical:status "final" ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

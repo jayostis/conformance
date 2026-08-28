@@ -19,6 +19,7 @@ Do **not** load `llms-full.txt` from that site. It is roughly 1.3 MB, larger tha
 ## Ground rules
 
 - **Never resolve a failure by weakening the runner.** Do not skip a fixture, relax an assertion, or soften a shape to make a fixture pass.
+- **A `.ttl` fixture has THREE possible polarities, and the filename is the assertion.** `*.VALID.ttl` must produce no `sh:Violation`; `*.INVALID.ttl` must produce at least one; `*.WARN.ttl` must produce at least one `sh:Warning` **and** no `sh:Violation`. Reach for the third whenever the constraint under test is `sh:Warning` severity — which is what the `core` v3.5 ratchet makes a value that existing data already carries. Filing such a case as `.VALID.ttl` is the silent-pass failure mode in a new costume: it goes green whether or not anything fires.
 - **A fixture reported `UNSHAPED` asserts nothing.** No shape targets it, zero constraints ran, and its PASS is vacuous. The shape belongs in `spec` first.
 - **`KNOWN_FAILURES.json` fails in BOTH directions.** An unlisted failure fails CI; a listed failure that starts passing also fails CI. Do not remove the second half, it is the whole reason the list is a ratchet rather than a suppression list. Entries are keyed on (fixture, reason).
 - **Always say which `spec` revision you measured against.** The same fixtures score very differently against different vocabulary. Never quote a number obtained with `--allow-spec-drift` as the suite's result.

@@ -1,6 +1,6 @@
 {
   "$comment": "Enumerated known failures. This file is a GATE INPUT, not a filter: scripts/run_conformance.py still executes and reports every fixture. scripts/check_baseline.py fails CI when a failure appears that is not listed here AND when a listed failure starts passing, so the list can only shrink deliberately. Entries are keyed on (fixture, reason): a fixture that changes HOW it fails is a new fact and must fail the gate. Adding an entry is an explicit committed edit and needs an ownedBy naming the repo that owns the fix. specPin records the spec revision these were measured against; advancing scripts/SPEC_PIN requires re-measuring.",
-  "specPin": "d37901e9c1e9aeb775ea0e1690eaaa50114df57a",
+  "specPin": "678ae0db6e1b8a7da0f77a848af0724bc0257f05",
   "entries": [
     {
       "fixture": "advisory/BRCA2-reclassification.expected.ttl",
@@ -25,6 +25,12 @@
       "reason": "UNSHAPED",
       "ownedBy": "spec",
       "detail": "coverage:ClaimRecord is defined in coverage.ttl and targeted by no shape."
+    },
+    {
+      "fixture": "clinical/status-laboratoryreport-in-progress.WARN.ttl",
+      "reason": "VIOLATIONS",
+      "ownedBy": "spec",
+      "detail": "clinical v1.16 states that all five clinical:status bindings are sh:Warning, so an out-of-set status is reported and never rejected. That holds on clinical:ClinicalDocumentShape and fails on every class that reaches it through sh:node. SHACL defines conformance as an EMPTY result set, so a nested sh:Warning makes the value node non-conforming and the outer sh:node constraint reports a sh:Violation at its own default severity. This lab report is therefore REJECTED for a value the release says should only be warned about, and all six document subtypes (LaboratoryReport, ProgressNote, DischargeSummary, ConsultationNote, ImagingReport, VisitSummary) inherit the escalation, for clinical:documentReferenceStatus as well as clinical:status. Confirmed on two independent engines: pyshacl 0.30.1 and cascade-cli 0.17.0 (rdf-validate-shacl). On ProgressNote the underlying warning is not even reported, only an opaque NodeConstraintComponent, so a reader cannot tell which field was wrong. The fixture asserts what clinical v1.16 says; the fix is a severity declaration in spec, and this entry must be removed when it lands."
     },
     {
       "fixture": "coverage-001.json",

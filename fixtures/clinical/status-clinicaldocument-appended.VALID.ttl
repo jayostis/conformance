@@ -1,0 +1,36 @@
+# clinical v1.16 — clinical:status on the BASE document shape, using a code that
+# is in diagnostic-report-status and NOT in composition-status.
+#
+# THIS IS THE FIXTURE THAT MAKES RULING 2 CHECKABLE.
+# clinical:ClinicalDocumentShape binds the TEN-code diagnostic-report-status set
+# rather than the four-code composition-status set that DocumentReference.
+# docStatus is bound to. The argument is that clinical:LaboratoryReportShape
+# reaches this shape through sh:node, a lab report is converted from a
+# DiagnosticReport, and composition-status is a strict SUBSET of
+# diagnostic-report-status -- so the ten-code set is the union of the two value
+# sets that reach this shape and the only one correct for every class beneath it.
+#
+# "appended" is chosen deliberately: it is one of the six codes that exist in
+# diagnostic-report-status and NOT in composition-status. A fixture using
+# "final" would pass under either binding and would therefore prove nothing
+# about which set was chosen. This one passes only under the wider set, so it
+# fails the moment someone narrows the binding to composition-status without
+# adding the subtype-specific shapes the release says are the next step.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:d0c00116-0000-4000-8000-000000000002> a clinical:ClinicalDocument ;
+    clinical:displayName "Comprehensive Metabolic Panel — addendum" ;
+    clinical:documentDate "2031-04-18"^^xsd:date ;
+    clinical:status "appended" ;
+    clinical:documentReferenceStatus "current" ;
+    clinical:fhirResourceId "DiagnosticReport/dr-61044" ;
+    clinical:fhirResourceType "DiagnosticReport" ;
+    clinical:importedAt "2031-04-20T07:31:02-05:00"^^xsd:dateTime ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

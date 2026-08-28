@@ -1,0 +1,31 @@
+# clinical v1.16 — WARNING. A laboratory report status outside
+# DiagnosticReport.status.
+#
+# The value is the same "in-progress" the ClinicalDocument twin uses, and that
+# is deliberate: clinical:LaboratoryReportShape reaches
+# clinical:ClinicalDocumentShape through sh:node, so this fixture also shows
+# what the nested shape does to a value the OUTER shape has already bound. The
+# two bindings are identical here by construction, since composition-status is a
+# strict subset of diagnostic-report-status, and this is where that claim stops
+# being a comment and becomes something the suite executes.
+#
+# sh:Warning, not sh:Violation: the ratchet is the same one the whole v1.16
+# status family follows.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:1ab00116-0000-4000-8000-000000000002> a clinical:LaboratoryReport ;
+    clinical:displayName "Lipid Panel" ;
+    clinical:documentDate "2031-06-02"^^xsd:date ;
+    clinical:status "in-progress" ;
+    clinical:documentReferenceStatus "current" ;
+    clinical:fhirResourceId "DiagnosticReport/dr-63180" ;
+    clinical:fhirResourceType "DiagnosticReport" ;
+    clinical:importedAt "2031-06-03T06:44:10-05:00"^^xsd:dateTime ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

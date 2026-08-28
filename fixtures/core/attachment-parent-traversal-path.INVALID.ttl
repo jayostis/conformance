@@ -1,0 +1,33 @@
+# core v3.7 — NEGATIVE. A ".." segment in cascade:attachmentPath. This is the
+# safety case, not the tidiness one.
+#
+# The other path negative in this directory is a portability defect: an absolute
+# path breaks when the Pod moves. This one is worse than broken. A ".." segment
+# makes an attachment reference a way to READ A FILE OUTSIDE THE POD, so a
+# consumer that resolves attachment paths naively -- joining them onto the pod
+# root and opening the result, which is the obvious implementation -- can be
+# walked out of the store by data it was given. The path below climbs three
+# levels and reaches for an SSH private key, which is what the exploit actually
+# looks like rather than a token "../etc/passwd".
+#
+# Rejecting it in the shape is what puts the check in ONE place. The
+# alternative is every consumer in every language remembering to write it, and
+# the one that forgets is the one that gets walked.
+#
+# The positively-stated pattern excludes this by construction: a segment must
+# BEGIN with an alphanumeric, and ".." does not. The same clause excludes a
+# single "." segment. Nothing in the pattern mentions traversal.
+#
+# Every other property here is valid, so exactly one constraint rejects it:
+# cascade:AttachmentShape / cascade:attachmentPath / sh:pattern.
+#
+# Fully synthetic; the path names nothing that exists.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+
+<urn:uuid:a77a0307-0000-4000-8000-0000000000a6> a cascade:Attachment ;
+    cascade:attachmentPath "attachments/../../../.ssh/id_ed25519" ;
+    cascade:contentHash
+        "8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:hashAlgorithm "sha-256" ;
+    cascade:attachmentMediaType "application/pdf" .

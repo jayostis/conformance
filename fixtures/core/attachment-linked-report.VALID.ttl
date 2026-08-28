@@ -1,0 +1,63 @@
+# core v3.7 — a cascade:Attachment carrying every fact the shape checks, and the
+# record that points at it.
+#
+# WHY THE RECORD IS HERE TOO. cascade:HasAttachmentEdgeShape is an open-world
+# edge shape (sh:targetSubjectsOf, sh:Warning) requiring the object to be an
+# IRI, so it fires only where the predicate is present. An attachment node
+# validated on its own would leave that edge unexercised, and the edge is the
+# only reason the node exists. The lab record is a health:LabResultRecord
+# because it is the cheapest fully-valid record in the suite; nothing about the
+# attachment depends on which class points at it.
+#
+# The attachment is an IRI, not a blank node, deliberately: the edge shape wants
+# one so that the record and the attachment can live in DIFFERENT files, which
+# is how a Pod partitioned by record type actually stores them.
+#
+# WHAT THE THREE VIOLATION-SEVERITY FACTS BUY, each of which has its own
+# negative fixture in this directory:
+#   attachmentPath   — without it there is nothing to open.
+#   contentHash      — without it nothing distinguishes the right bytes from any
+#                      other bytes at that path.
+#   hashAlgorithm    — without it the digest cannot be recomputed and so cannot
+#                      be checked, which makes contentHash decorative.
+#
+# The path is `attachments/{algorithm}/{digest}` and the file's NAME is its
+# digest. That is what makes the arrangement checkable rather than merely tidy:
+# a consumer hashes what it read and compares it with where it read it from, so
+# nothing has to be trusted to keep name and content in agreement. The digest
+# below is the real SHA-256 of the ASCII string "cascade-conformance-attachment
+# -fixture-v1\n", so the fixture's own value is reproducible rather than invented
+# -- see the Verification section of INVENTORY.md for the command.
+#
+# FHIR's Attachment.hash is deliberately NOT followed: it fixes SHA-1, which is
+# collision-broken, and a collision in a content-addressed store is a mechanism
+# by which one document silently replaces another. The algorithm is named
+# explicitly from the RFC 6920 registry instead, and sha-256 is required of new
+# implementations.
+#
+# Fully synthetic apart from the digest, which is a real hash of a synthetic
+# string.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:a77a0307-0000-4000-8000-000000000001> a health:LabResultRecord ;
+    health:testName "Comprehensive Metabolic Panel" ;
+    health:resultValue "See attached report" ;
+    health:performedDate "2031-04-18"^^xsd:date ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:hasAttachment <urn:uuid:a77a0307-0000-4000-8000-0000000000a1> ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .
+
+<urn:uuid:a77a0307-0000-4000-8000-0000000000a1> a cascade:Attachment ;
+    cascade:attachmentPath
+        "attachments/sha-256/8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:contentHash
+        "8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:hashAlgorithm "sha-256" ;
+    cascade:attachmentMediaType "application/pdf" ;
+    cascade:byteSize 184320 ;
+    cascade:attachmentTitle "Comprehensive Metabolic Panel — signed report" .

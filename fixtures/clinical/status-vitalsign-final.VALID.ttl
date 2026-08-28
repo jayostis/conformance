@@ -1,0 +1,30 @@
+# clinical v1.16 — clinical:status on a vital sign, IN the bound value set.
+#
+# A vital sign is converted from a FHIR Observation, so its status is drawn from
+# Observation.status: registered | preliminary | final | amended | corrected |
+# cancelled | entered-in-error | unknown. Eight codes, required binding,
+# verbatim.
+#
+# Through v1.15 clinical:status was written onto five record types and declared
+# on none of them, so this value was checked by nothing and validation passed in
+# silence. This fixture is the PASS half of the pair that makes the binding
+# observable: the value set is exercised, not merely present in a shapes file.
+#
+# "final" is used rather than "amended" or "corrected" so that the pair differs
+# in exactly one respect: membership of the value set.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:57a00116-0000-4000-8000-000000000001> a clinical:VitalSign ;
+    clinical:vitalType "Blood Pressure" ;
+    clinical:component1Value "128" ;
+    clinical:component2Value "78" ;
+    clinical:unit "mm[Hg]" ;
+    clinical:status "final" ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

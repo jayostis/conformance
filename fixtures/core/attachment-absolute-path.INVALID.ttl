@@ -1,0 +1,30 @@
+# core v3.7 — NEGATIVE. An absolute path in cascade:attachmentPath.
+#
+# A Pod is copied, synced, restored and re-rooted as a matter of routine. An
+# absolute path is a statement about ONE machine's filesystem, so it breaks the
+# first time any of that happens, and it breaks silently: the reference still
+# parses, still validates against every other constraint, and simply stops
+# resolving somewhere else.
+#
+# HOW THE PATTERN EXCLUDES IT, AND WHY IT IS WRITTEN THAT WAY. The constraint is
+# stated POSITIVELY -- a sequence of "/"-separated segments each beginning with
+# an alphanumeric -- so a leading "/" fails on the very first character with no
+# rule mentioning absolute paths at all. That is not a stylistic preference.
+# SHACL evaluates sh:pattern with XPath fn:matches, whose regular expression
+# language is XSD 1.1 and has NO lookahead assertion, so a "reject these three
+# things" pattern is not expressible here; an engine that accepted one would be
+# applying its host language's regex rather than the specification's.
+#
+# Rejected by cascade:AttachmentShape / cascade:attachmentPath / sh:pattern.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+
+<urn:uuid:a77a0307-0000-4000-8000-0000000000a5> a cascade:Attachment ;
+    cascade:attachmentPath
+        "/Users/example/Pods/household/attachments/sha-256/8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:contentHash
+        "8dd3c6b5f593b25cb9dc0094d67323d16c3bbc9584eda019726a38dd2cc7a471" ;
+    cascade:hashAlgorithm "sha-256" ;
+    cascade:attachmentMediaType "application/pdf" .

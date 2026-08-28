@@ -1,0 +1,36 @@
+# clinical v1.16 — clinical:status on a laboratory report, IN
+# DiagnosticReport.status.
+#
+# clinical:LaboratoryReportShape restates the ten-code diagnostic-report-status
+# binding rather than leaving it to the ClinicalDocumentShape it reaches through
+# sh:node, because a reader of the lab shape needs to see which of the two
+# document status value sets applies to a lab report.
+#
+# "corrected" is the code that carries the clinical weight here. It is what
+# distinguishes a result that REPLACED an earlier wrong one from the earlier
+# wrong one itself, and a record whose status is unchecked cannot be trusted to
+# make that distinction. It is also one of the six codes absent from
+# composition-status, so this fixture -- like its ClinicalDocument sibling --
+# passes only under the wider set that the release deliberately chose.
+#
+# LaboratoryReportShape additionally requires clinical:documentDate, so it is
+# present; every other required field arrives through sh:node from
+# clinical:ClinicalDocumentShape, which this fixture therefore also exercises.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:1ab00116-0000-4000-8000-000000000001> a clinical:LaboratoryReport ;
+    clinical:displayName "Comprehensive Metabolic Panel" ;
+    clinical:documentDate "2031-04-18"^^xsd:date ;
+    clinical:status "corrected" ;
+    clinical:documentReferenceStatus "superseded" ;
+    clinical:fhirResourceId "DiagnosticReport/dr-61044" ;
+    clinical:fhirResourceType "DiagnosticReport" ;
+    clinical:importedAt "2031-04-20T07:31:02-05:00"^^xsd:dateTime ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

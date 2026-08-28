@@ -1,0 +1,40 @@
+# health v2.8 — WARNING. "entered-in-error" written to the CLINICAL status of an
+# allergy. This is the load-bearing case of the whole status family.
+#
+# WHY THIS EXACT VALUE. "entered-in-error" is a real code, and it is in three of
+# the five value sets v1.16 binds: it is legal on a lab result, on a vital sign
+# and on a document. It is NOT in AllergyIntolerance.clinicalStatus, which has
+# exactly three codes, and its exclusion is the one deliberate narrowing in the
+# release. The reason is stated at the constraint: admitting it beside "inactive"
+# and "resolved" would merge "the patient no longer reacts to this" with "this
+# allergy was never real", which are opposite clinical facts and the one pair a
+# safety-relevant record must never conflate.
+#
+# So this fixture is not testing that a shape rejects nonsense. Every other WARN
+# fixture in this batch uses a value that is wrong everywhere. This one uses a
+# value that is right in three other places and wrong here, which is the only
+# way to show that the allergy set is three codes BY CHOICE rather than by
+# oversight -- and it is what fails if someone later "completes" the set to
+# four to match its siblings.
+#
+# The repudiation this record is reaching for has a correct home, and the
+# fixture shows it: clinical:verificationStatus, a different element with a
+# different four-code value set that does contain "entered-in-error".
+#
+# sh:Warning, not sh:Violation, per the core v3.5 ratchet. Nothing rejects this
+# record, and the fixture asserts exactly that alongside the warning.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:a11e0208-0000-4000-8000-000000000002> a health:AllergyRecord ;
+    health:allergen "Amoxicillin" ;
+    health:reaction "Urticaria" ;
+    clinical:status "entered-in-error" ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

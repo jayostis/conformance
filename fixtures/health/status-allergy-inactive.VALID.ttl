@@ -1,0 +1,28 @@
+# health v2.8 — clinical:status on an allergy record, IN
+# AllergyIntolerance.clinicalStatus.
+#
+# THREE codes, not four: active | inactive | resolved. This fixture uses
+# "inactive", and it carries clinical:verificationStatus "confirmed" alongside
+# it, because the pair is what shows the two axes are separate elements with
+# separate value sets. The allergy verification set has four codes and contains
+# neither "provisional" nor "differential" -- a differential diagnosis is not a
+# thing one has about an allergy -- which is why clinical v1.16 dropped
+# clinical:verificationStatus's rdfs:domain clinical:Condition rather than
+# widening it to a union: the same predicate binds to different value sets on
+# different classes, and that is a SHACL job.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:a11e0208-0000-4000-8000-000000000001> a health:AllergyRecord ;
+    health:allergen "Amoxicillin" ;
+    health:reaction "Urticaria" ;
+    clinical:status "inactive" ;
+    clinical:verificationStatus "confirmed" ;
+    clinical:sourceEHR "Meridian Health System" ;
+    cascade:dataProvenance cascade:EHRVerified ;
+    cascade:schemaVersion "1.4" .

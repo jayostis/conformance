@@ -21,6 +21,18 @@ Design notes, and the reason each one exists:
 
 * An unreadable, unparseable, or schema-invalid fixture is an error, never a pass.
 
+* There are THREE polarities, not two. A Cascade shape reports a value that
+  existing data carries at `sh:Warning` rather than rejecting it -- the ratchet
+  core v3.5 wrote down and clinical v1.16 applied to five `clinical:status`
+  bindings. A two-polarity runner cannot assert any of that: a fixture carrying
+  an out-of-set status is not a VALID fixture (something fires on it) and is not
+  an INVALID one either (nothing rejects it), so under `.INVALID.ttl` it fails
+  with NO_VIOLATION and under `.VALID.ttl` it passes for the wrong reason,
+  reporting nothing about the warning. `.WARN.ttl` asserts the actual claim:
+  at least one `sh:Warning` AND no `sh:Violation`. It is strictly an added
+  assertion -- it cannot turn a fixture that fails today into one that passes,
+  because no fixture in the suite carried that suffix before it existed.
+
 * The suite as a whole aborts (exit 2) if the shapes graph is empty, declares no
   `sh:targetClass`, or if zero constraint checks were evaluated across all
   fixtures. Those are the three ways this runner could report a meaningless PASS.
@@ -127,8 +139,9 @@ NON_RDF_SUFFIXES = {
 
 # Outcome reason codes.
 R_OK = "OK"
-R_VIOLATIONS = "VIOLATIONS"            # positive fixture: shapes reported violations
+R_VIOLATIONS = "VIOLATIONS"            # positive/warn fixture: shapes reported violations
 R_NO_VIOLATION = "NO_VIOLATION"        # negative fixture: shapes reported none
+R_NO_WARNING = "NO_WARNING"            # warn fixture: shapes reported no sh:Warning
 R_UNSHAPED = "UNSHAPED"                # zero constraints reachable; validation was vacuous
 R_NO_TURTLE = "NO_TURTLE"              # fixture declares no RDF to validate
 R_PARSE_ERROR = "PARSE_ERROR"
@@ -136,14 +149,21 @@ R_READ_ERROR = "READ_ERROR"
 R_SCHEMA_INVALID = "SCHEMA_INVALID"
 
 REASON_HELP = {
-    R_VIOLATIONS: "positive fixture, shapes reported at least one sh:Violation",
+    R_VIOLATIONS: "positive or warn fixture, shapes reported at least one sh:Violation",
     R_NO_VIOLATION: "negative fixture, shapes reported no sh:Violation so nothing rejected it",
+    R_NO_WARNING: "warn fixture, shapes reported no sh:Warning so nothing noticed it",
     R_UNSHAPED: "no shape targets any subject in the fixture, so zero constraints ran",
     R_NO_TURTLE: "fixture declares no RDF body, so there is nothing to validate",
     R_PARSE_ERROR: "fixture RDF could not be parsed",
     R_READ_ERROR: "fixture file could not be read or decoded",
     R_SCHEMA_INVALID: "fixture JSON does not validate against schema/fixture-schema.json",
 }
+
+# Fixture polarities. A `.ttl` fixture carries its polarity in its filename;
+# a JSON fixture carries it in `shouldAccept`.
+P_POSITIVE = "positive"   # must conform: no sh:Violation
+P_NEGATIVE = "negative"   # must be REJECTED: at least one sh:Violation
+P_WARN = "warn"           # must be NOTICED, not rejected: >=1 sh:Warning and 0 sh:Violation
 
 
 # --------------------------------------------------------------------------
@@ -391,11 +411,11 @@ def spec_dirty(spec_dir: Path) -> bool:
 # --------------------------------------------------------------------------
 
 class Fixture:
-    def __init__(self, fid, relpath, kind, positive, turtle, constraint_note, mode):
+    def __init__(self, fid, relpath, kind, polarity, turtle, constraint_note, mode):
         self.id = fid
         self.relpath = relpath
         self.kind = kind
-        self.positive = positive
+        self.polarity = polarity
         self.turtle = turtle
         self.constraint_note = constraint_note
         self.mode = mode
@@ -405,6 +425,7 @@ class Fixture:
         self.checks = 0
         self.types = []
         self.violations = []
+        self.warnings = []
 
 
 def discover(fixtures_dir: Path, schema: dict | None):
@@ -435,7 +456,7 @@ def discover(fixtures_dir: Path, schema: dict | None):
                     fid=str(doc["id"]),
                     relpath=rel,
                     kind="json",
-                    positive=bool(doc["shouldAccept"]),
+                    polarity=P_POSITIVE if bool(doc["shouldAccept"]) else P_NEGATIVE,
                     turtle=(doc.get("expectedOutput") or {}).get("turtle", ""),
                     constraint_note=doc.get("shaclConstraintViolated", ""),
                     mode=(doc.get("expectedOutput") or {}).get("validationMode", ""),
@@ -455,15 +476,17 @@ def discover(fixtures_dir: Path, schema: dict | None):
         if suffix == ".ttl":
             name = path.name
             if ".INVALID." in name:
-                positive = False
+                polarity = P_NEGATIVE
+            elif ".WARN." in name:
+                polarity = P_WARN
             else:
-                positive = True
+                polarity = P_POSITIVE
             fixtures.append(
                 Fixture(
                     fid=rel,
                     relpath=rel,
                     kind="ttl",
-                    positive=positive,
+                    polarity=polarity,
                     turtle=None,  # read at execution time so read errors are reported per fixture
                     constraint_note="",
                     mode="shacl-valid",
@@ -485,12 +508,17 @@ def base_uri(fixture: Fixture) -> str:
     return f"https://conformance.cascadeprotocol.org/fixtures/{fixture.relpath}#"
 
 
-def extract_violations(report: Graph, shapes: Shapes) -> list[str]:
-    """Render each sh:Violation as a stable, human-readable constraint name."""
+def extract_results(report: Graph, shapes: Shapes, wanted) -> list[str]:
+    """Render each result of the wanted severity as a stable constraint name.
+
+    A result with no explicit `sh:resultSeverity` is a Violation: SHACL's default
+    severity is `sh:Violation`, so an absent severity must be read as one and
+    never silently counted as a Warning.
+    """
     out = set()
     for result in report.subjects(RDF.type, SH.ValidationResult):
-        severity = report.value(result, SH.resultSeverity)
-        if severity is not None and severity != SH.Violation:
+        severity = report.value(result, SH.resultSeverity) or SH.Violation
+        if severity != wanted:
             continue
         source = report.value(result, SH.sourceShape)
         component = report.value(result, SH.sourceConstraintComponent)
@@ -517,6 +545,16 @@ def extract_violations(report: Graph, shapes: Shapes) -> list[str]:
         line += f"  [focus {qname(focus)}]"
         out.add(line)
     return sorted(out)
+
+
+def extract_violations(report: Graph, shapes: Shapes) -> list[str]:
+    """Render each sh:Violation as a stable, human-readable constraint name."""
+    return extract_results(report, shapes, SH.Violation)
+
+
+def extract_warnings(report: Graph, shapes: Shapes) -> list[str]:
+    """Render each sh:Warning as a stable, human-readable constraint name."""
+    return extract_results(report, shapes, SH.Warning)
 
 
 def run_fixture(fixture: Fixture, shapes: Shapes, fixtures_dir: Path):
@@ -587,15 +625,16 @@ def run_fixture(fixture: Fixture, shapes: Shapes, fixtures_dir: Path):
         debug=False,
     )
     fixture.violations = extract_violations(report, shapes)
+    fixture.warnings = extract_warnings(report, shapes)
 
-    if fixture.positive:
+    if fixture.polarity == P_POSITIVE:
         if conforms and not fixture.violations:
             fixture.outcome = "pass"
             fixture.reason = R_OK
         else:
             fixture.outcome = "fail"
             fixture.reason = R_VIOLATIONS
-    else:
+    elif fixture.polarity == P_NEGATIVE:
         if fixture.violations:
             fixture.outcome = "pass"
             fixture.reason = R_OK
@@ -605,6 +644,26 @@ def run_fixture(fixture: Fixture, shapes: Shapes, fixtures_dir: Path):
             fixture.detail = (
                 fixture.constraint_note.strip()[:160]
                 or "fixture declares shouldAccept=false but nothing rejects it"
+            )
+    else:  # P_WARN — must be noticed at Warning severity and NOT rejected.
+        if fixture.violations:
+            # Both halves matter. A warn fixture that also violates something is
+            # not evidence about the warning: it would be rejected outright, and
+            # the value the fixture exists to exercise never reaches a reader.
+            fixture.outcome = "fail"
+            fixture.reason = R_VIOLATIONS
+            fixture.detail = (
+                "warn fixture must be reported, not rejected; it produced a sh:Violation"
+            )
+        elif fixture.warnings:
+            fixture.outcome = "pass"
+            fixture.reason = R_OK
+        else:
+            fixture.outcome = "fail"
+            fixture.reason = R_NO_WARNING
+            fixture.detail = (
+                fixture.constraint_note.strip()[:160]
+                or "fixture is a .WARN. fixture but no shape reported a sh:Warning on it"
             )
 
 
@@ -636,6 +695,11 @@ def build_report(fixtures, non_rdf, discovery_errors, shapes, pin, spec_actual, 
     add(f"  conformance JSON   : {kinds['json']}")
     add(f"  RDF (.ttl)         : {kinds['ttl']}")
     add(f"  total executed     : {len(fixtures)}")
+    pol = defaultdict(int)
+    for f in fixtures:
+        pol[f.polarity] += 1
+    add(f"  by polarity        : {pol[P_POSITIVE]} positive / {pol[P_NEGATIVE]} negative "
+        f"/ {pol[P_WARN]} warn")
     add("")
 
     add(f"Not executed: {len(non_rdf)} file(s) under fixtures/ carry no RDF of their own.")
@@ -678,14 +742,17 @@ def build_report(fixtures, non_rdf, discovery_errors, shapes, pin, spec_actual, 
             group = sorted(by_reason[reason], key=lambda f: f.relpath)
             add(f"  {reason} ({len(group)}): {REASON_HELP.get(reason, '')}")
             for f in group:
-                polarity = "positive" if f.positive else "negative"
-                add(f"    - {f.relpath}  [{polarity}, {f.checks} constraint checks]")
+                add(f"    - {f.relpath}  [{f.polarity}, {f.checks} constraint checks]")
                 if f.detail:
                     add(f"        {f.detail}")
                 for v in f.violations[:6]:
                     add(f"        violated: {v}")
                 if len(f.violations) > 6:
                     add(f"        ... and {len(f.violations) - 6} more violations")
+                for w in f.warnings[:6]:
+                    add(f"        warned: {w}")
+                if len(f.warnings) > 6:
+                    add(f"        ... and {len(f.warnings) - 6} more warnings")
             add("")
 
     add("Passing fixtures by constraint checks evaluated (lowest first)")
@@ -827,12 +894,13 @@ def main(argv=None) -> int:
                 {
                     "path": f.relpath,
                     "id": f.id,
-                    "polarity": "positive" if f.positive else "negative",
+                    "polarity": f.polarity,
                     "outcome": f.outcome,
                     "reason": f.reason,
                     "constraintChecks": f.checks,
                     "types": f.types,
                     "violations": f.violations,
+                    "warnings": f.warnings,
                     "detail": f.detail,
                 }
                 for f in fixtures

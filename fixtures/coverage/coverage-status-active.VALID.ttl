@@ -1,0 +1,36 @@
+# coverage v1.5 — coverage:status on an insurance plan, IN fm-status.
+#
+# coverage:InsurancePlan had no status property at all through v1.4, so an
+# importer reading a conformant FHIR Coverage resource had to discard the one
+# element FHIR requires it to carry. coverage:claimStatus and
+# coverage:adjudicationStatus were never substitutes: they belong to the denial
+# and appeal workflow and describe a claim, not a plan.
+#
+# New coverage:status takes Coverage.status, required binding to fm-status:
+# active | cancelled | draft | entered-in-error.
+#
+# PRESENCE IS NOT REQUIRED, AND THAT IS EXERCISED ELSEWHERE, NOT HERE. The
+# source element is 1..1, but the shape asserts no sh:minCount, because no pod
+# contains this property yet and requiring it would turn every existing plan
+# record red for something no producer has had the chance to write. The four
+# pre-existing coverage-00* fixtures all omit coverage:status and all still
+# pass, which is that compatibility claim being exercised rather than asserted.
+#
+# Fully synthetic: invented payer, member and group numbers.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix coverage: <https://ns.cascadeprotocol.org/coverage/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:c0000105-0000-4000-8000-000000000001> a coverage:InsurancePlan ;
+    coverage:providerName "Kestrel Mutual Health" ;
+    coverage:planName "Kestrel Select PPO" ;
+    coverage:memberId "KM-40118823" ;
+    coverage:groupNumber "GRP-77120" ;
+    coverage:coverageType "PPO" ;
+    coverage:planType "ppo" ;
+    coverage:subscriberRelationship "self" ;
+    coverage:status "active" ;
+    coverage:effectiveStart "2031-01-01"^^xsd:date ;
+    cascade:dataProvenance cascade:PatientReported ;
+    cascade:schemaVersion "1.4" .
