@@ -15,7 +15,10 @@
 # scripts/SPEC_PIN, not from this file. If the two disagree, SPEC_PIN wins and
 # the rows below describe a vocabulary CI is not executing, so keep them in step:
 # SPEC_PIN's `vocab=` line must repeat the versions below verbatim. As of
-# 2026-08-28 both read core=3.7 health=2.8 clinical=1.16 coverage=1.5
+# 2026-08-28 both read core=3.7 health=2.8 clinical=1.16 coverage=1.6
+# coverage=1.6: cascade:AIExtracted joins InsurancePlanShape dataProvenance
+#   (every clinical/health shape had it since clinical v1.9; this was the miss).
+#   AI-extracted InsurancePlan fixture tracked in root 3.287, not yet here.
 # checkup=3.3 pots=1.4, and the pin is the spec PR #31 merge commit 678ae0d
 # (tags vocab/core-v3.7, vocab/health-v2.8, vocab/clinical-v1.16,
 # vocab/coverage-v1.5, all four on that commit).
@@ -67,7 +70,10 @@
 # encounter-001 was a KNOWN_FAILURES entry with reason UNSHAPED: it reported
 # conforming while evaluating ZERO constraints, because clinical:Encounter had no
 # shape. It now evaluates 29, so the entry is gone.
-core=3.7
+core=3.8
+# core=3.8: cascade:PatientReported defined -- the provenance individual 17
+#   sh:in lists already accepted. No fixture verdict changes; ontology-derived
+#   enums (sdk-python) stop rejecting a value every shape permits.
 # core=3.7: cascade:Attachment, the content-addressed document store. Bytes live
 #   under attachments/{algorithm}/{digest} and the Turtle carries a small node
 #   with the media type, digest, algorithm and a pod-relative path.
@@ -145,7 +151,12 @@ health=2.8
 #   Note: health:SocialHistoryRecordShape declares only sh:Info-severity constraints,
 #   so no fixture can be rejected by it and the health: spelling has no negative
 #   counterpart. social-003 covers the clinical: spelling instead.
-clinical=1.16
+clinical=1.17
+# clinical=1.17: severity restructure. The five clinical:status bindings and
+#   documentReferenceStatus moved off ClinicalDocumentShape onto target-class
+#   DocumentStatusShape / DocumentReferenceStatusShape so sh:node no longer
+#   escalates them to Violation on the six document subtypes. Un-baselines
+#   status-laboratoryreport-in-progress.WARN.
 # clinical=1.16: 15 new terms (14 properties, 1 class) plus five clinical:status
 #   bindings. Fixtures in fixtures/clinical/, all against the v1.16 shapes:
 #   - encounter-inpatient-full.VALID: all three Encounter.class Coding members,
