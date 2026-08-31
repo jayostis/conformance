@@ -671,6 +671,21 @@ def case_unusable_baseline_is_never_success(spec_dir, tmp):
     code7, out7 = run_gate(drifted_path, baseline)
     checks.append(("drifted run", code7, "--allow-spec-drift" in out7))
 
+    # A top-level JSON array parses, so nothing rejects it on the way in, but it
+    # has no `.get`. Every rule that reads either document must find it unusable
+    # rather than crash on it: a traceback exits 1, which CI reads as a real
+    # ratchet violation, and unusable input must never produce a verdict that
+    # looks substantive. The "no entries list" case above only covers a dict.
+    array_baseline = tmp / "arraybaseline.json"
+    array_baseline.write_text("[]\n", encoding="utf-8")
+    code8, out8 = run_gate(results, array_baseline)
+    checks.append(("array-shaped baseline", code8, "not a JSON object" in out8))
+
+    array_results = tmp / "arrayresults.json"
+    array_results.write_text("[]\n", encoding="utf-8")
+    code9, out9 = run_gate(array_results, baseline)
+    checks.append(("array-shaped results", code9, "not a JSON object" in out9))
+
     for label, code, explained in checks:
         if code != 2:
             raise SelfTestFailure(f"{label} baseline returned exit {code}, expected 2")

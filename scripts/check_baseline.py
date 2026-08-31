@@ -14,13 +14,15 @@ catches new failures is a list that grows and never shrinks, and a permanently
 red job and a suppressed failure end the same way: nobody reads either. Failing
 when a baselined fixture starts passing is what forces the list down.
 
-Rules, in the order they are checked:
+Rules, in the order they are checked. Both documents are loaded first, and a
+file that does not parse into a JSON object is exit 2 there — the rules below
+all read fields off them, so a non-object would crash rather than be judged.
 
 0.  Fixture keys are spelled POSIX on every platform, on both sides. A key
     carrying the OS-native separator matches nothing elsewhere, so it is exit 2
     naming the key rather than a verdict nobody can trust.
-1.  The baseline file must exist, parse, and declare `entries`. A missing or
-    unreadable baseline is exit 2, never a pass.
+1.  The baseline file must exist, parse into an object, and declare `entries`.
+    A missing or unreadable baseline is exit 2, never a pass.
 2.  The results file must describe a real run: at least one fixture executed and
     at least one constraint evaluated. A degenerate report cannot be ratcheted.
 3.  The baseline records the `spec` revision it was measured against. Applying a
@@ -61,9 +63,18 @@ def load_json(path: Path, what: str) -> dict:
     if not path.is_file():
         abort(f"{what} not found at {path}. A gate with no {what} cannot decide anything.")
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        loaded = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         abort(f"{what} at {path} could not be read: {exc}")
+    else:
+        # Parsing is not enough. A top-level array or scalar parses cleanly and
+        # then has no `.get`, so every rule below would raise AttributeError and
+        # exit 1 — the code CI reads as a real ratchet violation. Unusable input
+        # is exit 2, here, before anything tries to read a verdict out of it.
+        if not isinstance(loaded, dict):
+            abort(f"{what} at {path} is not a JSON object but "
+                  f"{type(loaded).__name__}. A gate cannot read anything out of it.")
+        return loaded
     return {}  # unreachable, keeps type checkers quiet
 
 
