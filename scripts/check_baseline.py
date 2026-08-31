@@ -16,6 +16,9 @@ when a baselined fixture starts passing is what forces the list down.
 
 Rules, in the order they are checked:
 
+0.  Fixture keys are spelled POSIX on every platform, on both sides. A key
+    carrying the OS-native separator matches nothing elsewhere, so it is exit 2
+    naming the key rather than a verdict nobody can trust.
 1.  The baseline file must exist, parse, and declare `entries`. A missing or
     unreadable baseline is exit 2, never a pass.
 2.  The results file must describe a real run: at least one fixture executed and
@@ -70,6 +73,42 @@ def key(fixture: str, reason: str) -> tuple[str, str]:
 
 def render(k: tuple[str, str]) -> str:
     return f"{k[0]}  [{k[1]}]"
+
+
+def refuse_native_separator_keys(results: dict, baseline: dict, baseline_name: str) -> None:
+    """A fixture key is spelled with `/` on every platform, or it is not usable.
+
+    KNOWN_FAILURES.json is keyed on these strings and is shared across Linux,
+    macOS and Windows, so a key carrying the OS-native separator matches nothing
+    and turns one fixture into both a new failure and a baselined one that
+    started passing. Normalising it here would make malformed input work
+    silently; every other check in this file refuses instead, and so does this.
+
+    Both sides are checked. The results half catches a stale or old-runner
+    report locally; the baseline half catches keys a pre-fix `--regenerate` on
+    Windows committed into the shared file, which is the half that protects
+    everyone downstream.
+    """
+    offenders = [
+        ("results file, fixtures[].path", f["path"])
+        for f in results.get("fixtures", []) or []
+        if isinstance(f, dict) and isinstance(f.get("path"), str) and "\\" in f["path"]
+    ] + [
+        (f"{baseline_name}, entries[].fixture", e["fixture"])
+        for e in baseline.get("entries", []) or []
+        if isinstance(e, dict) and isinstance(e.get("fixture"), str) and "\\" in e["fixture"]
+    ]
+    if offenders:
+        abort(
+            f"{len(offenders)} fixture key(s) are spelled with the OS-native separator "
+            "rather than POSIX `/`:\n" +
+            "\n".join(f"    {where}: {k}" for where, k in offenders) +
+            "\n  These keys match nothing on another platform, so any verdict drawn from "
+            "them would be a guess.\n"
+            "  Fix: re-run scripts/run_conformance.py to regenerate the results, and "
+            "respell any committed\n"
+            "  baseline entry with `/`."
+        )
 
 
 # --------------------------------------------------------------------------
@@ -141,6 +180,11 @@ def main(argv=None) -> int:
 
     results = load_json(results_path, "results file")
     baseline = load_json(baseline_path, "baseline")
+
+    # Rule 0: keys must be spelled the one way. Checked before anything reads
+    # them, --regenerate included, so a native-separator key can neither produce
+    # a verdict nor be written into the shared baseline.
+    refuse_native_separator_keys(results, baseline, baseline_path.name)
 
     if args.regenerate:
         return regenerate(baseline_path, results, baseline)

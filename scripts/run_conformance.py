@@ -437,7 +437,10 @@ def discover(fixtures_dir: Path, schema: dict | None):
     for path in sorted(fixtures_dir.rglob("*")):
         if not path.is_file():
             continue
-        rel = str(path.relative_to(fixtures_dir))
+        # POSIX, not the OS-native separator: this string is the key that
+        # KNOWN_FAILURES.json is keyed on, and that file is shared across
+        # platforms. A no-op on Linux and macOS.
+        rel = path.relative_to(fixtures_dir).as_posix()
         suffix = path.suffix.lower()
 
         if suffix == ".json":
