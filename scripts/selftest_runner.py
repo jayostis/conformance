@@ -686,6 +686,34 @@ def case_unusable_baseline_is_never_success(spec_dir, tmp):
     code9, out9 = run_gate(array_results, baseline)
     checks.append(("array-shaped results", code9, "not a JSON object" in out9))
 
+    # The two cases above stop at the top level of each document. INSIDE the
+    # lists a malformed entry is currently skipped rather than refused, and a
+    # skip is worse than a crash: the gate carries on and draws a verdict from
+    # evidence it could not read.
+    #
+    # A non-string `path` is the dangerous one. The entry is dropped, so the
+    # baselined fixture looks like it started passing while the unreadable one
+    # looks new, and the gate reports the impossible "1 new + 1 now passing" —
+    # the exact signature this whole file exists to make impossible. It exits 1,
+    # which CI reads as a real ratchet violation, with no traceback to say
+    # otherwise.
+    nonstring_key = json.loads(results.read_text(encoding="utf-8"))
+    nonstring_key["fixtures"][0]["path"] = 123
+    nonstring_path = tmp / "nonstringkey.json"
+    nonstring_path.write_text(json.dumps(nonstring_key, indent=2) + "\n", encoding="utf-8")
+    code10, out10 = run_gate(nonstring_path, baseline)
+    checks.append(("non-string fixture key", code10, "not a string" in out10))
+
+    # A `fixtures` mapping iterates to its keys, so every entry is a bare string
+    # and the first `.get` raises AttributeError — exit 1 again, one level below
+    # where the document-shape check looks.
+    mapping_fixtures = json.loads(results.read_text(encoding="utf-8"))
+    mapping_fixtures["fixtures"] = {"b.json": "fail"}
+    mapping_path = tmp / "mappingfixtures.json"
+    mapping_path.write_text(json.dumps(mapping_fixtures, indent=2) + "\n", encoding="utf-8")
+    code11, out11 = run_gate(mapping_path, baseline)
+    checks.append(("fixtures is not a list", code11, "not a list" in out11))
+
     for label, code, explained in checks:
         if code != 2:
             raise SelfTestFailure(f"{label} baseline returned exit {code}, expected 2")
