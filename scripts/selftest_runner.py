@@ -714,6 +714,37 @@ def case_unusable_baseline_is_never_success(spec_dir, tmp):
     code11, out11 = run_gate(mapping_path, baseline)
     checks.append(("fixtures is not a list", code11, "not a list" in out11))
 
+    # Entries are keyed on (fixture, reason), and only the FIRST half is
+    # validated. `reason` is still taken by bare subscript at both call sites,
+    # so an entry carrying a perfectly good key and no `reason` raises KeyError
+    # and exits 1 — the same unusable-input-reported-as-a-ratchet-violation
+    # class, one field over.
+    #
+    # The baseline half is the realistic one: KNOWN_FAILURES.json is hand-edited
+    # by whoever owns a failure, so a dropped `reason` is an authoring slip, not
+    # malformed machine output. It needs no Windows and no stale runner.
+    #
+    # These assert SELF-CHECK FAILED and not merely the field name: run_gate
+    # returns stdout+stderr, so `KeyError: 'reason'` would satisfy a bare
+    # substring test on "reason" while the gate was still crashing.
+    noreason_baseline = json.loads(baseline.read_text(encoding="utf-8"))
+    del noreason_baseline["entries"][0]["reason"]
+    noreason_baseline_path = tmp / "noreasonbaseline.json"
+    noreason_baseline_path.write_text(
+        json.dumps(noreason_baseline, indent=2) + "\n", encoding="utf-8")
+    code12, out12 = run_gate(results, noreason_baseline_path)
+    checks.append(("baseline entry without reason", code12,
+                   "SELF-CHECK FAILED" in out12 and "reason" in out12))
+
+    noreason_results = json.loads(results.read_text(encoding="utf-8"))
+    del noreason_results["fixtures"][0]["reason"]
+    noreason_results_path = tmp / "noreasonresults.json"
+    noreason_results_path.write_text(
+        json.dumps(noreason_results, indent=2) + "\n", encoding="utf-8")
+    code13, out13 = run_gate(noreason_results_path, baseline)
+    checks.append(("results entry without reason", code13,
+                   "SELF-CHECK FAILED" in out13 and "reason" in out13))
+
     for label, code, explained in checks:
         if code != 2:
             raise SelfTestFailure(f"{label} baseline returned exit {code}, expected 2")
