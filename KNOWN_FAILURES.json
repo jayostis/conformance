@@ -27,12 +27,6 @@
       "detail": "coverage:ClaimRecord is defined in coverage.ttl and targeted by no shape."
     },
     {
-      "fixture": "coverage-001.json",
-      "reason": "UNSHAPED",
-      "ownedBy": "spec",
-      "detail": "clinical:CoverageRecord is defined in clinical.ttl and targeted by no shape; coverage:InsurancePlan is the shaped spelling."
-    },
-    {
       "fixture": "denial-001.json",
       "reason": "UNSHAPED",
       "ownedBy": "spec",

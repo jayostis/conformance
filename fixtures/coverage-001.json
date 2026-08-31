@@ -2,10 +2,10 @@
   "id": "coverage-001",
   "description": "Happy path: Primary insurance coverage (Blue Cross Blue Shield PPO) from EHR",
   "dataType": "Coverage",
-  "vocabulary": "clinical",
+  "vocabulary": "coverage",
   "input": {
     "id": "urn:uuid:c0vr-0001-aaaa-bbbb-ccccddddeeee",
-    "type": "CoverageRecord",
+    "type": "InsurancePlan",
     "providerName": "Blue Cross Blue Shield",
     "memberId": "BCBS-AR-2020-78452",
     "dataProvenance": "ClinicalGenerated",
@@ -14,17 +14,17 @@
     "planName": "Blue PPO Select",
     "planType": "ppo",
     "coverageType": "primary",
-    "relationship": "self",
-    "effectivePeriodStart": "2020-01-01T00:00:00Z",
+    "subscriberRelationship": "self",
+    "effectiveStart": "2020-01-01",
     "payorName": "Blue Cross Blue Shield of Oregon",
     "subscriberId": "BCBS-AR-2020-78452",
     "sourceRecordId": "ehr-coverage-2020-0101-001"
   },
   "expectedOutput": {
-    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:c0vr-0001-aaaa-bbbb-ccccddddeeee> a clinical:CoverageRecord ;\n    clinical:providerName \"Blue Cross Blue Shield\" ;\n    clinical:memberId \"BCBS-AR-2020-78452\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    clinical:groupNumber \"GRP-98765\" ;\n    clinical:planName \"Blue PPO Select\" ;\n    clinical:planType \"ppo\" ;\n    clinical:coverageType \"primary\" ;\n    clinical:relationship \"self\" ;\n    clinical:effectivePeriodStart \"2020-01-01T00:00:00Z\"^^xsd:dateTime ;\n    clinical:payorName \"Blue Cross Blue Shield of Oregon\" ;\n    clinical:subscriberId \"BCBS-AR-2020-78452\" ;\n    health:sourceRecordId \"ehr-coverage-2020-0101-001\" .\n",
+    "turtle": "@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .\n@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .\n@prefix coverage: <https://ns.cascadeprotocol.org/coverage/v1#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n<urn:uuid:c0vr-0001-aaaa-bbbb-ccccddddeeee> a coverage:InsurancePlan ;\n    coverage:providerName \"Blue Cross Blue Shield\" ;\n    coverage:memberId \"BCBS-AR-2020-78452\" ;\n    cascade:dataProvenance cascade:ClinicalGenerated ;\n    cascade:schemaVersion \"1.3\" ;\n    coverage:groupNumber \"GRP-98765\" ;\n    coverage:planName \"Blue PPO Select\" ;\n    coverage:planType \"ppo\" ;\n    coverage:coverageType \"primary\" ;\n    coverage:subscriberRelationship \"self\" ;\n    coverage:effectiveStart \"2020-01-01\"^^xsd:date ;\n    clinical:payorName \"Blue Cross Blue Shield of Oregon\" ;\n    coverage:subscriberId \"BCBS-AR-2020-78452\" ;\n    coverage:sourceRecordId \"ehr-coverage-2020-0101-001\" .\n",
     "validationMode": "shacl-valid"
   },
   "shouldAccept": true,
   "tags": ["happy-path", "clinical", "ehr-import"],
-  "notes": "Based on Coverage 1 (Blue Cross Blue Shield PPO) from the Reference Patient Pod insurance.ttl file."
+  "notes": "Based on Coverage 1 (Blue Cross Blue Shield PPO) from the Reference Patient Pod insurance.ttl file, and matching it triple for triple. Typed coverage:InsurancePlan with coverage: predicates: the clinical:CoverageRecord spelling this fixture previously used has been deprecated since clinical v1.5 and was targeted by no shape, so the fixture validated vacuously. clinical:payorName is retained under its original predicate because coverage v1.6 has no payor property distinct from coverage:providerName, which is sh:maxCount 1. coverage:effectiveStart is xsd:date, not the xsd:dateTime clinical:effectivePeriodStart carried; the time component was a midnight-UTC placeholder."
 }
