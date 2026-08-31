@@ -479,6 +479,41 @@ def case_spec_pin_is_enforced(spec_dir, tmp):
     return f"staged drifted checkout ({head[:7]}) refused; --allow-spec-drift lifts it"
 
 
+def case_runner_emits_posix_fixture_keys(spec_dir, tmp):
+    """A fixture key is spelled with `/` on every platform, including Windows.
+
+    The key the runner writes into `results.json` is the same string
+    `KNOWN_FAILURES.json` is keyed on, and that file is shared across platforms.
+    Building it from the OS-native separator makes every subdirectory fixture
+    miss on Windows, and the gate then reports the same fixture as BOTH a new
+    failure and a baselined one that started passing.
+
+    Honest limitation: on Linux and macOS the native separator already IS `/`,
+    so this case cannot go red on CI. It is a regression guard there, and a
+    reproduction of the defect only on Windows.
+    """
+    fixtures = stage_ttl_fixture(tmp, WARN_FIXTURE)
+    _code, payload, _ = run_runner(spec_dir, fixtures)
+    reported = [f["path"] for f in payload.get("fixtures", [])]
+    if not reported:
+        raise SelfTestFailure(
+            "the runner reported no fixtures at all, so this case asserted nothing"
+        )
+    native = [k for k in reported if "\\" in k]
+    if native:
+        raise SelfTestFailure(
+            f"fixture key(s) spelled with the OS-native separator: {native}. "
+            "KNOWN_FAILURES.json is keyed on these strings and is shared across "
+            "platforms, so POSIX must be the one spelling."
+        )
+    if WARN_FIXTURE not in reported:
+        raise SelfTestFailure(
+            f"expected the subdirectory fixture under its POSIX key {WARN_FIXTURE!r}, "
+            f"got {reported}"
+        )
+    return f"subdirectory fixture keyed as {WARN_FIXTURE}, no OS-native separator"
+
+
 # --------------------------------------------------------------------------
 # Baseline gate cases
 # --------------------------------------------------------------------------
@@ -644,6 +679,64 @@ def case_unusable_baseline_is_never_success(spec_dir, tmp):
     return f"{len(checks)} unusable-baseline cases all exit 2 and say why"
 
 
+# A real subdirectory fixture, in both spellings. The gate must treat the
+# native-separator one as unusable input rather than as evidence.
+SEPARATOR_FIXTURE_POSIX = "advisory/BRCA2-reclassification.expected.ttl"
+SEPARATOR_FIXTURE_NATIVE = "advisory\\BRCA2-reclassification.expected.ttl"
+
+
+def case_gate_refuses_backslash_in_results(spec_dir, tmp):
+    """A results file carrying a native-separator key is unusable, not evidence.
+
+    Today the gate compares the two spellings raw, so the one fixture is counted
+    twice in opposite directions at once - a new failure AND a baselined failure
+    that started passing - and the gate exits 1 with a verdict that is not merely
+    wrong but impossible. Input it cannot key must be refused (exit 2) and the
+    offending key named, so the reader is pointed at the spelling rather than at
+    a fictional regression.
+    """
+    results = write_results(tmp, [(SEPARATOR_FIXTURE_NATIVE, "UNSHAPED", "fail")])
+    baseline = write_baseline(tmp, [(SEPARATOR_FIXTURE_POSIX, "UNSHAPED", "spec")])
+    code, out = run_gate(results, baseline)
+    if code != 2:
+        raise SelfTestFailure(
+            f"a results key spelled {SEPARATOR_FIXTURE_NATIVE!r} must be refused with "
+            f"exit 2, got exit {code}. A key the gate cannot match is unusable input, "
+            f"and any verdict drawn from it is a guess:\n{out}"
+        )
+    if SEPARATOR_FIXTURE_NATIVE not in out:
+        raise SelfTestFailure(
+            f"the gate refused without naming the offending key "
+            f"{SEPARATOR_FIXTURE_NATIVE!r}:\n{out}"
+        )
+    return "native-separator key in results -> exit 2, names the key"
+
+
+def case_gate_refuses_backslash_in_baseline(spec_dir, tmp):
+    """The symmetric half, and the one that protects Linux and macOS.
+
+    `--regenerate` run on Windows writes the runner's native-separator paths into
+    the shared KNOWN_FAILURES.json verbatim. Those keys then match nothing
+    anywhere else, so a platform-local defect is committed as everyone's. The
+    baseline must be refused on its own spelling, whatever the results say.
+    """
+    results = write_results(tmp, [(SEPARATOR_FIXTURE_POSIX, "UNSHAPED", "fail")])
+    baseline = write_baseline(tmp, [(SEPARATOR_FIXTURE_NATIVE, "UNSHAPED", "spec")])
+    code, out = run_gate(results, baseline)
+    if code != 2:
+        raise SelfTestFailure(
+            f"a baseline entry spelled {SEPARATOR_FIXTURE_NATIVE!r} must be refused with "
+            f"exit 2, got exit {code}. A baseline regenerated on Windows must not be "
+            f"able to break the gate for everyone else:\n{out}"
+        )
+    if SEPARATOR_FIXTURE_NATIVE not in out:
+        raise SelfTestFailure(
+            f"the gate refused without naming the offending baseline entry "
+            f"{SEPARATOR_FIXTURE_NATIVE!r}:\n{out}"
+        )
+    return "native-separator key in baseline -> exit 2, names the key"
+
+
 CASES = [
     ("unmutated positive fixture passes", case_unmutated_positive_passes),
     ("one broken constraint is caught and named", case_positive_mutation_is_caught),
@@ -657,11 +750,14 @@ CASES = [
     ("empty shapes graph aborts the run", case_empty_shapes_aborts),
     ("malformed shapes file aborts the run", case_malformed_shapes_aborts),
     ("spec pin is enforced", case_spec_pin_is_enforced),
+    ("runner emits POSIX fixture keys", case_runner_emits_posix_fixture_keys),
     ("ratchet holds when nothing changed", case_ratchet_holds_when_nothing_changed),
     ("new failure fails the ratchet", case_new_failure_fails_the_ratchet),
     ("unexpected pass fails the ratchet", case_unexpected_pass_fails_the_ratchet),
     ("changed failure reason fails the ratchet", case_changed_reason_fails_the_ratchet),
     ("unusable baseline is never success", case_unusable_baseline_is_never_success),
+    ("native-separator key in results is refused", case_gate_refuses_backslash_in_results),
+    ("native-separator key in baseline is refused", case_gate_refuses_backslash_in_baseline),
 ]
 
 
