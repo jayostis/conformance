@@ -22,9 +22,14 @@
 # left unedited, and still passes. This fixture is the other half: given the
 # predicate, the value is checked.
 #
-# Everything else here mirrors social-history-smoking.ttl, so the pair differs
-# in exactly one respect -- the value of cascade:consentScope -- and the
-# INVALID sibling isolates the sh:in constraint.
+# This file and its INVALID sibling differ in exactly one respect besides their
+# subject IRIs: the value of cascade:consentScope. So the sh:in constraint is
+# the only thing that can separate their verdicts.
+#
+# Strip the consent scope and this record is what social-history-smoking.ttl is
+# -- a bare clinical:SocialHistoryRecord evaluating that fixture's same 12
+# constraint checks. The four this file adds on top, 12 -> 16, are
+# cascade:ConsentScopeShape's and nothing else's.
 #
 # Fully synthetic.
 

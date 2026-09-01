@@ -23,6 +23,14 @@
 # here would fail before a single fixture ran. Move `repo=` back to the org in
 # the same commit that re-pins to an org SHA, once this vocabulary lands there.
 #
+# WHAT KEEPS THIS COMMIT REACHABLE, because a branch tip is not a guarantee: the
+# fork carries `refs/tags/vocab/core-v3.10` pointing at this exact SHA, verified
+# with `git ls-remote`. A tag holds the object even if the fork's `main` is later
+# reset or rebased onto upstream, which is the normal end of a fork workflow and
+# would otherwise leave every CI run -- including runs of unrelated PRs -- dying
+# at `git checkout` on an object that has been garbage-collected. Do not re-pin
+# to a fork SHA that no tag points at.
+#
 # THIS PIN MOVES THREE VOCABULARIES, not one. core 3.8 -> 3.10, clinical
 # 1.17 -> 1.19, coverage 1.6 -> 1.7. Two of those five version steps are
 # NOT widening -- clinical v1.18 and coverage v1.7 both move records from

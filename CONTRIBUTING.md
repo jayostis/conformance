@@ -30,8 +30,14 @@ python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r scripts/requirements.txt
 
-# check spec out at the pinned commit
-git -C ../spec checkout "$(grep '^commit=' scripts/SPEC_PIN | cut -d= -f2)"
+# check spec out at the pinned commit.
+# Read BOTH lines: `repo=` names which remote the commit is on, and it is not
+# always the org. Reading only `commit=` fails with "reference is not a tree"
+# whenever the pin is ahead of the-cascade-protocol/spec.
+SPEC_REPO="$(grep '^repo=' scripts/SPEC_PIN | cut -d= -f2-)"
+SPEC_COMMIT="$(grep '^commit=' scripts/SPEC_PIN | cut -d= -f2)"
+git -C ../spec fetch "${SPEC_REPO}.git" "$SPEC_COMMIT"
+git -C ../spec checkout "$SPEC_COMMIT"
 ```
 
 CI runs Python 3.13.

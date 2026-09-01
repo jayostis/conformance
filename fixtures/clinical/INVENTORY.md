@@ -67,13 +67,14 @@ bound value set.
 
 `cascade:consentScope` is the first constraint in this specification that
 mentions consent. Before this pair, `cascade:ConsentScopeShape` shipped with
-**zero** constraint executions behind it — the condition #5 and #6 report for
-`checkup:`, `pots:` and `clinical:CoverageRecord`, and the one this repository
-exists to catch.
+**zero** constraint executions behind it — a released shape that no fixture
+reaches, which is the condition issues #5 (`checkup:` and `pots:`) and #6
+(`clinical:CoverageRecord`) were filed for, and the one this repository exists
+to catch.
 
 | Fixture | Expect | Scenario |
 |---|---|---|
-| `social-history-consent-scope.VALID.ttl` | PASS | `cascade:consentScope cascade:SocialHistoryConsent` on a social history record — the class `clinical.ttl` says "requires separate consent scope", so the record type a producer will write the property on first. Otherwise identical to `social-history-smoking.ttl`, so the constraint under test is the only difference between it and the fixture next to it. |
+| `social-history-consent-scope.VALID.ttl` | PASS | `cascade:consentScope cascade:SocialHistoryConsent` on a social history record — the class `clinical.ttl` says "requires separate consent scope", so the record type a producer will write the property on first. It and its INVALID sibling differ in exactly one respect besides their subject IRIs — the value of `cascade:consentScope` — so `sh:in` is the only thing that can separate their verdicts. (It is *not* byte-identical to `social-history-smoking.ttl`: it carries a different `health:smokingStatus` and no `clinical:packsPerYear`. Neither is constrained on this class, which the counts show — strip the consent scope and it evaluates that fixture's same 12 checks.) |
 | `social-history-consent-scope-wrong-value.INVALID.ttl` | FAIL | `cascade:consentScope cascade:SelfReported`. **The value being a real term is the point.** `cascade:SelfReported` is a `cascade:DataProvenance` subclass declared in `core.ttl` since v1, so an invented IRI would have been caught by any constraint that merely checked the value resolved; an IRI that exists in the same namespace and is simply not in the closed `cascade:ConsentScope` list is caught only by the constraint this release added. It is also the confusion a producer will actually make, provenance being the other `cascade:` code list a record of this shape carries. Exactly one violation fires: `cascade:ConsentScopeShape / cascade:consentScope / sh:InConstraintComponent`. |
 
 **What is deliberately NOT here, and must not be added.** There is no fixture

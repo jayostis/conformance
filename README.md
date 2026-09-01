@@ -56,7 +56,7 @@ The third exists because Cascade shapes report a value that existing data alread
 | Directory | Count | Positive | Negative | Warn | What it covers |
 |---|---|---|---|---|---|
 | `core/` | 15 | 6 | 8 | 1 | AIExtracted provenance; the `core` v3.5 ORIGIN axis (`cascade:sourceIdentity`); and the `core` v3.7 `cascade:Attachment` store — one negative per Violation constraint, three path/digest negatives, and the media-type warning |
-| `clinical/` | 12 | 7 | 2 | 3 | Social history in Turtle form, and the `clinical` v1.16 batch: encounter facts and participation, the two document status axes and the two attribution axes, and three of the five `clinical:status` binding sets |
+| `clinical/` | 14 | 8 | 3 | 3 | Social history in Turtle form, the `clinical` v1.16 batch (encounter facts and participation, the two document status axes and the two attribution axes, and three of the five `clinical:status` binding sets), and the `core` v3.10 consent-scope pair |
 | `genomics/phenopackets/` | 9 | 9 | 0 | 0 | GA4GH Phenopacket conversion oracles |
 | `genomics/fhir-genomics-ig/` | 7 | 7 | 0 | 0 | HL7 Genomics Reporting IG bundle conversion oracles |
 | `evidence/` | 7 | 3 | 4 | 0 | Assertion facet / evidence grounding rules (evidence v1-draft) |
@@ -67,9 +67,9 @@ The third exists because Cascade shapes report a value that existing data alread
 | `coverage/` | 2 | 1 | 1 | 0 | `coverage:status` (`coverage` v1.5) |
 | `genomics/vcf/` | 1 | 1 | 0 | 0 | VCF conversion oracle |
 | `genomics/vrs/` | 1 | 1 | 0 | 0 | GA4GH VRS allele conversion oracle |
-| **Total** | **71** | **47** | **18** | **6** | |
+| **Total** | **73** | **48** | **19** | **6** | |
 
-**Grand total: 161 executable fixtures** (90 JSON + 71 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
+**Grand total: 163 executable fixtures** (90 JSON + 73 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
 
 A further 94 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
@@ -146,32 +146,36 @@ The runner also refuses a checkout that sits at the pinned commit but has uncomm
 `.github/workflows/conformance.yml` runs on every push to `main` and every pull request, in two jobs:
 
 - **runner mutation tests** runs `scripts/selftest_runner.py`. This job is green and must stay green. If it goes red, no result from the other job means anything.
-- **fixture suite** runs every fixture, prints the whole report, then ratchets it against `KNOWN_FAILURES.json`. The suite itself is still red and the report still names all 28 failures; the job is green only while nothing has got worse and nothing has got better without the record being updated. See [What a green CI run means](#what-a-green-ci-run-means).
+- **fixture suite** runs every fixture, prints the whole report, then ratchets it against `KNOWN_FAILURES.json`. The suite itself is still red and the report still names all 26 failures; the job is green only while nothing has got worse and nothing has got better without the record being updated. See [What a green CI run means](#what-a-green-ci-run-means).
 
 ## Current status
 
-As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.7, health 2.8, clinical 1.16, coverage 1.5, checkup 3.3):
+As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.10, health 2.8, clinical 1.19, coverage 1.7, checkup 3.3):
 
 ```
-passed  133
-failed   28
+passed  137
+failed   26
 skipped   0
-total   161        63,281 constraint checks evaluated
+total   163        63,354 constraint checks evaluated
 ```
+
+These numbers move with the pin. Re-measure them in the same commit that
+re-pins — a "Current status" block quoting a count no run reproduces is how a
+reader learns to stop trusting the section.
 
 The first execution of these fixtures, against the older `spec` revision the pin
 originally named, was **43 passed / 68 failed / 0 skipped / 111 total**. Three things
 moved it: 19 fixtures started passing on their own when `spec` defined and shaped the
 classes they had always asserted; 22 were fixed here; 50 were added. No fixture that
-passed has since failed. The remaining 28 break down as:
+passed has since failed. The remaining 26 break down as:
 
 | Reason | Count | Owned by | Notes |
 |---|---|---|---|
-| `VIOLATIONS` | 16 | `spec` (4), undecided (12) | Fifteen are conversion oracles under `fixtures/genomics/`; the sixteenth is `clinical/status-laboratoryreport-in-progress.WARN.ttl`, described under [A defect the v1.16 batch found](#a-defect-the-v116-batch-found) below. Each `.expected.ttl` records what the importer currently emits from the neighbouring `.input.json`, so a violation means either the importer must emit more or the shape must ask less. Three are settled — GA4GH Phenopackets do not carry a date of birth or a biological sex, so `cascade:PatientProfileShape` is stricter than the source format can satisfy. The other twelve need triage one at a time. |
-| `UNSHAPED` | 9 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `clinical:CoverageRecord`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. `proc-001/002/003` left this row at core 3.6 / health 2.7 / clinical 1.15: they asserted `health:ProcedureRecord`, which `health.ttl` never defined, and clinical v1.15 ruled `clinical:` the canonical procedure spelling, so they were retargeted onto `clinical:Procedure` and all three now run against real constraints. |
+| `VIOLATIONS` | 15 | `spec` (4), undecided (11) | All fifteen are conversion oracles under `fixtures/genomics/`. `clinical/status-laboratoryreport-in-progress.WARN.ttl` left this row at clinical v1.17, which moved the two Warning bindings onto target-class shapes so `sh:node` no longer escalates them — see [A defect the v1.16 batch found](#a-defect-the-v116-batch-found) below, kept as the record of a defect these fixtures caught. Each `.expected.ttl` records what the importer currently emits from the neighbouring `.input.json`, so a violation means either the importer must emit more or the shape must ask less. Three are settled — GA4GH Phenopackets do not carry a date of birth or a biological sex, so `cascade:PatientProfileShape` is stricter than the source format can satisfy. The other twelve need triage one at a time. |
+| `UNSHAPED` | 8 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. `clinical:CoverageRecord` left this row from both ends at once — PR #4 retyped `coverage-001` to `coverage:InsurancePlan`, so no fixture asserts it, and clinical v1.18 then shaped the class. The residue is the opposite gap, tracked in #6: a shape with no fixture behind it. `proc-001/002/003` left this row at core 3.6 / health 2.7 / clinical 1.15: they asserted `health:ProcedureRecord`, which `health.ttl` never defined, and clinical v1.15 ruled `clinical:` the canonical procedure spelling, so they were retargeted onto `clinical:Procedure` and all three now run against real constraints. |
 | `NO_TURTLE` | 3 | `conformance` | Comment-only placeholder `.ttl` files: two unauthored advisory oracles, and `genomics/phenopackets/biosamples-SAMN05324082.expected.ttl`, which is deliberately empty because it asserts `detect() === false` — not a SHACL assertion, so it needs a different home. |
 
-Each of the 28 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
+Each of the 26 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
 constraint it violates and the repo that owns the fix.
 
 ### A defect the v1.16 batch found
@@ -193,10 +197,15 @@ Reproduced on two independent engines, which is what rules out an implementation
 quirk: pyshacl 0.30.1 (this runner) and cascade-cli 0.17.0 (rdf-validate-shacl) agree
 on the verdict, and both agree the `ClinicalDocument` twin is only warned.
 
-`clinical/status-laboratoryreport-in-progress.WARN.ttl` asserts what the release
-*says* rather than what the shapes currently do, and is baselined under `ownedBy:
-spec`. The ratchet fails in both directions, so when `spec` fixes the severity the
-entry must be removed in the same commit.
+**FIXED, and this section is kept as the record rather than as a live failure.**
+`clinical/status-laboratoryreport-in-progress.WARN.ttl` asserted what the release
+*said* rather than what its shapes did, and was baselined under `ownedBy: spec`.
+clinical v1.17 moved the two Warning bindings off `ClinicalDocumentShape` onto
+target-class shapes (`DocumentStatusShape`, `DocumentReferenceStatusShape`), so
+`sh:node` no longer escalates them; the fixture passes and its baseline entry
+was removed in the commit that re-pinned. That is the ratchet working in the
+direction people forget it has: a listed failure that starts passing fails CI
+too, which is what forced the entry out rather than letting it go stale.
 
 The six fixtures added for core v3.5 were measured in both directions before they
 were committed. Against the previous pin (`spec` 9461fa9, core 3.4) the two negatives

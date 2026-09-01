@@ -32,6 +32,13 @@ Do **not** load `llms-full.txt` from that site. It is roughly 1.3 MB, larger tha
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r scripts/requirements.txt
+# Read BOTH lines. `repo=` names which remote the pinned commit is on and is
+# not always the org; reading only `commit=` fails with "reference is not a
+# tree" whenever the pin is ahead of the-cascade-protocol/spec. Do NOT skip
+# the checkout on failure -- measuring against whatever ../spec happens to be
+# at is worse than not measuring.
+git -C ../spec fetch "$(grep '^repo=' scripts/SPEC_PIN | cut -d= -f2-).git" \
+                     "$(grep '^commit=' scripts/SPEC_PIN | cut -d= -f2)"
 git -C ../spec checkout "$(grep '^commit=' scripts/SPEC_PIN | cut -d= -f2)"
 
 python3 scripts/run_conformance.py --spec-dir ../spec --json results.json  # the truth
