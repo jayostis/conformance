@@ -14,10 +14,23 @@ catches new failures is a list that grows and never shrinks, and a permanently
 red job and a suppressed failure end the same way: nobody reads either. Failing
 when a baselined fixture starts passing is what forces the list down.
 
-Rules, in the order they are checked:
+Rules, in the order they are checked. Both documents are loaded first, and a
+file that does not parse into a JSON object is exit 2 there — the rules below
+all read fields off them, so a non-object would crash rather than be judged.
 
-1.  The baseline file must exist, parse, and declare `entries`. A missing or
-    unreadable baseline is exit 2, never a pass.
+0.  Fixture keys are spelled POSIX on every platform, on both sides. A key
+    carrying the OS-native separator matches nothing elsewhere, so it is exit 2
+    naming the key rather than a verdict nobody can trust. Walking those keys is
+    also where each document's key list is checked one level below rule 1's
+    document shape: `fixtures`/`entries` must be a list of objects, each
+    carrying a string `path`/`fixture` and -- wherever the entry is one rule 5
+    actually keys -- a string `reason`. Both halves are checked because both are
+    read by bare subscript downstream, so validating only the first leaves the
+    identical failure one field over. A malformed entry is refused there, never
+    skipped -- skipping drops it from the comparison and lets the gate draw a
+    verdict from evidence it could not read.
+1.  The baseline file must exist, parse into an object, and declare `entries`.
+    A missing or unreadable baseline is exit 2, never a pass.
 2.  The results file must describe a real run: at least one fixture executed and
     at least one constraint evaluated. A degenerate report cannot be ratcheted.
 3.  The baseline records the `spec` revision it was measured against. Applying a
@@ -58,9 +71,18 @@ def load_json(path: Path, what: str) -> dict:
     if not path.is_file():
         abort(f"{what} not found at {path}. A gate with no {what} cannot decide anything.")
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        loaded = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         abort(f"{what} at {path} could not be read: {exc}")
+    else:
+        # Parsing is not enough. A top-level array or scalar parses cleanly and
+        # then has no `.get`, so every rule below would raise AttributeError and
+        # exit 1 — the code CI reads as a real ratchet violation. Unusable input
+        # is exit 2, here, before anything tries to read a verdict out of it.
+        if not isinstance(loaded, dict):
+            abort(f"{what} at {path} is not a JSON object but "
+                  f"{type(loaded).__name__}. A gate cannot read anything out of it.")
+        return loaded
     return {}  # unreachable, keeps type checkers quiet
 
 
@@ -70,6 +92,97 @@ def key(fixture: str, reason: str) -> tuple[str, str]:
 
 def render(k: tuple[str, str]) -> str:
     return f"{k[0]}  [{k[1]}]"
+
+
+def fixture_keys(results: dict, baseline: dict,
+                 baseline_name: str) -> list[tuple[str, str, str | None]]:
+    """Every (fixture, reason) key in both documents, or exit 2 naming the one that is unusable.
+
+    `load_json` refuses a document that is not an object; this refuses the same
+    way one level down, where the keys actually live. Tolerating a malformed
+    entry here would be worse than crashing on it: the entry is dropped, the gate
+    carries on, and it draws a verdict from evidence it could not read. A results
+    entry whose `path` is not a string vanishes, so the baselined fixture looks
+    like it started passing while the unreadable one looks new -- one fixture
+    counted in both directions at once, reported as exit 1, which CI reads as a
+    genuine ratchet violation. A `fixtures` mapping iterates to bare strings and
+    raises AttributeError further down, exit 1 again. Both are unusable input,
+    and unusable input is exit 2 here, before anything reads a verdict out of it.
+
+    BOTH halves of the key are validated, because rule 5 and `regenerate()` both
+    read both by bare subscript. Checking only the first half leaves precisely
+    the same defect one field over: an entry carrying a perfectly good `fixture`
+    and no `reason` raises KeyError and exits 1, the code CI reads as a real
+    ratchet violation. The baseline half is the one a human reaches --
+    KNOWN_FAILURES.json is hand-edited by whoever owns a failure, so a dropped
+    `reason` is an ordinary authoring slip, needing no Windows, no stale runner
+    and no --regenerate to produce.
+
+    A results fixture that PASSED is keyed by nothing: rule 5 and `regenerate()`
+    both skip it, so its `reason` is never read and is not required here.
+    Refusing input that is in fact usable is the mirror of the defect this
+    function exists to prevent. `keyed` is spelled as the same predicate both
+    consumers use, so the check and the use cannot drift apart.
+    """
+    triples: list[tuple[str, str, str | None]] = []
+    for where, document, list_field, key_field, keyed in (
+        ("results file", results, "fixtures", "path",
+         lambda item: item.get("outcome") != "pass"),
+        (baseline_name, baseline, "entries", "fixture",
+         lambda item: True),
+    ):
+        items = document.get(list_field, [])
+        if not isinstance(items, list):
+            abort(f"{where}: `{list_field}` is not a list but {type(items).__name__}. "
+                  f"A gate cannot read fixture keys out of it.")
+        for i, item in enumerate(items):
+            if not isinstance(item, dict):
+                abort(f"{where}: `{list_field}[{i}]` is not a JSON object but "
+                      f"{type(item).__name__}. Every entry must carry a `{key_field}`.")
+            k = item.get(key_field)
+            if not isinstance(k, str):
+                abort(f"{where}: `{list_field}[{i}].{key_field}` is not a string but "
+                      f"{type(k).__name__} ({k!r}). A key that is not a string matches "
+                      f"nothing, so any verdict drawn from it would be a guess.")
+            reason = item.get("reason")
+            if keyed(item) and not isinstance(reason, str):
+                abort(f"{where}: `{list_field}[{i}].reason` is not a string but "
+                      f"{type(reason).__name__} ({reason!r}), on {key_field} {k!r}. "
+                      f"Entries are keyed on (fixture, reason); half a key matches "
+                      f"nothing, so any verdict drawn from it would be a guess.")
+            triples.append((f"{where}, {list_field}[].{key_field}", k, reason))
+    return triples
+
+
+def refuse_native_separator_keys(results: dict, baseline: dict, baseline_name: str) -> None:
+    """A fixture key is spelled with `/` on every platform, or it is not usable.
+
+    KNOWN_FAILURES.json is keyed on these strings and is shared across Linux,
+    macOS and Windows, so a key carrying the OS-native separator matches nothing
+    and turns one fixture into both a new failure and a baselined one that
+    started passing. Normalising it here would make malformed input work
+    silently; every other check in this file refuses instead, and so does this.
+
+    Both sides are checked -- `fixture_keys` walks them and refuses anything it
+    cannot key at all. The results half catches a stale or old-runner report
+    locally; the baseline half catches keys a pre-fix `--regenerate` on Windows
+    committed into the shared file, which is the half that protects everyone
+    downstream.
+    """
+    offenders = [(where, k)
+                 for where, k, _reason in fixture_keys(results, baseline, baseline_name)
+                 if "\\" in k]
+    if offenders:
+        abort(
+            f"{len(offenders)} fixture key(s) are spelled with the OS-native separator "
+            "rather than POSIX `/`:\n" +
+            "\n".join(f"    {where}: {k}" for where, k in offenders) +
+            "\n  These keys match nothing on another platform, so any verdict drawn from "
+            "them would be a guess.\n"
+            "  Fix: re-run scripts/run_conformance.py to regenerate the results, and "
+            "respell any committed\n"
+            "  baseline entry with `/`."
+        )
 
 
 # --------------------------------------------------------------------------
@@ -141,6 +254,11 @@ def main(argv=None) -> int:
 
     results = load_json(results_path, "results file")
     baseline = load_json(baseline_path, "baseline")
+
+    # Rule 0: keys must be spelled the one way. Checked before anything reads
+    # them, --regenerate included, so a native-separator key can neither produce
+    # a verdict nor be written into the shared baseline.
+    refuse_native_separator_keys(results, baseline, baseline_path.name)
 
     if args.regenerate:
         return regenerate(baseline_path, results, baseline)

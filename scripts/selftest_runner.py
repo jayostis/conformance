@@ -479,6 +479,41 @@ def case_spec_pin_is_enforced(spec_dir, tmp):
     return f"staged drifted checkout ({head[:7]}) refused; --allow-spec-drift lifts it"
 
 
+def case_runner_emits_posix_fixture_keys(spec_dir, tmp):
+    """A fixture key is spelled with `/` on every platform, including Windows.
+
+    The key the runner writes into `results.json` is the same string
+    `KNOWN_FAILURES.json` is keyed on, and that file is shared across platforms.
+    Building it from the OS-native separator makes every subdirectory fixture
+    miss on Windows, and the gate then reports the same fixture as BOTH a new
+    failure and a baselined one that started passing.
+
+    Honest limitation: on Linux and macOS the native separator already IS `/`,
+    so this case cannot go red on CI. It is a regression guard there, and a
+    reproduction of the defect only on Windows.
+    """
+    fixtures = stage_ttl_fixture(tmp, WARN_FIXTURE)
+    _code, payload, _ = run_runner(spec_dir, fixtures)
+    reported = [f["path"] for f in payload.get("fixtures", [])]
+    if not reported:
+        raise SelfTestFailure(
+            "the runner reported no fixtures at all, so this case asserted nothing"
+        )
+    native = [k for k in reported if "\\" in k]
+    if native:
+        raise SelfTestFailure(
+            f"fixture key(s) spelled with the OS-native separator: {native}. "
+            "KNOWN_FAILURES.json is keyed on these strings and is shared across "
+            "platforms, so POSIX must be the one spelling."
+        )
+    if WARN_FIXTURE not in reported:
+        raise SelfTestFailure(
+            f"expected the subdirectory fixture under its POSIX key {WARN_FIXTURE!r}, "
+            f"got {reported}"
+        )
+    return f"subdirectory fixture keyed as {WARN_FIXTURE}, no OS-native separator"
+
+
 # --------------------------------------------------------------------------
 # Baseline gate cases
 # --------------------------------------------------------------------------
@@ -636,12 +671,144 @@ def case_unusable_baseline_is_never_success(spec_dir, tmp):
     code7, out7 = run_gate(drifted_path, baseline)
     checks.append(("drifted run", code7, "--allow-spec-drift" in out7))
 
+    # A top-level JSON array parses, so nothing rejects it on the way in, but it
+    # has no `.get`. Every rule that reads either document must find it unusable
+    # rather than crash on it: a traceback exits 1, which CI reads as a real
+    # ratchet violation, and unusable input must never produce a verdict that
+    # looks substantive. The "no entries list" case above only covers a dict.
+    array_baseline = tmp / "arraybaseline.json"
+    array_baseline.write_text("[]\n", encoding="utf-8")
+    code8, out8 = run_gate(results, array_baseline)
+    checks.append(("array-shaped baseline", code8, "not a JSON object" in out8))
+
+    array_results = tmp / "arrayresults.json"
+    array_results.write_text("[]\n", encoding="utf-8")
+    code9, out9 = run_gate(array_results, baseline)
+    checks.append(("array-shaped results", code9, "not a JSON object" in out9))
+
+    # The two cases above stop at the top level of each document. INSIDE the
+    # lists a malformed entry is currently skipped rather than refused, and a
+    # skip is worse than a crash: the gate carries on and draws a verdict from
+    # evidence it could not read.
+    #
+    # A non-string `path` is the dangerous one. The entry is dropped, so the
+    # baselined fixture looks like it started passing while the unreadable one
+    # looks new, and the gate reports the impossible "1 new + 1 now passing" —
+    # the exact signature this whole file exists to make impossible. It exits 1,
+    # which CI reads as a real ratchet violation, with no traceback to say
+    # otherwise.
+    nonstring_key = json.loads(results.read_text(encoding="utf-8"))
+    nonstring_key["fixtures"][0]["path"] = 123
+    nonstring_path = tmp / "nonstringkey.json"
+    nonstring_path.write_text(json.dumps(nonstring_key, indent=2) + "\n", encoding="utf-8")
+    code10, out10 = run_gate(nonstring_path, baseline)
+    checks.append(("non-string fixture key", code10, "not a string" in out10))
+
+    # A `fixtures` mapping iterates to its keys, so every entry is a bare string
+    # and the first `.get` raises AttributeError — exit 1 again, one level below
+    # where the document-shape check looks.
+    mapping_fixtures = json.loads(results.read_text(encoding="utf-8"))
+    mapping_fixtures["fixtures"] = {"b.json": "fail"}
+    mapping_path = tmp / "mappingfixtures.json"
+    mapping_path.write_text(json.dumps(mapping_fixtures, indent=2) + "\n", encoding="utf-8")
+    code11, out11 = run_gate(mapping_path, baseline)
+    checks.append(("fixtures is not a list", code11, "not a list" in out11))
+
+    # Entries are keyed on (fixture, reason), and only the FIRST half is
+    # validated. `reason` is still taken by bare subscript at both call sites,
+    # so an entry carrying a perfectly good key and no `reason` raises KeyError
+    # and exits 1 — the same unusable-input-reported-as-a-ratchet-violation
+    # class, one field over.
+    #
+    # The baseline half is the realistic one: KNOWN_FAILURES.json is hand-edited
+    # by whoever owns a failure, so a dropped `reason` is an authoring slip, not
+    # malformed machine output. It needs no Windows and no stale runner.
+    #
+    # These assert SELF-CHECK FAILED and not merely the field name: run_gate
+    # returns stdout+stderr, so `KeyError: 'reason'` would satisfy a bare
+    # substring test on "reason" while the gate was still crashing.
+    noreason_baseline = json.loads(baseline.read_text(encoding="utf-8"))
+    del noreason_baseline["entries"][0]["reason"]
+    noreason_baseline_path = tmp / "noreasonbaseline.json"
+    noreason_baseline_path.write_text(
+        json.dumps(noreason_baseline, indent=2) + "\n", encoding="utf-8")
+    code12, out12 = run_gate(results, noreason_baseline_path)
+    checks.append(("baseline entry without reason", code12,
+                   "SELF-CHECK FAILED" in out12 and "reason" in out12))
+
+    noreason_results = json.loads(results.read_text(encoding="utf-8"))
+    del noreason_results["fixtures"][0]["reason"]
+    noreason_results_path = tmp / "noreasonresults.json"
+    noreason_results_path.write_text(
+        json.dumps(noreason_results, indent=2) + "\n", encoding="utf-8")
+    code13, out13 = run_gate(noreason_results_path, baseline)
+    checks.append(("results entry without reason", code13,
+                   "SELF-CHECK FAILED" in out13 and "reason" in out13))
+
     for label, code, explained in checks:
         if code != 2:
             raise SelfTestFailure(f"{label} baseline returned exit {code}, expected 2")
         if not explained:
             raise SelfTestFailure(f"{label} aborted without explaining itself")
     return f"{len(checks)} unusable-baseline cases all exit 2 and say why"
+
+
+# A real subdirectory fixture, in both spellings. The gate must treat the
+# native-separator one as unusable input rather than as evidence.
+SEPARATOR_FIXTURE_POSIX = "advisory/BRCA2-reclassification.expected.ttl"
+SEPARATOR_FIXTURE_NATIVE = "advisory\\BRCA2-reclassification.expected.ttl"
+
+
+def case_gate_refuses_backslash_in_results(spec_dir, tmp):
+    """A results file carrying a native-separator key is unusable, not evidence.
+
+    Today the gate compares the two spellings raw, so the one fixture is counted
+    twice in opposite directions at once - a new failure AND a baselined failure
+    that started passing - and the gate exits 1 with a verdict that is not merely
+    wrong but impossible. Input it cannot key must be refused (exit 2) and the
+    offending key named, so the reader is pointed at the spelling rather than at
+    a fictional regression.
+    """
+    results = write_results(tmp, [(SEPARATOR_FIXTURE_NATIVE, "UNSHAPED", "fail")])
+    baseline = write_baseline(tmp, [(SEPARATOR_FIXTURE_POSIX, "UNSHAPED", "spec")])
+    code, out = run_gate(results, baseline)
+    if code != 2:
+        raise SelfTestFailure(
+            f"a results key spelled {SEPARATOR_FIXTURE_NATIVE!r} must be refused with "
+            f"exit 2, got exit {code}. A key the gate cannot match is unusable input, "
+            f"and any verdict drawn from it is a guess:\n{out}"
+        )
+    if SEPARATOR_FIXTURE_NATIVE not in out:
+        raise SelfTestFailure(
+            f"the gate refused without naming the offending key "
+            f"{SEPARATOR_FIXTURE_NATIVE!r}:\n{out}"
+        )
+    return "native-separator key in results -> exit 2, names the key"
+
+
+def case_gate_refuses_backslash_in_baseline(spec_dir, tmp):
+    """The symmetric half, and the one that protects Linux and macOS.
+
+    `--regenerate` run on Windows writes the runner's native-separator paths into
+    the shared KNOWN_FAILURES.json verbatim. Those keys then match nothing
+    anywhere else, so a platform-local defect is committed as everyone's. The
+    baseline must be refused on its own spelling, whatever the results say.
+    """
+    results = write_results(tmp, [(SEPARATOR_FIXTURE_POSIX, "UNSHAPED", "fail")])
+    baseline = write_baseline(tmp, [(SEPARATOR_FIXTURE_NATIVE, "UNSHAPED", "spec")])
+    code, out = run_gate(results, baseline)
+    if code != 2:
+        raise SelfTestFailure(
+            f"a baseline entry spelled {SEPARATOR_FIXTURE_NATIVE!r} must be refused with "
+            f"exit 2, got exit {code}. A baseline regenerated on Windows must not be "
+            f"able to break the gate for everyone else:\n{out}"
+        )
+    if SEPARATOR_FIXTURE_NATIVE not in out:
+        raise SelfTestFailure(
+            f"the gate refused without naming the offending baseline entry "
+            f"{SEPARATOR_FIXTURE_NATIVE!r}:\n{out}"
+        )
+    return "native-separator key in baseline -> exit 2, names the key"
 
 
 CASES = [
@@ -657,11 +824,14 @@ CASES = [
     ("empty shapes graph aborts the run", case_empty_shapes_aborts),
     ("malformed shapes file aborts the run", case_malformed_shapes_aborts),
     ("spec pin is enforced", case_spec_pin_is_enforced),
+    ("runner emits POSIX fixture keys", case_runner_emits_posix_fixture_keys),
     ("ratchet holds when nothing changed", case_ratchet_holds_when_nothing_changed),
     ("new failure fails the ratchet", case_new_failure_fails_the_ratchet),
     ("unexpected pass fails the ratchet", case_unexpected_pass_fails_the_ratchet),
     ("changed failure reason fails the ratchet", case_changed_reason_fails_the_ratchet),
     ("unusable baseline is never success", case_unusable_baseline_is_never_success),
+    ("native-separator key in results is refused", case_gate_refuses_backslash_in_results),
+    ("native-separator key in baseline is refused", case_gate_refuses_backslash_in_baseline),
 ]
 
 
