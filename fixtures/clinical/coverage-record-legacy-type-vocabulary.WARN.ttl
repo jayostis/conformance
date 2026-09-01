@@ -34,9 +34,21 @@
 #
 # EVERYTHING ELSE HERE MUST BE CLEAN, or the fixture proves nothing: a .WARN.
 # fixture that also violates something is rejected outright and is not evidence
-# about the warning. So the three sh:Violation constraints on
-# clinical:CoverageRecordShape — providerName, memberId, coverageType PRESENCE —
-# are all satisfied. The value being wrong is the only thing wrong.
+# about the warning. clinical:CoverageRecordShape has FIVE constraints that can
+# report at sh:Violation, not three. Three carry sh:severity sh:Violation
+# explicitly — providerName, memberId, coverageType PRESENCE — and two more
+# declare no sh:severity at all, which in SHACL means the default, and the
+# default is sh:Violation: cascade:dataProvenance (sh:in, sh:minCount 1,
+# sh:maxCount 1) and cascade:schemaVersion (sh:datatype, sh:minCount 1,
+# sh:maxCount 1, sh:pattern major.minor). All five are satisfied below, which
+# is why this record reaches the warning at all.
+#
+# CARRY THE LAST TWO ACROSS if you write a sibling fixture from this comment as
+# the checklist. They are easy to miss precisely because the shape does not
+# spell their severity out: dropping cascade:schemaVersion, or writing "1.3.0"
+# where the pattern wants "1.3", produces a violation, and a .WARN. fixture
+# that violates anything fails outright — with nothing in this header to say
+# why. The value being wrong is the only thing wrong here.
 #
 # Fully synthetic: invented payer, member and group numbers.
 

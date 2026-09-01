@@ -72,15 +72,18 @@ The third exists because Cascade shapes report a value that existing data alread
 
 **Grand total: 166 executable fixtures** (92 JSON + 74 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
 
-A further 94 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
+A further 97 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
 ## Running the suite
 
 ```bash
 python3 -m pip install -r scripts/requirements.txt
 
-# Clone the pinned spec revision (see scripts/SPEC_PIN for the commit)
-git clone https://github.com/the-cascade-protocol/spec.git ../spec
+# Clone the pinned spec revision. Read BOTH lines of scripts/SPEC_PIN: `repo=`
+# names which remote the pinned commit is on and is not always the org, so
+# reading only `commit=` fails with "reference is not a tree" whenever the pin
+# is ahead of the-cascade-protocol/spec.
+git clone "$(grep '^repo=' scripts/SPEC_PIN | cut -d= -f2-).git" ../spec
 git -C ../spec checkout "$(grep '^commit=' scripts/SPEC_PIN | cut -d= -f2)"
 
 # 1. the truth: execute and report every fixture
