@@ -1,0 +1,44 @@
+# core v3.10 — NEGATIVE. A consent scope whose value is not a consent scope.
+#
+# The value here, cascade:SelfReported, is a REAL term: a cascade:DataProvenance
+# subclass declared in core.ttl since v1. That is the whole point of choosing
+# it. A fixture that put an invented IRI in this position would be rejected by
+# any constraint at all, including one that merely checked the value resolved;
+# an IRI that exists in the same namespace and is simply not a member of the
+# closed cascade:ConsentScope code list is rejected only by the constraint this
+# release added -- cascade:ConsentScopeShape / cascade:consentScope / sh:in.
+# It is also the confusion a producer will actually make, since provenance is
+# the other cascade: code list a record of this shape carries.
+#
+# WHY THIS IS THE ONLY NEGATIVE THIS RELEASE ADMITS. There is no fixture here
+# asserting that a MISSING consent scope is rejected, because core v3.10
+# requires the property nowhere and is not meant to. That is ratchet step 2 --
+# sh:minCount 1 at sh:Warning on clinical:SocialHistoryRecordShape, once a
+# reference producer emits the predicate -- and it belongs to a later vocabulary
+# version.
+#
+# WHAT THE POLARITY SUFFIX IS CATCHING. Against the previous pin (spec 9b13ae4,
+# core v3.8) no shape anywhere mentions consent, so this file and its VALID
+# sibling are indistinguishable and this one passes. .INVALID.ttl is what turns
+# that silence into a reported NO_VIOLATION.
+#
+# Everything else on this record is valid, so exactly one constraint rejects it:
+# sh:InConstraintComponent on cascade:consentScope.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:cascade:social-history:example-consent-scope-wrong-value>
+    a clinical:SocialHistoryRecord ;
+    clinical:socialHistoryCategory "smokingStatus" ;
+    health:smokingStatus "never" ;
+
+    # THE DEFECT: a cascade:DataProvenance individual where a
+    # cascade:ConsentScope individual belongs.
+    cascade:consentScope cascade:SelfReported ;
+
+    cascade:dataProvenance cascade:EHRVerified .

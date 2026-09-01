@@ -1,0 +1,41 @@
+# core v3.10 — POSITIVE. A social history record carrying a consent scope.
+#
+# core v3.10 declares cascade:consentScope, the property whose only value --
+# cascade:SocialHistoryConsent -- had existed since core v3.0 with nothing to
+# carry it and nothing to check it. cascade:ConsentScopeShape is the first
+# constraint in this specification that mentions consent, and before this
+# fixture pair it shipped with zero constraint executions behind it: a record
+# carrying a consent scope that was absent, wrong or invented validated
+# identically.
+#
+# WHY A SOCIAL HISTORY RECORD. clinical.ttl states on clinical:SocialHistoryRecord
+# that the class "requires separate consent scope (cascade:SocialHistoryConsent)",
+# so this is the record type the property was defined for, and the one a producer
+# will write it on first.
+#
+# WHAT MUST NOT BE READ INTO THIS FIXTURE. It does not assert that a social
+# history record needs a consent scope. Nothing in core v3.10 requires the
+# property anywhere, at any severity: cascade:ConsentScopeShape is
+# sh:targetSubjectsOf, so it constrains the VALUE wherever the predicate appears
+# and reports nothing on a record that omits it. That half is asserted by
+# social-history-smoking.ttl, which carries no consent scope, is deliberately
+# left unedited, and still passes. This fixture is the other half: given the
+# predicate, the value is checked.
+#
+# Everything else here mirrors social-history-smoking.ttl, so the pair differs
+# in exactly one respect -- the value of cascade:consentScope -- and the
+# INVALID sibling isolates the sh:in constraint.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:cascade:social-history:example-consent-scope>
+    a clinical:SocialHistoryRecord ;
+    clinical:socialHistoryCategory "smokingStatus" ;
+    health:smokingStatus "never" ;
+    cascade:consentScope cascade:SocialHistoryConsent ;
+    cascade:dataProvenance cascade:EHRVerified .

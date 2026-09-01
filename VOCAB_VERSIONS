@@ -15,13 +15,14 @@
 # scripts/SPEC_PIN, not from this file. If the two disagree, SPEC_PIN wins and
 # the rows below describe a vocabulary CI is not executing, so keep them in step:
 # SPEC_PIN's `vocab=` line must repeat the versions below verbatim. As of
-# 2026-08-28 both read core=3.7 health=2.8 clinical=1.16 coverage=1.6
-# coverage=1.6: cascade:AIExtracted joins InsurancePlanShape dataProvenance
-#   (every clinical/health shape had it since clinical v1.9; this was the miss).
-#   AI-extracted InsurancePlan fixture tracked in root 3.287, not yet here.
-# checkup=3.3 pots=1.4, and the pin is the spec PR #31 merge commit 678ae0d
-# (tags vocab/core-v3.7, vocab/health-v2.8, vocab/clinical-v1.16,
-# vocab/coverage-v1.5, all four on that commit).
+# 2026-09-01 both read core=3.10 health=2.8 clinical=1.19 coverage=1.7
+# checkup=3.3 pots=1.4, and the pin is the jayostis/spec PR #21 merge commit
+# 40e581f (tag vocab/core-v3.10).
+#
+# (Corrected 2026-09-01: the coverage row read 1.5 while SPEC_PIN read 1.6, so
+# the two had been out of step since the 2026-08-28 re-pin. The v1.6 note that
+# had been inserted mid-sentence here is now a row note below, where the other
+# per-version notes live.)
 #
 # 2026-08-27 batch: core 3.7 / health 2.8 / clinical 1.16 / coverage 1.5
 # (spec PR the-cascade-protocol/spec#31, merge commit 678ae0d; tags
@@ -70,7 +71,33 @@
 # encounter-001 was a KNOWN_FAILURES entry with reason UNSHAPED: it reported
 # conforming while evaluating ZERO constraints, because clinical:Encounter had no
 # shape. It now evaluates 29, so the entry is gone.
-core=3.8
+core=3.10
+# core=3.10: cascade:consentScope, the cascade:ConsentScope code list, and
+#   cascade:ConsentScopeShape -- the FIRST constraint anywhere in this
+#   specification that mentions consent. cascade:SocialHistoryConsent had been
+#   declared since core v3.0 as the value of a property that was declared
+#   nowhere. Fixtures: clinical/social-history-consent-scope.VALID (the scope
+#   carried and accepted, 12 -> 16 constraint checks at this pin) and
+#   clinical/social-history-consent-scope-wrong-value.INVALID (cascade:SelfReported,
+#   a real cascade:DataProvenance term and not a consent scope, rejected by
+#   sh:InConstraintComponent). The negative was measured NO_VIOLATION against
+#   core 3.8, where the two files are indistinguishable.
+#   They are filed under fixtures/clinical/ because the records they carry are
+#   clinical:SocialHistoryRecord; the shape constraining them is core's.
+#   NOT covered by a negative fixture, and deliberately: ABSENCE of a consent
+#   scope, which core v3.10 does not require on any record class at any
+#   severity. cascade:ConsentScopeShape is sh:targetSubjectsOf, so it reports
+#   nothing on a record that omits the predicate. That claim is exercised by
+#   clinical/social-history-smoking.ttl, which carries no scope, is left
+#   UNEDITED on purpose and still passes at 12 constraint checks -- and by the
+#   other 160 fixtures, which omit the predicate and are unaffected. A presence
+#   constraint is ratchet step 2 and belongs to a later vocabulary version.
+#   See fixtures/clinical/INVENTORY.md.
+# core=3.9: cascade:DataProvenance and its ten value terms drop
+#   rdfs:subClassOf prov:Entity -- a code list is not stored record data. No
+#   shape constrains on prov:Entity and the three sh:in enumerations match on
+#   IRI, so no fixture changes verdict and nothing here can assert it; the
+#   claim it corrects was only ever read by spec's own class-coverage gate.
 # core=3.8: cascade:PatientReported defined -- the provenance individual 17
 #   sh:in lists already accepted. No fixture verdict changes; ontology-derived
 #   enums (sdk-python) stop rejecting a value every shape permits.
@@ -151,7 +178,22 @@ health=2.8
 #   Note: health:SocialHistoryRecordShape declares only sh:Info-severity constraints,
 #   so no fixture can be rejected by it and the health: spelling has no negative
 #   counterpart. social-003 covers the clinical: spelling instead.
-clinical=1.17
+clinical=1.19
+# clinical=1.19 and 1.18: NO FIXTURE REACHES EITHER, and the gap is named here
+#   rather than implied. Both act on clinical:CoverageRecord -- v1.18 adds
+#   clinical:CoverageRecordShape (the class was deprecated-but-retained and
+#   targeted by nothing, so every record in the spelling all pre-migration
+#   coverage data uses reported conforms=true), v1.19 adds
+#   clinical:CoverageTypeVocabularyShape at sh:Warning. No fixture asserts
+#   clinical:CoverageRecord any more: #1 / PR #4 retyped coverage-001 to
+#   coverage:InsurancePlan, which was the right fix and left this behind.
+#   MEASURED, not assumed: re-running all 163 fixtures at spec 9b13ae4 and at
+#   40e581f changed not one constraint-check count outside the six coverage
+#   fixtures and the two new consent ones. spec's own changelog says the same
+#   ("the shape this release adds is exercised by nothing and wants a
+#   deliberately retained legacy-read fixture"). Note v1.18 is NOT widening --
+#   records move from unexamined to examined -- so a fixture for it can be a
+#   negative from the start.
 # clinical=1.17: severity restructure. The five clinical:status bindings and
 #   documentReferenceStatus moved off ClinicalDocumentShape onto target-class
 #   DocumentStatusShape / DocumentReferenceStatusShape so sh:node no longer
@@ -203,7 +245,30 @@ clinical=1.17
 #   SocialHistoryRecordShape (clinical/social-history-smoking.ttl, social-003).
 # clinical=1.9: cascade:AIExtracted added to the dataProvenance sh:in enum on every clinical record shape; an AIExtracted Medication is now SHACL-valid. Fixtures: med-011.
 # clinical=1.8: Medication RDF type and predicates migrated from health: to clinical: namespace
-coverage=1.5
+coverage=1.7
+# coverage=1.7: one sh:property block, for coverage:sourceRecordId -- declared
+#   since coverage v1.3 and constrained by nothing since, because it was
+#   authored for coverage:ClaimRecord and coverage:BenefitStatement and neither
+#   class is shaped, so there was no node shape to put it in. It became
+#   reachable when a DIFFERENT class started carrying it: the declaration is
+#   domain-free and coverage:InsurancePlan, which is shaped, carries it in
+#   coverage-001. EXERCISED HERE, positively: all six coverage fixtures go
+#   47 -> 49 constraint checks at this pin (xsd:string datatype, sh:maxCount 1).
+#   NOT covered: a NEGATIVE fixture. v1.7 is not widening -- two values now
+#   report sh:MaxCountConstraintComponent and a non-string reports
+#   sh:DatatypeConstraintComponent where the previous shapes said conforms=true
+#   -- so both negatives are writable today and neither is written yet. spec
+#   verified them locally with pyshacl 0.30.1; nothing in THIS repository does,
+#   which is the gap.
+#   ALSO NOT covered, and named because spec named it: cascade:sourceRecordId
+#   has the identical defect (declared in core.ttl, shaped nowhere) and is live
+#   today on a passing VALID fixture, fixtures/core/source-identity-namespace
+#   .VALID.ttl, where a shaped health:LabResultRecord carries it unjudged.
+# coverage=1.6: cascade:AIExtracted joins InsurancePlanShape's dataProvenance
+#   set (every clinical/health shape had it since clinical v1.9; this one was
+#   the miss). A behaviour change -- such a plan record was rejected at
+#   sh:Violation and now validates -- and no fixture exercises it. An
+#   AI-extracted InsurancePlan fixture is tracked in root backlog 3.287.
 # coverage=1.5: coverage:status. FHIR R4 Coverage.status, required binding to
 #   fm-status (active | cancelled | draft | entered-in-error), at sh:Violation --
 #   the severity follows the BINDING STRENGTH of the source element, which is the

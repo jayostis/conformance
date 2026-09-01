@@ -1,8 +1,11 @@
 # Clinical Conformance Fixtures (Inventory)
 
 **Vocabulary covered:** `clinical` v1.4 (`social-history-smoking.ttl`, the
-`clinical:` spelling of social history) and `clinical` v1.16 (the encounter,
-document and status batch below).
+`clinical:` spelling of social history), `clinical` v1.16 (the encounter,
+document and status batch below) and `core` v3.10 (the consent-scope pair —
+records typed `clinical:SocialHistoryRecord`, constrained by a `core` shape,
+so they live here beside the other social history fixtures rather than in
+`../core/`).
 
 ## Fixture kind
 
@@ -59,6 +62,37 @@ bound value set.
 | `status-clinicaldocument-in-progress.WARN.ttl` | WARN | "in-progress" is out of set under the wider binding *and* the narrower one, so this fixture keeps meaning what it means if the ratchet later narrows the DocumentReference-derived subtypes to `composition-status`. |
 | `status-laboratoryreport-corrected.VALID.ttl` | PASS | "corrected" is what distinguishes a result that **replaced** an earlier wrong one from the wrong one itself. Also absent from `composition-status`, so it too passes only under the wider set. |
 | `status-laboratoryreport-in-progress.WARN.ttl` | WARN **(currently FAILS — see below)** | The same value as the ClinicalDocument twin, on the class that reaches `ClinicalDocumentShape` through `sh:node`. |
+
+### Consent scope (core v3.10)
+
+`cascade:consentScope` is the first constraint in this specification that
+mentions consent. Before this pair, `cascade:ConsentScopeShape` shipped with
+**zero** constraint executions behind it — the condition #5 and #6 report for
+`checkup:`, `pots:` and `clinical:CoverageRecord`, and the one this repository
+exists to catch.
+
+| Fixture | Expect | Scenario |
+|---|---|---|
+| `social-history-consent-scope.VALID.ttl` | PASS | `cascade:consentScope cascade:SocialHistoryConsent` on a social history record — the class `clinical.ttl` says "requires separate consent scope", so the record type a producer will write the property on first. Otherwise identical to `social-history-smoking.ttl`, so the constraint under test is the only difference between it and the fixture next to it. |
+| `social-history-consent-scope-wrong-value.INVALID.ttl` | FAIL | `cascade:consentScope cascade:SelfReported`. **The value being a real term is the point.** `cascade:SelfReported` is a `cascade:DataProvenance` subclass declared in `core.ttl` since v1, so an invented IRI would have been caught by any constraint that merely checked the value resolved; an IRI that exists in the same namespace and is simply not in the closed `cascade:ConsentScope` list is caught only by the constraint this release added. It is also the confusion a producer will actually make, provenance being the other `cascade:` code list a record of this shape carries. Exactly one violation fires: `cascade:ConsentScopeShape / cascade:consentScope / sh:InConstraintComponent`. |
+
+**What is deliberately NOT here, and must not be added.** There is no fixture
+asserting that a *missing* consent scope is rejected. core v3.10 requires the
+property nowhere, on no record class, at no severity: `cascade:ConsentScopeShape`
+is `sh:targetSubjectsOf`, so it constrains the value wherever the predicate
+appears and reports nothing on a record that omits it. That is the ratchet
+`core` v3.5 wrote down. Requiring presence is step 2 — `sh:minCount 1` at
+`sh:Warning` on `clinical:SocialHistoryRecordShape`, once a reference producer
+emits a scope — and step 3 raises it to `sh:Violation`; each is its own
+vocabulary version and neither is this one.
+
+**`social-history-smoking.ttl` is what asserts that half, and it does so by
+being left alone.** It carries no consent scope and still passes, at 12
+constraint checks, unchanged across the pin move. Adding a consent scope to it
+would destroy the only evidence in this repository that absence is still
+unchecked — which is what separates spec#5 as merged from the draft that put
+`sh:minCount 1` at `sh:Violation` on `clinical:SocialHistoryRecordShape` and
+would have rejected every social history record written before v3.10.
 
 ## A defect this batch found, and did not paper over
 
@@ -126,3 +160,44 @@ cascade validate fixtures/clinical/<fixture> --shapes <flat dir of spec *.shapes
 ```
 
 All eleven verdicts agree with this runner's, including the lab report failure.
+
+### The consent-scope pair (core v3.10)
+
+Same discipline, and the RED half is the whole argument for the polarity suffix.
+
+```sh
+# RED first: at the PREVIOUS pin (spec 9b13ae4, core v3.8), where no shape
+# anywhere mentions consent.
+python3 scripts/run_conformance.py --spec-dir <spec@9b13ae4> \
+  --select 'clinical/social-history*'
+#   2 passed / 1 failed / 3 total.
+#   social-history-consent-scope-wrong-value.INVALID.ttl reports NO_VIOLATION:
+#   the two files are INDISTINGUISHABLE there, both evaluating the same 12
+#   constraint checks as social-history-smoking.ttl, because the consent scope
+#   on each is read by nothing. That is what .INVALID.ttl turns into a
+#   reported failure instead of a silent pass.
+
+# GREEN: at the pin now named in scripts/SPEC_PIN (spec 40e581f, core v3.10).
+python3 scripts/run_conformance.py --spec-dir <spec@40e581f> \
+  --select 'clinical/social-history*'
+#   3 passed / 0 failed / 3 total.
+```
+
+The positive fixture is not proven by passing either — it passes under both
+pins. What proves it is the count: **12 → 16** constraint checks, the four being
+`cascade:ConsentScopeShape`'s `sh:nodeKind`, `sh:in`, `sh:minCount` and
+`sh:maxCount`. `social-history-smoking.ttl` stays at **12 → 12**, and that
+non-movement is the open-world assertion: the shape did not reach it, because it
+carries no consent scope.
+
+The negative fixture's single violation is
+`cascade:ConsentScopeShape / path cascade:consentScope / InConstraintComponent`,
+verbatim from `results.json` — one violation, from the constraint under test,
+and nothing else fires.
+
+Measured across the **whole** suite at both pins, because two of the five
+version steps this pin moves (clinical v1.18, coverage v1.7) are explicitly not
+widening: 163 fixtures, exactly one verdict change, and it is
+`social-history-consent-scope-wrong-value.INVALID.ttl` going `NO_VIOLATION` →
+`pass`. No existing fixture changed verdict, gained a warning or lost one. See
+`scripts/SPEC_PIN` for the counts and for where the +20 constraint checks went.
