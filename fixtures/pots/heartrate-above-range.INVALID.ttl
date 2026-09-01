@@ -1,0 +1,49 @@
+# pots v1.4 — NEGATIVE. A heart rate above the shape's physiological ceiling.
+#
+# 350 bpm is not a plausible human heart rate at any age, and that is the point:
+# pots:HeartRateMeasurementShape binds the value to 20-300 bpm at sh:Violation,
+# and this is the reading a sensor glitch or a unit mix-up produces. A device
+# that reports in a different unit, or an artefact during motion, is how a number
+# like this reaches a pod, and a record carrying it should be rejected rather
+# than filed as a real observation.
+#
+# EXACTLY ONE CONSTRAINT FIRES, and the runner prints it like this:
+#   pots:HeartRateMeasurementShape / path _:blank / MaxInclusiveConstraintComponent
+#     :: "Heart rate value must be 20-300 bpm"
+#
+# THE `_:blank` IS NOT A FAULT IN THE FIXTURE. The constraint's sh:path is the
+# SEQUENCE PATH ( fhir:valueQuantity fhir:value ), which SHACL encodes as an RDF
+# list -- a blank node -- and the runner's path renderer prints a blank node
+# rather than expanding the list. Every sequence-path constraint in the
+# specification reports this way. The sh:message is what identifies it, which is
+# why the message is quoted above. Do not go looking for a property literally
+# named _:blank, and do not "fix" the fixture to make the name appear.
+#
+# Everything else is correct and identical to heartrate-standing.VALID.ttl apart
+# from the subject IRI and the value: fhir:valueQuantity is present so the
+# sh:minCount 1 above it is satisfied, the datatype is xsd:double so
+# sh:datatype passes, and the timing properties are Info-severity and in range.
+# The one thing wrong is the one thing that fails, which is what makes this a
+# test of the range constraint rather than of the record as a whole.
+#
+# 350 rather than 301 deliberately. A boundary value tests the inclusivity of the
+# bound, which is worth doing but is a different assertion, and a fixture sitting
+# one bpm outside is fragile against a future decision to widen the range for
+# infant data. This value is wrong under any plausible bound.
+#
+# Fully synthetic.
+
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix ucum: <http://unitsofmeasure.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:p0t5-0003-4a00-8000-00000000hr20> a pots:HeartRateMeasurement ;
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "350.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "60.0"^^xsd:double .

@@ -1,0 +1,29 @@
+# pots v1.4 — a user-reported symptom during the standing phase.
+#
+# pots:SymptomEventShape has one Violation constraint, pots:symptom, carrying
+# sh:datatype xsd:string, sh:minCount 1, sh:maxCount 1 AND sh:minLength 1. The
+# last of those is the one worth noticing: a symptom event whose symptom is the
+# empty string satisfies every other part and still says nothing. That case is
+# symptomevent-empty-symptom.INVALID.ttl.
+#
+# Lightheadedness on standing is the cardinal POTS symptom and the reason someone
+# runs this check at all, so it is the realistic value rather than an arbitrary
+# in-range string.
+#
+# pots:notes is Info-severity with sh:maxLength 100. The note here is 56
+# characters, well inside it. The limit is not exercised by a negative fixture
+# because Info findings are invisible to this runner in both directions --
+# extract_violations() reads sh:Violation and extract_warnings() reads sh:Warning,
+# and nothing reads sh:Info. Of pots:SymptomEventShape's four constraints, two
+# are Info and therefore unobservable here; that is a property of the runner, not
+# a gap in this fixture.
+#
+# Fully synthetic: not a real person's report.
+
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:p0t5-0006-4a00-8000-00000000sy10> a pots:SymptomEvent ;
+    pots:symptom "lightheadedness" ;
+    pots:notes "Onset at four minutes upright; resolved on sitting." ;
+    pots:timestampSeconds "240.0"^^xsd:double .

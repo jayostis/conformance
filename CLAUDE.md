@@ -26,8 +26,8 @@ python3 scripts/check_baseline.py --results results.json
 ```
 
 Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.10 / health 2.8 /
-clinical 1.19 / coverage 1.7), which is what CI executes: **140 passed / 26
-failed / 0 skipped / 166 total**, 63,468 constraint checks, and all 26 are
+clinical 1.19 / coverage 1.7), which is what CI executes: **151 passed / 26
+failed / 0 skipped / 177 total**, 63,817 constraint checks, and all 26 are
 enumerated in `KNOWN_FAILURES.json`, so the ratchet holds and the job is green.
 
 These counts move with the pin, so re-measure them in the same commit that
@@ -154,7 +154,8 @@ for any of them is impossible until a shape exists: there is no constraint to vi
 - (Resolved 2026-09-01, both directions) `clinical:CoverageRecord` was listed here as "asserted by `coverage-001`, no shape". PR #4 retyped `coverage-001` to `coverage:InsurancePlan` and clinical v1.18 added `clinical:CoverageRecordShape`, which inverted the gap rather than closing it — a **shape with no fixture behind it**. #6 / PR #11 closed that half too: three fixtures now assert the class, so the shape is executed rather than merely present. Note the pairing is deliberate and must survive: `coverage-001` demonstrates the spelling new data uses, `legacycoverage-001` demonstrates the retained spelling still reads. Retiring the legacy fixture is how the deprecation becomes an accident rather than a decision.
 - `ldp:BasicContainer` — asserted by `pod-001`/`pod-003`, external vocabulary, no Cascade shape
 - `cascade:InteractionScenario` — shaped, but no fixture instantiates it
-- `checkup:` and `pots:` — `VOCAB_VERSIONS` carries a version row for each and no fixture instantiates any class either vocabulary shapes
+- `checkup:` — `VOCAB_VERSIONS` carries a version row and no fixture instantiates any class it shapes. Tracked as #5, which is **blocked**: the fixture turns on whether intake exports nest, and only the private Swift SDK can answer that. Asked at jayostis/spec#14.
+- `pots:` — (Resolved 2026-09-01, #10) 11 fixtures in `fixtures/pots/` now cover all five reachable classes and all 9 reachable Violation constraints. **Two shapes remain uncoverable**: `pots:SystolicComponentShape` and `pots:DiastolicComponentShape` carry no `sh:targetClass` and nothing reaches them, so their mmHg range checks can never fire and no fixture can assert them. That is jayostis/spec#40, and it is a `spec` fix, not a fixture one.
 - `health:SocialHistoryRecordShape` declares only `sh:Info` constraints, so the `health:` spelling of social history cannot have a negative fixture; `social-003` covers the `clinical:` spelling
 - (Resolved 2026-06-22) `proc-001/002/003` previously used `dataType: "ProcedureRecord"` (not in the fixture-schema enum) and failed `schema/fixture-schema.json` validation; corrected to `dataType: "Procedure"` (input `type` stays `ProcedureRecord`, matching the cond/lab convention). All fixtures now validate against the schema.
 

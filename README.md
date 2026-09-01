@@ -44,7 +44,7 @@ Every count below is derived from the fixture files themselves, not maintained b
 
 ### RDF fixtures (`fixtures/**/*.ttl`)
 
-74 further fixtures are Turtle files rather than JSON records. They carry their polarity in the filename and are executed by the same runner. There are **three** polarities:
+85 further fixtures are Turtle files rather than JSON records. They carry their polarity in the filename and are executed by the same runner. There are **three** polarities:
 
 | Suffix | Polarity | The claim |
 |---|---|---|
@@ -68,11 +68,12 @@ The third exists because Cascade shapes report a value that existing data alread
 | `coverage/` | 2 | 1 | 1 | 0 | `coverage:status` (`coverage` v1.5) |
 | `genomics/vcf/` | 1 | 1 | 0 | 0 | VCF conversion oracle |
 | `genomics/vrs/` | 1 | 1 | 0 | 0 | GA4GH VRS allele conversion oracle |
-| **Total** | **74** | **48** | **19** | **7** | |
+| `pots/` | 11 | 5 | 5 | 1 | The whole of `pots` v1.4 that can be reached: all five `sh:targetClass`-carrying shapes and all 9 reachable Violation constraints, plus the `pots:PostureStability` warning that is the only way to prove that shape fires |
+| **Total** | **85** | **53** | **24** | **8** | |
 
-**Grand total: 166 executable fixtures** (92 JSON + 74 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
+**Grand total: 177 executable fixtures** (92 JSON + 85 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
 
-A further 97 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
+A further 98 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
 ## Running the suite
 
@@ -157,10 +158,10 @@ The runner also refuses a checkout that sits at the pinned commit but has uncomm
 As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.10, health 2.8, clinical 1.19, coverage 1.7, checkup 3.3):
 
 ```
-passed  140
+passed  151
 failed   26
 skipped   0
-total   166        63,468 constraint checks evaluated
+total   177        63,817 constraint checks evaluated
 ```
 
 These numbers move with the pin. Re-measure them in the same commit that

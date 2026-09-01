@@ -1,0 +1,39 @@
+# pots v1.4 — NEGATIVE. A symptom event whose symptom is the empty string.
+#
+# WHY THE EMPTY STRING AND NOT A MISSING PROPERTY. Dropping pots:symptom
+# altogether would also be rejected, by sh:minCount 1 in the same constraint --
+# but that is the easy case, and a producer is far more likely to write an empty
+# value than to omit the field. A symptom picker with nothing selected, a text
+# box the user tapped past, a converter defaulting an absent enum to "": each
+# emits a symptom event whose symptom is present, correctly typed, and empty.
+#
+# sh:minLength 1 is what separates those two failures, and it is the half a shape
+# author is most likely to leave out. This fixture is what proves it is there.
+#
+# EXACTLY ONE CONSTRAINT FIRES:
+#   pots:SymptomEventShape / path pots:symptom / MinLengthConstraintComponent
+#
+# sh:datatype xsd:string is satisfied -- "" is a perfectly good string -- and so
+# are sh:minCount and sh:maxCount, because the property IS present exactly once.
+# Only the length constraint separates this record from a valid one, which is the
+# claim the fixture exists to make.
+#
+# NOTE FOR ANYONE WRITING A SIBLING: sh:minLength counts characters after string
+# conversion with no trimming, as SHACL defines it, so a symptom of " " (one
+# space) has length 1 and PASSES. That is a real gap and it is not this
+# vocabulary's alone -- jayostis/spec#26 and jayostis/spec#33 track it across all
+# 28 required fields in the specification. Do not write a whitespace fixture here
+# expecting it to fail; it will report NO_VIOLATION.
+#
+# Everything else is identical to symptomevent-lightheadedness.VALID.ttl apart
+# from the subject IRI and the symptom value.
+#
+# Fully synthetic.
+
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:p0t5-0007-4a00-8000-00000000sy20> a pots:SymptomEvent ;
+    pots:symptom "" ;
+    pots:notes "Onset at four minutes upright; resolved on sitting." ;
+    pots:timestampSeconds "240.0"^^xsd:double .

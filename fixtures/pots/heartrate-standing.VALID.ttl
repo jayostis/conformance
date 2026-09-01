@@ -1,0 +1,43 @@
+# pots v1.4 — a standing heart rate observation, on its own.
+#
+# WHY STANDALONE. Cascade validates a pod file by file, and
+# pots:HeartRateMeasurementShape targets the class rather than a path from a
+# check result, so a measurement written to a different file from the check it
+# belongs to arrives exactly like this. The same argument
+# clinical/encounter-participant-standalone.VALID.ttl makes for
+# clinical:EncounterParticipant.
+#
+# It also isolates the shape. potscheck-nasalean-full.VALID.ttl contains four of
+# these, so a failure there could belong to any of five shapes; a failure here
+# belongs to this one.
+#
+# THE VALUE IS REACHED BY A SEQUENCE PATH, which is the part worth knowing.
+# pots:HeartRateMeasurementShape's second Violation constraint has
+# sh:path ( fhir:valueQuantity fhir:value ) -- a two-step path into the nested
+# quantity node, not a property on the measurement itself. A fixture that put the
+# number directly on the measurement would satisfy neither that constraint nor
+# the sh:minCount 1 on fhir:valueQuantity above it, and would fail with two
+# violations rather than zero.
+#
+# 104 bpm at one minute upright: a real standing value for someone whose supine
+# baseline is in the seventies, and comfortably inside the shape's 20-300 range
+# without sitting at a boundary. The out-of-range case is
+# heartrate-above-range.INVALID.ttl.
+#
+# Fully synthetic.
+
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix ucum: <http://unitsofmeasure.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:p0t5-0002-4a00-8000-00000000hr10> a pots:HeartRateMeasurement ;
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "104.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "60.0"^^xsd:double ;
+    pots:atSeconds "60"^^xsd:integer .
