@@ -2,7 +2,9 @@
 
 **Vocabulary covered:** `clinical` v1.4 (`social-history-smoking.ttl`, the
 `clinical:` spelling of social history), `clinical` v1.16 (the encounter,
-document and status batch below) and `core` v3.10 (the consent-scope pair —
+document and status batch below), `clinical` v1.19 (the coverage-type
+vocabulary warning on the deprecated `clinical:CoverageRecord` spelling) and
+`core` v3.10 (the consent-scope pair —
 records typed `clinical:SocialHistoryRecord`, constrained by a `core` shape,
 so they live here beside the other social history fixtures rather than in
 `../core/`).
@@ -68,9 +70,10 @@ bound value set.
 `cascade:consentScope` is the first constraint in this specification that
 mentions consent. Before this pair, `cascade:ConsentScopeShape` shipped with
 **zero** constraint executions behind it — a released shape that no fixture
-reaches, which is the condition issues #5 (`checkup:` and `pots:`) and #6
+reaches, which is the condition issues #5 (`checkup:`), #10 (`pots:`) and #6
 (`clinical:CoverageRecord`) were filed for, and the one this repository exists
-to catch.
+to catch. #6 is closed: `coverage-record-legacy-type-vocabulary.WARN.ttl` below
+is part of that fix.
 
 | Fixture | Expect | Scenario |
 |---|---|---|
@@ -94,6 +97,22 @@ would destroy the only evidence in this repository that absence is still
 unchecked — which is what separates spec#5 as merged from the draft that put
 `sh:minCount 1` at `sh:Violation` on `clinical:SocialHistoryRecordShape` and
 would have rejected every social history record written before v3.10.
+
+### Coverage type vocabulary, deprecated spelling (clinical v1.19)
+
+`clinical:CoverageRecord` is deprecated since clinical v1.5 and **retained**, not
+removed, because real pre-migration Pods still hold coverage in that spelling.
+clinical v1.18 shaped the class and v1.19 added the advisory value check below.
+No fixture asserted the class at the time, because #1 / PR #4 had just retyped
+`coverage-001` onto the current `coverage:InsurancePlan` spelling — correct for
+data going forward, and it removed the corpus's last legacy instance at about the
+moment `spec` shaped it. The two JSON halves of the fix live at
+`../legacycoverage-001.json` (happy path) and `../legacycoverage-002.json`
+(negative); the warning half is here, because only a `.WARN.ttl` can state it.
+
+| Fixture | Expect | Scenario |
+|---|---|---|
+| `coverage-record-legacy-type-vocabulary.WARN.ttl` | WARN | `clinical:coverageType "commercial"` — a payer-local code in neither the retained Cascade values (`primary`, `secondary`, `dental`, `vision`) nor the v3-ActCode list, and the word payer systems, EOBs and member portals actually use for employer-sponsored coverage. **`.WARN.` and not `.INVALID.` is the point:** FHIR binds `Coverage.type` EXTENSIBLY, so an alternate code is conformant at source and the specification deliberately does not reject it — an `.INVALID.` fixture would fail with `NO_VIOLATION`. **And not `.VALID.` either:** that asserts only the absence of a violation, which this record also satisfies, so it would pass whether or not `clinical:CoverageTypeVocabularyShape` existed. Everything else on the record is clean, because a warn fixture that also violates something is rejected outright and is not evidence about the warning. Exactly one warning fires: `clinical:CoverageTypeVocabularyShape / clinical:coverageType / sh:InConstraintComponent`. |
 
 ## A defect this batch found, and did not paper over
 

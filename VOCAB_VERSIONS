@@ -179,21 +179,40 @@ health=2.8
 #   so no fixture can be rejected by it and the health: spelling has no negative
 #   counterpart. social-003 covers the clinical: spelling instead.
 clinical=1.19
-# clinical=1.19 and 1.18: NO FIXTURE REACHES EITHER, and the gap is named here
-#   rather than implied. Both act on clinical:CoverageRecord -- v1.18 adds
-#   clinical:CoverageRecordShape (the class was deprecated-but-retained and
-#   targeted by nothing, so every record in the spelling all pre-migration
-#   coverage data uses reported conforms=true), v1.19 adds
-#   clinical:CoverageTypeVocabularyShape at sh:Warning. No fixture asserts
-#   clinical:CoverageRecord any more: #1 / PR #4 retyped coverage-001 to
-#   coverage:InsurancePlan, which was the right fix and left this behind.
-#   MEASURED, not assumed: re-running all 163 fixtures at spec 9b13ae4 and at
-#   40e581f changed not one constraint-check count outside the six coverage
-#   fixtures and the two new consent ones. spec's own changelog says the same
-#   ("the shape this release adds is exercised by nothing and wants a
-#   deliberately retained legacy-read fixture"). Note v1.18 is NOT widening --
-#   records move from unexamined to examined -- so a fixture for it can be a
-#   negative from the start.
+# clinical=1.19 and 1.18: BOTH REACHED as of 2026-09-01 (#6, PR #11). Both act on
+#   clinical:CoverageRecord -- v1.18 adds clinical:CoverageRecordShape (the class
+#   was deprecated-but-retained and targeted by nothing, so every record in the
+#   spelling all pre-migration coverage data uses reported conforms=true), v1.19
+#   adds clinical:CoverageTypeVocabularyShape at sh:Warning.
+#
+#   This row previously read "NO FIXTURE REACHES EITHER". #1 / PR #4 had retyped
+#   coverage-001 to coverage:InsurancePlan -- the right fix for data going
+#   forward -- which removed the corpus's last instance of the legacy spelling at
+#   about the moment spec shaped it. Three fixtures restore it:
+#
+#     legacycoverage-001.json  happy path, 38 checks. NOT invented: the triples
+#         are the pre-migration form of coverage-001 recovered from 0a7d5dc^,
+#         under a distinct subject IRI. Exercises both departures the shape
+#         documents -- clinical:relationship over this vocabulary's five values,
+#         and clinical:effectivePeriodStart accepting the importer's xsd:dateTime
+#         alongside the declared xsd:date range.
+#     legacycoverage-002.json  negative, 38 checks. clinical:providerName absent,
+#         rejected by that property's sh:minCount 1 at sh:Violation. Proves the
+#         shape FIRES rather than merely being present.
+#     clinical/coverage-record-legacy-type-vocabulary.WARN.ttl  38 checks.
+#         v1.19's value check firing at sh:Warning on "commercial", a payer-local
+#         code in neither the retained Cascade values nor the v3-ActCode list.
+#         .WARN. and not .INVALID. because FHIR binds Coverage.type EXTENSIBLY,
+#         so the specification deliberately does not reject it; and not .VALID.
+#         because that would pass whether or not the shape existed.
+#
+#   Note v1.18 is NOT widening -- records move from unexamined to examined -- so
+#   the negative fixture could be a negative from the start.
+#
+#   The pairing with coverage-001 is deliberate: one fixture shows the spelling
+#   new data uses, the other shows the retained spelling still reads. spec's
+#   CONTRIBUTING.md, "Deprecating a spelling", requires the second so that
+#   retirement is a decision rather than an accident.
 # clinical=1.17: severity restructure. The five clinical:status bindings and
 #   documentReferenceStatus moved off ClinicalDocumentShape onto target-class
 #   DocumentStatusShape / DocumentReferenceStatusShape so sh:node no longer

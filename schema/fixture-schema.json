@@ -129,7 +129,9 @@
           "ai-asserted",
           "data-absence",
           "cardinality-constraint",
-          "migration"
+          "migration",
+          "deprecated-spelling",
+          "legacy-read"
         ]
       },
       "description": "Tags classifying the fixture for filtering and coverage reporting"

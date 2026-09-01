@@ -39,11 +39,12 @@ Every count below is derived from the fixture files themselves, not maintained b
 | Imaging Study | `imaging-` | 1 | Imaging studies and results |
 | Medication Administration | `medadmin-` | 1 | Medication administration events |
 | Data Absence | `absent-` | 3 | A record whose primary value is absent for a stated reason (`cascade:dataAbsentReason`, core v3.6) |
-| **Total** | | **90** | 24 data types |
+| Coverage Record (legacy) | `legacycoverage-` | 2 | Deprecated-and-retained `clinical:CoverageRecord` spelling, kept readable per `spec` CONTRIBUTING "Deprecating a spelling" (clinical v1.18/v1.19) |
+| **Total** | | **92** | 25 data types |
 
 ### RDF fixtures (`fixtures/**/*.ttl`)
 
-71 further fixtures are Turtle files rather than JSON records. They carry their polarity in the filename and are executed by the same runner. There are **three** polarities:
+74 further fixtures are Turtle files rather than JSON records. They carry their polarity in the filename and are executed by the same runner. There are **three** polarities:
 
 | Suffix | Polarity | The claim |
 |---|---|---|
@@ -56,7 +57,7 @@ The third exists because Cascade shapes report a value that existing data alread
 | Directory | Count | Positive | Negative | Warn | What it covers |
 |---|---|---|---|---|---|
 | `core/` | 15 | 6 | 8 | 1 | AIExtracted provenance; the `core` v3.5 ORIGIN axis (`cascade:sourceIdentity`); and the `core` v3.7 `cascade:Attachment` store — one negative per Violation constraint, three path/digest negatives, and the media-type warning |
-| `clinical/` | 14 | 8 | 3 | 3 | Social history in Turtle form, the `clinical` v1.16 batch (encounter facts and participation, the two document status axes and the two attribution axes, and three of the five `clinical:status` binding sets), and the `core` v3.10 consent-scope pair |
+| `clinical/` | 15 | 8 | 3 | 4 | Social history in Turtle form, the `clinical` v1.16 batch (encounter facts and participation, the two document status axes and the two attribution axes, and three of the five `clinical:status` binding sets), the `core` v3.10 consent-scope pair, and the `clinical` v1.19 coverage-type vocabulary warning on the deprecated `clinical:CoverageRecord` spelling |
 | `genomics/phenopackets/` | 9 | 9 | 0 | 0 | GA4GH Phenopacket conversion oracles |
 | `genomics/fhir-genomics-ig/` | 7 | 7 | 0 | 0 | HL7 Genomics Reporting IG bundle conversion oracles |
 | `evidence/` | 7 | 3 | 4 | 0 | Assertion facet / evidence grounding rules (evidence v1-draft) |
@@ -67,19 +68,22 @@ The third exists because Cascade shapes report a value that existing data alread
 | `coverage/` | 2 | 1 | 1 | 0 | `coverage:status` (`coverage` v1.5) |
 | `genomics/vcf/` | 1 | 1 | 0 | 0 | VCF conversion oracle |
 | `genomics/vrs/` | 1 | 1 | 0 | 0 | GA4GH VRS allele conversion oracle |
-| **Total** | **73** | **48** | **19** | **6** | |
+| **Total** | **74** | **48** | **19** | **7** | |
 
-**Grand total: 163 executable fixtures** (90 JSON + 73 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
+**Grand total: 166 executable fixtures** (92 JSON + 74 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
 
-A further 94 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
+A further 97 files under `fixtures/` are the source side of those conversion oracles (`*.input.xml`, `*.input.json`, `*.input.ldpatch`, `*.input.vcf.gz`), their `*.gaps.json` sidecars, and `INVENTORY.md` files. They carry no RDF of their own, so the SHACL runner does not execute them; each has a corresponding `*.expected.ttl` that it does execute. The runner reports them by category on every run so the number is auditable rather than assumed.
 
 ## Running the suite
 
 ```bash
 python3 -m pip install -r scripts/requirements.txt
 
-# Clone the pinned spec revision (see scripts/SPEC_PIN for the commit)
-git clone https://github.com/the-cascade-protocol/spec.git ../spec
+# Clone the pinned spec revision. Read BOTH lines of scripts/SPEC_PIN: `repo=`
+# names which remote the pinned commit is on and is not always the org, so
+# reading only `commit=` fails with "reference is not a tree" whenever the pin
+# is ahead of the-cascade-protocol/spec.
+git clone "$(grep '^repo=' scripts/SPEC_PIN | cut -d= -f2-).git" ../spec
 git -C ../spec checkout "$(grep '^commit=' scripts/SPEC_PIN | cut -d= -f2)"
 
 # 1. the truth: execute and report every fixture
@@ -153,10 +157,10 @@ The runner also refuses a checkout that sits at the pinned commit but has uncomm
 As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.10, health 2.8, clinical 1.19, coverage 1.7, checkup 3.3):
 
 ```
-passed  137
+passed  140
 failed   26
 skipped   0
-total   163        63,354 constraint checks evaluated
+total   166        63,468 constraint checks evaluated
 ```
 
 These numbers move with the pin. Re-measure them in the same commit that
@@ -172,7 +176,7 @@ passed has since failed. The remaining 26 break down as:
 | Reason | Count | Owned by | Notes |
 |---|---|---|---|
 | `VIOLATIONS` | 15 | `spec` (4), undecided (11) | All fifteen are conversion oracles under `fixtures/genomics/`. `clinical/status-laboratoryreport-in-progress.WARN.ttl` left this row at clinical v1.17, which moved the two Warning bindings onto target-class shapes so `sh:node` no longer escalates them — see [A defect the v1.16 batch found](#a-defect-the-v116-batch-found) below, kept as the record of a defect these fixtures caught. Each `.expected.ttl` records what the importer currently emits from the neighbouring `.input.json`, so a violation means either the importer must emit more or the shape must ask less. Three are settled — GA4GH Phenopackets do not carry a date of birth or a biological sex, so `cascade:PatientProfileShape` is stricter than the source format can satisfy. The other twelve need triage one at a time. |
-| `UNSHAPED` | 8 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. `clinical:CoverageRecord` left this row from both ends at once — PR #4 retyped `coverage-001` to `coverage:InsurancePlan`, so no fixture asserts it, and clinical v1.18 then shaped the class. The residue is the opposite gap, tracked in #6: a shape with no fixture behind it. `proc-001/002/003` left this row at core 3.6 / health 2.7 / clinical 1.15: they asserted `health:ProcedureRecord`, which `health.ttl` never defined, and clinical v1.15 ruled `clinical:` the canonical procedure spelling, so they were retargeted onto `clinical:Procedure` and all three now run against real constraints. |
+| `UNSHAPED` | 8 | `spec` | A class a fixture asserts and no shape targets, so zero constraints run: `clinical:ImplantedDevice`, `clinical:MedicationAdministration`, `clinical:ImagingStudy`, `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `ldp:BasicContainer` (`pod-001`, `pod-003`). **None of these is fixable in this repository**: the missing artefact is a shape in `spec`. `clinical:CoverageRecord` left this row from both ends at once — PR #4 retyped `coverage-001` to `coverage:InsurancePlan`, so no fixture asserts it, and clinical v1.18 then shaped the class. That left the opposite gap, a shape with no fixture behind it; #6 / PR #11 closed it by adding `legacycoverage-001`, `legacycoverage-002` and `clinical/coverage-record-legacy-type-vocabulary.WARN.ttl`, so the class is now both shaped and asserted. `proc-001/002/003` left this row at core 3.6 / health 2.7 / clinical 1.15: they asserted `health:ProcedureRecord`, which `health.ttl` never defined, and clinical v1.15 ruled `clinical:` the canonical procedure spelling, so they were retargeted onto `clinical:Procedure` and all three now run against real constraints. |
 | `NO_TURTLE` | 3 | `conformance` | Comment-only placeholder `.ttl` files: two unauthored advisory oracles, and `genomics/phenopackets/biosamples-SAMN05324082.expected.ttl`, which is deliberately empty because it asserts `detect() === false` — not a SHACL assertion, so it needs a different home. |
 
 Each of the 26 is enumerated in [`KNOWN_FAILURES.json`](KNOWN_FAILURES.json) with the
