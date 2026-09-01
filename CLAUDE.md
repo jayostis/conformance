@@ -26,8 +26,8 @@ python3 scripts/check_baseline.py --results results.json
 ```
 
 Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.10 / health 2.8 /
-clinical 1.19 / coverage 1.7), which is what CI executes: **137 passed / 26
-failed / 0 skipped / 163 total**, 63,354 constraint checks, and all 26 are
+clinical 1.19 / coverage 1.7), which is what CI executes: **140 passed / 26
+failed / 0 skipped / 166 total**, 63,468 constraint checks, and all 26 are
 enumerated in `KNOWN_FAILURES.json`, so the ratchet holds and the job is green.
 
 These counts move with the pin, so re-measure them in the same commit that
@@ -117,12 +117,19 @@ not, measured by recording which node shapes matched a focus node across the who
   v3.10 and must not be given a fixture; `clinical/social-history-smoking.ttl`
   carries no scope, is deliberately unedited, and its continued pass is what
   asserts that. See the core=3.10 row in `VOCAB_VERSIONS`.
-- clinical v1.18/v1.19 and coverage v1.6: **no fixture reaches these.** Named as
-  gaps in `VOCAB_VERSIONS` rather than left implied — the first two act on
-  `clinical:CoverageRecord`, which no fixture has asserted since `coverage-001`
-  was retyped, and coverage v1.6's `cascade:AIExtracted` on `InsurancePlanShape`
-  has no fixture either. coverage v1.7 IS exercised: six coverage fixtures go
-  47 → 49 constraint checks.
+- clinical v1.18/v1.19: **reached as of 2026-09-01** (#6, PR #11). Three fixtures
+  restore the deprecated-and-retained `clinical:CoverageRecord` spelling, which no
+  fixture had asserted since `coverage-001` was retyped by PR #4:
+  `legacycoverage-001` (happy path, recovered from the pre-migration form at
+  `0a7d5dc^`), `legacycoverage-002` (negative, `clinical:providerName` absent) and
+  `clinical/coverage-record-legacy-type-vocabulary.WARN.ttl` (v1.19's
+  `clinical:CoverageTypeVocabularyShape` firing at `sh:Warning` on an
+  out-of-vocabulary value). 38 constraint checks each, +114 total. This is the
+  obligation `spec`'s `CONTRIBUTING.md` "Deprecating a spelling" imposes: a
+  retained spelling keeps a fixture demonstrating it still reads.
+- coverage v1.6: **still no fixture.** `cascade:AIExtracted` on
+  `InsurancePlanShape` is unexercised. coverage v1.7 IS exercised: six coverage
+  fixtures go 47 → 49 constraint checks.
 - The historical entries below describe earlier batches and their pins.
 - core v3.7 / health v2.8 / clinical v1.16 / coverage v1.5: 25 fixtures across
   `fixtures/clinical/`, `fixtures/health/`, `fixtures/coverage/` and `fixtures/core/`.
@@ -144,7 +151,7 @@ for any of them is impossible until a shape exists: there is no constraint to vi
 - `health:ProcedureRecord` — asserted by `proc-001/002/003`, not defined in `health.ttl`
 - `clinical:MedicationAdministration`, `clinical:ImplantedDevice`, `clinical:ImagingStudy` — defined in `clinical.ttl`, no shape. (`clinical:Encounter` left this list at clinical v1.14, and `clinical:EncounterParticipant` was shaped from birth in v1.16.)
 - `coverage:ClaimRecord`, `coverage:BenefitStatement`, `coverage:DenialNotice`, `coverage:AppealRecord` — defined in `coverage.ttl`, no shape
-- (Resolved 2026-09-01) `clinical:CoverageRecord` was listed here as "asserted by `coverage-001`, no shape". Neither half is true any more: PR #4 retyped `coverage-001` to `coverage:InsurancePlan`, and clinical v1.18 added `clinical:CoverageRecordShape`. The gap inverted rather than closing — the class is now a **shape with no fixture behind it**, which is #6, not an unshaped class.
+- (Resolved 2026-09-01, both directions) `clinical:CoverageRecord` was listed here as "asserted by `coverage-001`, no shape". PR #4 retyped `coverage-001` to `coverage:InsurancePlan` and clinical v1.18 added `clinical:CoverageRecordShape`, which inverted the gap rather than closing it — a **shape with no fixture behind it**. #6 / PR #11 closed that half too: three fixtures now assert the class, so the shape is executed rather than merely present. Note the pairing is deliberate and must survive: `coverage-001` demonstrates the spelling new data uses, `legacycoverage-001` demonstrates the retained spelling still reads. Retiring the legacy fixture is how the deprecation becomes an accident rather than a decision.
 - `ldp:BasicContainer` — asserted by `pod-001`/`pod-003`, external vocabulary, no Cascade shape
 - `cascade:InteractionScenario` — shaped, but no fixture instantiates it
 - `checkup:` and `pots:` — `VOCAB_VERSIONS` carries a version row for each and no fixture instantiates any class either vocabulary shapes
