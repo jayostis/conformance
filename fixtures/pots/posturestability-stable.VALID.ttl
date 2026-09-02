@@ -31,7 +31,7 @@
 @prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:uuid:p0t5-0008-4a00-8000-00000000ps10> a pots:PostureStability ;
+<urn:uuid:b0750008-0000-4a00-8000-000000004010> a pots:PostureStability ;
     pots:isStable true ;
     pots:stabilityScore "0.94"^^xsd:double ;
     pots:atSeconds "300"^^xsd:integer .

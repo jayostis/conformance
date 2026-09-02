@@ -44,19 +44,19 @@
 @prefix ucum: <http://unitsofmeasure.org/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:uuid:p0t5-0010-4a00-8000-000000000010> a pots:POTSCheckResult ;
+<urn:uuid:b0750010-0000-4a00-8000-000000000010> a pots:POTSCheckResult ;
     pots:date "2031-03-14T09:12:00Z"^^xsd:dateTime ;
     pots:protocol "tiltTable" ;
     pots:potsThresholdMet true ;
-    pots:supineHeartRate <urn:uuid:p0t5-0010-4a00-8000-00000000hr30> ;
+    pots:supineHeartRate <urn:uuid:b0750010-0000-4a00-8000-000000001030> ;
     pots:standingHeartRates (
-        <urn:uuid:p0t5-0010-4a00-8000-00000000hr31>
+        <urn:uuid:b0750010-0000-4a00-8000-000000001031>
     ) ;
-    pots:supineBloodPressure <urn:uuid:p0t5-0010-4a00-8000-00000000bp30> ;
+    pots:supineBloodPressure <urn:uuid:b0750010-0000-4a00-8000-000000002030> ;
     cascade:dataProvenance cascade:PatientReported ;
     cascade:schemaVersion "1.4" .
 
-<urn:uuid:p0t5-0010-4a00-8000-00000000hr30> a pots:HeartRateMeasurement ;
+<urn:uuid:b0750010-0000-4a00-8000-000000001030> a pots:HeartRateMeasurement ;
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
         fhir:value "72.0"^^xsd:double ;
@@ -65,7 +65,7 @@
     ] ;
     pots:secondsSinceStand "0.0"^^xsd:double .
 
-<urn:uuid:p0t5-0010-4a00-8000-00000000hr31> a pots:HeartRateMeasurement ;
+<urn:uuid:b0750010-0000-4a00-8000-000000001031> a pots:HeartRateMeasurement ;
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
         fhir:value "118.0"^^xsd:double ;
@@ -74,7 +74,7 @@
     ] ;
     pots:secondsSinceStand "600.0"^^xsd:double .
 
-<urn:uuid:p0t5-0010-4a00-8000-00000000bp30> a pots:BloodPressureMeasurement ;
+<urn:uuid:b0750010-0000-4a00-8000-000000002030> a pots:BloodPressureMeasurement ;
     fhir:component [
         fhir:code loinc:8480-6 ;
         fhir:valueQuantity [

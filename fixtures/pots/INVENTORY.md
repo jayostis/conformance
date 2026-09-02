@@ -57,6 +57,32 @@ classes: scoping it that way means it did not have to wait on `spec` picking a r
 **Do not add fixtures for those two shapes until spec#40 lands.** There is no constraint to
 violate, so a negative would fail with `NO_VIOLATION` and a positive would pass vacuously.
 
+### Executed is not asserted, and the gap is 4 constraints
+
+All 9 reachable Violation constraints in the table above are **executed** — each evaluates
+against a focus node in this batch, which is why the `pots` row in `VOCAB_VERSIONS` stopped
+saying NO FIXTURE COVERAGE. Only **5 are ever violated**, and that is the stronger property: a
+constraint no fixture breaks would go on passing if `spec` deleted or deactivated it, and
+nothing here would notice.
+
+| Negatively asserted (5) | Fixture that breaks it |
+|---|---|
+| `pots:protocol` / `sh:in` | `potscheck-protocol-out-of-set.INVALID.ttl` |
+| `pots:supineHeartRate` / `sh:class` | `potscheck-untyped-supine-heartrate.INVALID.ttl` |
+| `( fhir:valueQuantity fhir:value )` / `sh:maxInclusive` | `heartrate-above-range.INVALID.ttl` |
+| `fhir:component` / `sh:minCount` | `bloodpressure-no-component.INVALID.ttl` |
+| `pots:symptom` / `sh:minLength` | `symptomevent-empty-symptom.INVALID.ttl` |
+
+**Only ever satisfied (4):** `pots:date`, `pots:potsThresholdMet`, `cascade:schemaVersion` (the
+`^[0-9]+\.[0-9]+$` pattern), and `fhir:valueQuantity` / `sh:minCount` on
+`pots:HeartRateMeasurementShape`. Delete any one of those four in `spec` and all 11 fixtures
+here still pass with no change in the suite. Four more negative fixtures would close that, and
+unlike the two unreachable shapes above **nothing blocks them** — they are simply not written
+yet. Do not read the "all 9" in `README.md` as more than execution.
+
+The list is derived from the run, not from reading the shapes: every violation the suite reports
+for `pots/*` is in the table's right-hand column and there are exactly five of them.
+
 ## Fixtures
 
 ### POTS check result (the top-level bundle)
@@ -65,14 +91,14 @@ violate, so a negative would fail with `NO_VIOLATION` and a positive would pass 
 |---|---|---|
 | `potscheck-nasalean-full.VALID.ttl` | PASS | A complete NASA Lean check carrying **all five reachable classes in one graph**, because that is the shape the data takes: a check result REQUIRES a supine heart rate of class `pots:HeartRateMeasurement`, so it cannot be written standalone. All five Violation constraints and all three Warning constraints are satisfied. 72 bpm supine rising to 118 bpm standing is a +46 bpm delta, past the adult ≥30 bpm threshold, which is why `potsThresholdMet` is true — the numbers mean something rather than merely being in range. |
 | `potscheck-protocol-out-of-set.INVALID.ttl` | FAIL | `pots:protocol "tiltTable"` against a value set of exactly one member, `"nasaLean"`. **Violation and not Warning is the point**, and the contrast is with `../clinical/coverage-record-legacy-type-vocabulary.WARN.ttl`: there the FHIR binding is extensible so a local code is flagged, here the value names *which measurement procedure produced the numbers*. A tilt-table result read against NASA Lean thresholds is a wrong answer, not a diminished one. |
-| `potscheck-untyped-supine-heartrate.INVALID.ttl` | FAIL | The supine heart rate node is structurally perfect and carries **no `rdf:type`**, so `sh:class` rejects it. Worth more than its own constraint: `pots:HeartRateMeasurementShape` never fires on that node *at all*, because it reaches focus nodes by `sh:targetClass`. Every constraint it declares, including the 20–300 range, is skipped in silence. That is the mechanism jayostis/spec#14 is blocked on, shown where it can be shown. |
+| `potscheck-untyped-supine-heartrate.INVALID.ttl` | FAIL | The supine heart rate node is structurally perfect and carries **no `rdf:type`**, so `sh:class` rejects it. Worth more than its own constraint: `pots:HeartRateMeasurementShape` never fires on that node *at all*, because it reaches focus nodes by `sh:targetClass`. **The untyped node carries 350.0 bpm** — the same out-of-range value `heartrate-above-range.INVALID.ttl` carries — so the silence is *observable*: the typed sibling reports a `MaxInclusiveConstraintComponent` for that number and this file reports nothing but the `sh:class` failure. An in-range value could not state that, since a missing range violation would be equally explained by the number being legal. The two files are a controlled pair, differing only in `rdf:type`. That is the mechanism jayostis/spec#14 is blocked on, shown where it can be shown. |
 
 ### Heart rate
 
 | Fixture | Expect | Scenario |
 |---|---|---|
 | `heartrate-standing.VALID.ttl` | PASS | A standing measurement on its own. Cascade validates a pod file by file and the shape targets the class, so a measurement written to a different file from its check arrives exactly like this — the same argument `../clinical/encounter-participant-standalone.VALID.ttl` makes. The value is reached by a **sequence path** `( fhir:valueQuantity fhir:value )`, not a property on the measurement. |
-| `heartrate-above-range.INVALID.ttl` | FAIL | 350 bpm, outside the 20–300 bound. The runner prints this constraint's path as `_:blank`, because a SHACL sequence path is an RDF list; the `sh:message` is what identifies it. Noted in the fixture so the next reader does not go hunting for a property of that name. |
+| `heartrate-above-range.INVALID.ttl` | FAIL | 350 bpm, outside the 20–300 bound. The runner prints this constraint's path as `_:blank`, because a SHACL sequence path is an RDF list; the `sh:message` is what identifies it. Noted in the fixture so the next reader does not go hunting for a property of that name. Its graph is byte-identical to `heartrate-standing.VALID.ttl` apart from the subject and the value — both timing properties included — so `diff` on the two shows exactly the two lines the header claims. |
 
 ### Blood pressure
 
@@ -110,6 +136,33 @@ Wrapping them in a list hides nothing from validation.
 
 **If the private Swift producer turns out to emit repeated properties instead, change these
 fixtures and say so** — do not add a rival convention beside them.
+
+**Subject IRIs are well-formed UUIDs, and that is load-bearing rather than cosmetic.** Every
+subject here is `urn:uuid:` followed by a real 8-4-4-4-12 hex UUID with the version-4 nibble and
+the RFC 4122 variant nibble in their proper places, so a consumer that parses the URN gets a
+UUID rather than an exception. `cascade-cli` does exactly that: a node whose URN does not match
+`UUID_RE` (`src/lib/literal-lifting.ts`) is silently absent from its reference-lifting index, and
+`UUID_V4_REGEX` (`src/lib/fhir-converter/types.ts`) is stricter still. Both accept every
+identifier in this directory.
+
+The values are systematic so a failure can be traced back to a file, and the structure uses hex
+digits only:
+
+```
+urn:uuid:b075NNNN-0000-4a00-8000-RRRRRRRRRTTS
+         ^^^^     ^^^^      ^                ^
+         |        |         |                serial within role
+         |        |         version 4 / variant 8, as any v4 UUID
+         |        fixture serial, 0001..0011, matching the order below
+         fixed hex tag shared by every subject in this directory
+```
+
+`TT` is the role: `00` check result, `10` heart rate, `20` blood pressure, `30` symptom event,
+`40` posture stability. **Do not go back to mnemonic-but-invalid identifiers.** An earlier draft
+of this batch used `urn:uuid:p0t5-0001-4a00-8000-00000000hr01`, which reads better and is not a
+UUID — wrong grouping and non-hex characters in every group that carries a tag. Roughly 89
+identifiers elsewhere in `fixtures/` and most of `reference-patient-pod/` still have that defect;
+they are not this batch's to fix, but new fixtures should not join them.
 
 ## Verification
 

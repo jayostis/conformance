@@ -22,9 +22,17 @@
 # Everything else is correct and identical to heartrate-standing.VALID.ttl apart
 # from the subject IRI and the value: fhir:valueQuantity is present so the
 # sh:minCount 1 above it is satisfied, the datatype is xsd:double so
-# sh:datatype passes, and the timing properties are Info-severity and in range.
-# The one thing wrong is the one thing that fails, which is what makes this a
-# test of the range constraint rather than of the record as a whole.
+# sh:datatype passes, and BOTH timing properties are present, Info-severity and
+# in range. The one thing wrong is the one thing that fails, which is what makes
+# this a test of the range constraint rather than of the record as a whole.
+#
+# THE PARITY IS EXACT AND IS MAINTAINED DELIBERATELY. pots:HeartRateMeasurement-
+# Shape declares two Info-severity timing constraints, on pots:secondsSinceStand
+# and on pots:atSeconds (which pots.ttl:297 calls the legacy spelling), and both
+# files carry both properties with the same values. A reader comparing the two
+# graphs should find exactly two differences, the subject and the value, and the
+# claim above is only worth making if that stays true -- so a property added to
+# either file belongs in the other.
 #
 # 350 rather than 301 deliberately. A boundary value tests the inclusivity of the
 # bound, which is worth doing but is a different assertion, and a fixture sitting
@@ -39,11 +47,12 @@
 @prefix ucum: <http://unitsofmeasure.org/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:uuid:p0t5-0003-4a00-8000-00000000hr20> a pots:HeartRateMeasurement ;
+<urn:uuid:b0750003-0000-4a00-8000-000000001020> a pots:HeartRateMeasurement ;
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
         fhir:value "350.0"^^xsd:double ;
         fhir:unit "beats/minute" ;
         fhir:code ucum:min-1
     ] ;
-    pots:secondsSinceStand "60.0"^^xsd:double .
+    pots:secondsSinceStand "60.0"^^xsd:double ;
+    pots:atSeconds "60"^^xsd:integer .

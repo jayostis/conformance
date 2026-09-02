@@ -33,7 +33,7 @@
 @prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:uuid:p0t5-0007-4a00-8000-00000000sy20> a pots:SymptomEvent ;
+<urn:uuid:b0750007-0000-4a00-8000-000000003020> a pots:SymptomEvent ;
     pots:symptom "" ;
     pots:notes "Onset at four minutes upright; resolved on sitting." ;
     pots:timestampSeconds "240.0"^^xsd:double .

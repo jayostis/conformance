@@ -34,7 +34,7 @@
 @prefix ucum: <http://unitsofmeasure.org/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:uuid:p0t5-0004-4a00-8000-00000000bp10> a pots:BloodPressureMeasurement ;
+<urn:uuid:b0750004-0000-4a00-8000-000000002010> a pots:BloodPressureMeasurement ;
     fhir:component [
         fhir:code loinc:8480-6 ;
         fhir:valueQuantity [

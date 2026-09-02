@@ -328,8 +328,18 @@ checkup=3.3
 pots=1.4
 # pots=1.4: COVERED as of 2026-09-01 (#10). This row read "NO FIXTURE COVERAGE"
 #   alongside checkup= until then. 11 .ttl fixtures in fixtures/pots/ cover all
-#   five reachable classes and all 9 reachable Violation constraints, +349
-#   constraint checks. See fixtures/pots/INVENTORY.md.
+#   five reachable classes and EXECUTE all 9 reachable Violation constraints,
+#   +349 constraint checks. See fixtures/pots/INVENTORY.md.
+#
+#   EXECUTED IS NOT ASSERTED, and the gap is 4 constraints. Only 5 of the 9 are
+#   ever violated by a fixture: pots:protocol/In, pots:supineHeartRate/Class,
+#   ( fhir:valueQuantity fhir:value )/MaxInclusive, fhir:component/MinCount and
+#   pots:symptom/MinLength. pots:date, pots:potsThresholdMet,
+#   cascade:schemaVersion's ^[0-9]+\.[0-9]+$ pattern and
+#   fhir:valueQuantity/MinCount are only ever satisfied, so deleting or
+#   deactivating any of those four in spec would leave all 11 fixtures passing
+#   and the suite unchanged -- exactly the vacuity this repository exists to
+#   catch. Four more negative fixtures would close it; nothing blocks them.
 #
 #   THE COUNTS HERE ARE MEASURED BY PARSING, NOT BY GREP, and that distinction
 #   changed them. Grepping sh:Violation / sh:Warning / sh:Info as text over

@@ -2,10 +2,28 @@
 #
 # WHY THIS FIXTURE IS WORTH MORE THAN ITS OWN CONSTRAINT. pots:supineHeartRate
 # is bound with sh:class pots:HeartRateMeasurement at sh:Violation, and sh:class
-# reaches only a node carrying rdf:type. The node below is structurally perfect
-# -- it has the fhir:valueQuantity, the value is 72.0 bpm and inside the 20-300
-# range, the timing property is present and correct -- and it is rejected anyway,
-# for the single reason that nobody wrote `a pots:HeartRateMeasurement` on it.
+# reaches only a node carrying rdf:type. The node below is structurally complete
+# -- it has the fhir:valueQuantity, the datatype is right, the timing property is
+# present and correct -- and it is rejected anyway, for the single reason that
+# nobody wrote `a pots:HeartRateMeasurement` on it.
+#
+# THE VALUE IS 350.0 bpm, WHICH IS THE POINT AND NOT AN OVERSIGHT. It is the same
+# out-of-range value heartrate-above-range.INVALID.ttl carries, and that fixture
+# reports a MaxInclusiveConstraintComponent for it. Here the identical number
+# reports nothing, because the only difference between the two nodes is the
+# rdf:type. That makes the two files a controlled pair: same value, typed node
+# fails the range check, untyped node is never asked. An in-range value such as
+# 72.0 could not state this -- the absence of a range violation would be equally
+# explained by the number being legal, so the output would be consistent with the
+# shape having fired and passed, and a future spec change that gave
+# HeartRateMeasurementShape a target reaching untyped nodes would leave this
+# fixture passing unchanged while its header quietly became false.
+#
+# The record is therefore NOT clinically coherent, unlike every other fixture in
+# this directory: a 350 bpm supine baseline against a 118 bpm standing rate does
+# not describe a real check, and pots:potsThresholdMet true is arbitrary here.
+# That is the cost of making the silence observable, and it is worth paying in
+# this one fixture because the silence is the entire claim.
 #
 # THAT IS THE QUESTION jayostis/spec#14 IS BLOCKED ON, demonstrated where it can
 # be demonstrated. That issue wants to replace seventeen `sh:node` sites in
@@ -30,12 +48,16 @@
 # Note what does NOT fire, and why that is the whole point: no constraint from
 # pots:HeartRateMeasurementShape appears in the report at all. That shape reaches
 # its focus nodes by sh:targetClass, the node has no type, so the shape never
-# sees it. Every constraint it declares -- including the 20-300 bpm range -- is
-# skipped in silence. Compare heartrate-above-range.INVALID.ttl, where the same
-# shape does fire because the node is typed.
+# sees it. Every constraint it declares is skipped in silence -- including the
+# 20-300 bpm range that this node's own 350.0 bpm plainly breaks, and which
+# heartrate-above-range.INVALID.ttl reports for that same value on a typed node.
+# The missing MaxInclusiveConstraintComponent is the observable evidence: it is
+# absent from the one-line report above, and running the pair shows the contrast.
 #
 # The other four Violation constraints on the check result are satisfied, so the
-# untyped reference is the only thing wrong.
+# untyped reference is the only thing the validator objects to. It is not the
+# only thing wrong with the record -- the 350.0 is wrong too, and is ignored,
+# which is precisely the finding.
 #
 # Fully synthetic.
 
@@ -46,28 +68,29 @@
 @prefix ucum: <http://unitsofmeasure.org/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:uuid:p0t5-0011-4a00-8000-000000000011> a pots:POTSCheckResult ;
+<urn:uuid:b0750011-0000-4a00-8000-000000000011> a pots:POTSCheckResult ;
     pots:date "2031-03-14T09:12:00Z"^^xsd:dateTime ;
     pots:protocol "nasaLean" ;
     pots:potsThresholdMet true ;
-    pots:supineHeartRate <urn:uuid:p0t5-0011-4a00-8000-00000000hr40> ;
+    pots:supineHeartRate <urn:uuid:b0750011-0000-4a00-8000-000000001040> ;
     pots:standingHeartRates (
-        <urn:uuid:p0t5-0011-4a00-8000-00000000hr41>
+        <urn:uuid:b0750011-0000-4a00-8000-000000001041>
     ) ;
     cascade:dataProvenance cascade:PatientReported ;
     cascade:schemaVersion "1.4" .
 
-# NO rdf:type. Everything else about this node is correct.
-<urn:uuid:p0t5-0011-4a00-8000-00000000hr40>
+# NO rdf:type, and the value is out of range. A typed node carrying 350.0 reports
+# a range violation; this one reports nothing at all. See the header.
+<urn:uuid:b0750011-0000-4a00-8000-000000001040>
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
-        fhir:value "72.0"^^xsd:double ;
+        fhir:value "350.0"^^xsd:double ;
         fhir:unit "beats/minute" ;
         fhir:code ucum:min-1
     ] ;
     pots:secondsSinceStand "0.0"^^xsd:double .
 
-<urn:uuid:p0t5-0011-4a00-8000-00000000hr41> a pots:HeartRateMeasurement ;
+<urn:uuid:b0750011-0000-4a00-8000-000000001041> a pots:HeartRateMeasurement ;
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
         fhir:value "118.0"^^xsd:double ;

@@ -32,7 +32,7 @@
 @prefix ucum: <http://unitsofmeasure.org/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:uuid:p0t5-0002-4a00-8000-00000000hr10> a pots:HeartRateMeasurement ;
+<urn:uuid:b0750002-0000-4a00-8000-000000001010> a pots:HeartRateMeasurement ;
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
         fhir:value "104.0"^^xsd:double ;

@@ -31,7 +31,7 @@
 @prefix ucum: <http://unitsofmeasure.org/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:uuid:p0t5-0005-4a00-8000-00000000bp20> a pots:BloodPressureMeasurement ;
+<urn:uuid:b0750005-0000-4a00-8000-000000002020> a pots:BloodPressureMeasurement ;
     fhir:code loinc:8480-6 ;
     fhir:valueQuantity [
         fhir:value "118.0"^^xsd:double ;

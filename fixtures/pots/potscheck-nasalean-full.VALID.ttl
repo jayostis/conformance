@@ -59,22 +59,22 @@
 @prefix ucum: <http://unitsofmeasure.org/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<urn:uuid:p0t5-0001-4a00-8000-000000000001> a pots:POTSCheckResult ;
+<urn:uuid:b0750001-0000-4a00-8000-000000000001> a pots:POTSCheckResult ;
     pots:date "2031-03-14T09:12:00Z"^^xsd:dateTime ;
     pots:protocol "nasaLean" ;
     pots:potsThresholdMet true ;
-    pots:supineHeartRate <urn:uuid:p0t5-0001-4a00-8000-00000000hr00> ;
+    pots:supineHeartRate <urn:uuid:b0750001-0000-4a00-8000-000000001000> ;
     pots:standingHeartRates (
-        <urn:uuid:p0t5-0001-4a00-8000-00000000hr01>
-        <urn:uuid:p0t5-0001-4a00-8000-00000000hr02>
-        <urn:uuid:p0t5-0001-4a00-8000-00000000hr03>
+        <urn:uuid:b0750001-0000-4a00-8000-000000001001>
+        <urn:uuid:b0750001-0000-4a00-8000-000000001002>
+        <urn:uuid:b0750001-0000-4a00-8000-000000001003>
     ) ;
-    pots:supineBloodPressure <urn:uuid:p0t5-0001-4a00-8000-00000000bp00> ;
+    pots:supineBloodPressure <urn:uuid:b0750001-0000-4a00-8000-000000002000> ;
     pots:symptomEvents (
-        <urn:uuid:p0t5-0001-4a00-8000-00000000sy01>
+        <urn:uuid:b0750001-0000-4a00-8000-000000003001>
     ) ;
     pots:postureStability (
-        <urn:uuid:p0t5-0001-4a00-8000-00000000ps01>
+        <urn:uuid:b0750001-0000-4a00-8000-000000004001>
     ) ;
     pots:maxHeartRateDelta "46.0"^^xsd:double ;
     pots:orthostaticHypotensionSuspected false ;
@@ -88,7 +88,7 @@
     cascade:dataProvenance cascade:PatientReported ;
     cascade:schemaVersion "1.4" .
 
-<urn:uuid:p0t5-0001-4a00-8000-00000000hr00> a pots:HeartRateMeasurement ;
+<urn:uuid:b0750001-0000-4a00-8000-000000001000> a pots:HeartRateMeasurement ;
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
         fhir:value "72.0"^^xsd:double ;
@@ -97,7 +97,7 @@
     ] ;
     pots:secondsSinceStand "0.0"^^xsd:double .
 
-<urn:uuid:p0t5-0001-4a00-8000-00000000hr01> a pots:HeartRateMeasurement ;
+<urn:uuid:b0750001-0000-4a00-8000-000000001001> a pots:HeartRateMeasurement ;
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
         fhir:value "104.0"^^xsd:double ;
@@ -106,7 +106,7 @@
     ] ;
     pots:secondsSinceStand "60.0"^^xsd:double .
 
-<urn:uuid:p0t5-0001-4a00-8000-00000000hr02> a pots:HeartRateMeasurement ;
+<urn:uuid:b0750001-0000-4a00-8000-000000001002> a pots:HeartRateMeasurement ;
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
         fhir:value "112.0"^^xsd:double ;
@@ -115,7 +115,7 @@
     ] ;
     pots:secondsSinceStand "300.0"^^xsd:double .
 
-<urn:uuid:p0t5-0001-4a00-8000-00000000hr03> a pots:HeartRateMeasurement ;
+<urn:uuid:b0750001-0000-4a00-8000-000000001003> a pots:HeartRateMeasurement ;
     fhir:code loinc:8867-4 ;
     fhir:valueQuantity [
         fhir:value "118.0"^^xsd:double ;
@@ -124,7 +124,7 @@
     ] ;
     pots:secondsSinceStand "600.0"^^xsd:double .
 
-<urn:uuid:p0t5-0001-4a00-8000-00000000bp00> a pots:BloodPressureMeasurement ;
+<urn:uuid:b0750001-0000-4a00-8000-000000002000> a pots:BloodPressureMeasurement ;
     fhir:component [
         fhir:code loinc:8480-6 ;
         fhir:valueQuantity [
@@ -143,12 +143,12 @@
     ] ;
     pots:secondsSinceStand "0.0"^^xsd:double .
 
-<urn:uuid:p0t5-0001-4a00-8000-00000000sy01> a pots:SymptomEvent ;
+<urn:uuid:b0750001-0000-4a00-8000-000000003001> a pots:SymptomEvent ;
     pots:symptom "lightheadedness" ;
     pots:notes "Reported at four minutes standing; resolved on sitting." ;
     pots:timestampSeconds "240.0"^^xsd:double .
 
-<urn:uuid:p0t5-0001-4a00-8000-00000000ps01> a pots:PostureStability ;
+<urn:uuid:b0750001-0000-4a00-8000-000000004001> a pots:PostureStability ;
     pots:isStable true ;
     pots:stabilityScore "0.94"^^xsd:double ;
     pots:atSeconds "300"^^xsd:integer .

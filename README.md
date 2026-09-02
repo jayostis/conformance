@@ -68,7 +68,7 @@ The third exists because Cascade shapes report a value that existing data alread
 | `coverage/` | 2 | 1 | 1 | 0 | `coverage:status` (`coverage` v1.5) |
 | `genomics/vcf/` | 1 | 1 | 0 | 0 | VCF conversion oracle |
 | `genomics/vrs/` | 1 | 1 | 0 | 0 | GA4GH VRS allele conversion oracle |
-| `pots/` | 11 | 5 | 5 | 1 | The whole of `pots` v1.4 that can be reached: all five `sh:targetClass`-carrying shapes and all 9 reachable Violation constraints, plus the `pots:PostureStability` warning that is the only way to prove that shape fires |
+| `pots/` | 11 | 5 | 5 | 1 | The whole of `pots` v1.4 that can be reached: all five `sh:targetClass`-carrying shapes, and all 9 reachable Violation constraints **executed** — of which **5 are negatively asserted** and 4 are only ever satisfied, enumerated in `fixtures/pots/INVENTORY.md` — plus the `pots:PostureStability` warning that is the only way to prove that shape fires |
 | **Total** | **85** | **53** | **24** | **8** | |
 
 **Grand total: 177 executable fixtures** (92 JSON + 85 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
