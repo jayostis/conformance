@@ -1,0 +1,63 @@
+# core v3.11 — WARN. A consent scope whose value is not a consent scope.
+#
+# THIS FILE WAS .INVALID.ttl UNTIL 2026-09-02, and the rename is the point of the
+# commit that made it. core v3.10 bound cascade:consentScope to a closed list at
+# sh:Violation, so this record was REJECTED. core v3.11 opened the list, on
+# D-CONSENT-1: "sh:in at sh:Warning at most, never sh:Violation ... a closed list
+# missing a member rejects conformant data". Sensitivity categories grow --
+# reproductive health and genomics are foreseeable members -- and 42 CFR Part 2
+# is US-specific, so a record tagged with a category the list has not caught up
+# to is conformant data, not an error.
+#
+# The fixture's DATA did not change. What changed is what the specification says
+# should happen to it, and the polarity suffix is the only place a fixture states
+# that. Leaving this file as .INVALID.ttl after v3.11 would have made it assert a
+# rejection the specification had deliberately stopped performing, and it fails
+# with NO_VIOLATION exactly as it should when that happens. That failure is what
+# forced this rename rather than anyone remembering to look.
+#
+# WHY NOT .VALID.ttl EITHER. .VALID. asserts only the absence of a violation,
+# which this record now satisfies -- so it would pass whether or not
+# cascade:ConsentScopeShape existed at all, which is the vacuous pass this
+# repository exists to catch. .WARN. states the actual post-v3.11 claim: the
+# value set still FIRES, at Warning severity, and nothing rejects the record.
+#
+# THE VALUE IS STILL THE REASON THIS FIXTURE WORKS. cascade:SelfReported is a
+# REAL term -- a cascade:DataProvenance subclass declared in core.ttl since v1.
+# An invented IRI would be caught by any constraint that merely checked the value
+# resolved; an IRI that exists in the same namespace and is simply not a member
+# of the cascade:ConsentScope list is caught only by the sh:in constraint. It is
+# also the confusion a producer will actually make, provenance being the other
+# cascade: code list a record of this shape carries.
+#
+# WHAT v3.11 DID NOT DEMOTE, and why this fixture cannot show it. The shape
+# SPLIT rather than softening: sh:nodeKind, sh:minCount and sh:maxCount keep
+# sh:Violation in a block carrying no sh:in, and sh:in moved alone to a second
+# block at sh:Warning. So "two consent scopes on one record" and "a literal
+# instead of an IRI" are still rejections. Neither has a fixture. Adding them is
+# a separate piece of work and they would be .INVALID.ttl, not .WARN.ttl.
+#
+# EXACTLY ONE FINDING, and no violation:
+#   cascade:ConsentScopeShape / path cascade:consentScope / InConstraintComponent
+#
+# Everything else on this record is valid, which is what keeps the finding
+# attributable -- a warn fixture that also violates something is rejected
+# outright and is not evidence about the warning.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix clinical: <https://ns.cascadeprotocol.org/clinical/v1#> .
+@prefix health: <https://ns.cascadeprotocol.org/health/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:cascade:social-history:example-consent-scope-wrong-value>
+    a clinical:SocialHistoryRecord ;
+    clinical:socialHistoryCategory "smokingStatus" ;
+    health:smokingStatus "never" ;
+
+    # THE FINDING: a cascade:DataProvenance individual where a
+    # cascade:ConsentScope individual belongs. Advisory since core v3.11.
+    cascade:consentScope cascade:SelfReported ;
+
+    cascade:dataProvenance cascade:EHRVerified .

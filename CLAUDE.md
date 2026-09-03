@@ -25,8 +25,8 @@ python3 scripts/run_conformance.py --spec-dir ../spec --json results.json
 python3 scripts/check_baseline.py --results results.json
 ```
 
-Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.10 / health 2.8 /
-clinical 1.19 / coverage 1.7), which is what CI executes: **151 passed / 26
+Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.12 / health 2.8 /
+clinical 1.19 / coverage 1.8 / checkup 3.4 / pots 1.4), which is what CI executes: **151 passed / 26
 failed / 0 skipped / 177 total**, 63,817 constraint checks, and all 26 are
 enumerated in `KNOWN_FAILURES.json`, so the ratchet holds and the job is green.
 
@@ -108,7 +108,8 @@ Check `VOCAB_VERSIONS` at the repo root. Compare against `spec/VOCAB_VERSIONS` t
 
 ### Vocabulary coverage (as of 2026-09-01)
 
-Covered up to core=3.10, health=2.8, clinical=1.19, coverage=1.7. Read the comments in
+Covered up to core=3.12, health=2.8, clinical=1.19, coverage=1.8, checkup=3.4, pots=1.4.
+Read the comments in
 `VOCAB_VERSIONS`: each row now names what a fixture actually exercises and what it does
 not, measured by recording which node shapes matched a focus node across the whole suite.
 - core v3.10: `cascade:consentScope` and `cascade:ConsentScopeShape`, the first

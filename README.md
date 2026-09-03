@@ -57,7 +57,7 @@ The third exists because Cascade shapes report a value that existing data alread
 | Directory | Count | Positive | Negative | Warn | What it covers |
 |---|---|---|---|---|---|
 | `core/` | 15 | 6 | 8 | 1 | AIExtracted provenance; the `core` v3.5 ORIGIN axis (`cascade:sourceIdentity`); and the `core` v3.7 `cascade:Attachment` store — one negative per Violation constraint, three path/digest negatives, and the media-type warning |
-| `clinical/` | 15 | 8 | 3 | 4 | Social history in Turtle form, the `clinical` v1.16 batch (encounter facts and participation, the two document status axes and the two attribution axes, and three of the five `clinical:status` binding sets), the `core` v3.10 consent-scope pair, and the `clinical` v1.19 coverage-type vocabulary warning on the deprecated `clinical:CoverageRecord` spelling |
+| `clinical/` | 15 | 8 | 2 | 5 | Social history in Turtle form, the `clinical` v1.16 batch (encounter facts and participation, the two document status axes and the two attribution axes, and three of the five `clinical:status` binding sets), the `core` v3.10/v3.11 consent-scope pair (the wrong-value half is a `.WARN.ttl` since v3.11 opened the value set), and the `clinical` v1.19 coverage-type vocabulary warning on the deprecated `clinical:CoverageRecord` spelling |
 | `genomics/phenopackets/` | 9 | 9 | 0 | 0 | GA4GH Phenopacket conversion oracles |
 | `genomics/fhir-genomics-ig/` | 7 | 7 | 0 | 0 | HL7 Genomics Reporting IG bundle conversion oracles |
 | `evidence/` | 7 | 3 | 4 | 0 | Assertion facet / evidence grounding rules (evidence v1-draft) |
@@ -69,7 +69,7 @@ The third exists because Cascade shapes report a value that existing data alread
 | `genomics/vcf/` | 1 | 1 | 0 | 0 | VCF conversion oracle |
 | `genomics/vrs/` | 1 | 1 | 0 | 0 | GA4GH VRS allele conversion oracle |
 | `pots/` | 11 | 5 | 5 | 1 | The whole of `pots` v1.4 that can be reached: all five `sh:targetClass`-carrying shapes, and all 9 reachable Violation constraints **executed** — of which **5 are negatively asserted** and 4 are only ever satisfied, enumerated in `fixtures/pots/INVENTORY.md` — plus the `pots:PostureStability` warning that is the only way to prove that shape fires |
-| **Total** | **85** | **53** | **24** | **8** | |
+| **Total** | **85** | **53** | **23** | **9** | |
 
 **Grand total: 177 executable fixtures** (92 JSON + 85 Turtle), which is the number `scripts/run_conformance.py` reports on every run. The JSON table above had drifted from the files by seven — `absent-` was missing entirely and `lab-` and `proc-` were behind — and is corrected here against a run.
 
@@ -155,7 +155,7 @@ The runner also refuses a checkout that sits at the pinned commit but has uncomm
 
 ## Current status
 
-As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.10, health 2.8, clinical 1.19, coverage 1.7, checkup 3.3):
+As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.12, health 2.8, clinical 1.19, coverage 1.8, checkup 3.4, pots 1.4):
 
 ```
 passed  151

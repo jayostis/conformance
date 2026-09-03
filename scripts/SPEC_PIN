@@ -10,62 +10,93 @@
 # VOCAB_VERSIONS line below, run `make -C . conformance` (or
 # `scripts/run_conformance.py`), and record the resulting counts in the PR.
 
-# Pinned at the MERGE commit of jayostis/spec PR #21 on `main`
-# (core v3.10 / health v2.8 / clinical v1.19 / coverage v1.7; tag
-# `vocab/core-v3.10` points at this commit).
+# Pinned at the MERGE commit of jayostis/spec PR #42 on `main`
+# (core v3.12 / health v2.8 / clinical v1.19 / coverage v1.8 / checkup v3.4 /
+# pots v1.4).
 #
-# `repo=` MOVED, and that is deliberate rather than a typo. Every previous pin
-# named the-cascade-protocol/spec; this commit is not on that repository and is
-# not an ancestor of its `main`, which is still at core 3.8 / clinical 1.17 /
-# coverage 1.6 and whose core.shapes.ttl contains no ConsentScopeShape. core
-# v3.9 and v3.10, clinical v1.18 and v1.19, and coverage v1.7 exist today only
-# on the fork. CI clones `repo=` and checks out `commit=`, so naming the org
-# here would fail before a single fixture ran. Move `repo=` back to the org in
-# the same commit that re-pins to an org SHA, once this vocabulary lands there.
+# `repo=` IS STILL THE FORK, and still deliberately. This commit is not on
+# the-cascade-protocol/spec and is not an ancestor of its `main`, which sits at
+# 97a5388. core v3.9 through v3.12, clinical v1.18 and v1.19, coverage v1.7 and
+# v1.8, and checkup v3.4 exist today only on the fork. CI clones `repo=` and
+# checks out `commit=`, so naming the org here would fail before a single
+# fixture ran. Move `repo=` back to the org in the same commit that re-pins to
+# an org SHA, once this vocabulary lands there.
 #
-# WHAT KEEPS THIS COMMIT REACHABLE, because a branch tip is not a guarantee: the
-# fork carries `refs/tags/vocab/core-v3.10` pointing at this exact SHA, verified
-# with `git ls-remote`. A tag holds the object even if the fork's `main` is later
-# reset or rebased onto upstream, which is the normal end of a fork workflow and
-# would otherwise leave every CI run -- including runs of unrelated PRs -- dying
-# at `git checkout` on an object that has been garbage-collected. Do not re-pin
-# to a fork SHA that no tag points at.
+# WHAT KEEPS THIS COMMIT REACHABLE, because a branch tip is not a guarantee:
+# THREE tags point at this exact SHA -- `vocab/core-v3.12`,
+# `vocab/coverage-v1.8` and `vocab/checkup-v3.4` -- verified with `git ls-remote`
+# before pinning. A tag holds the object even if the fork's `main` is later reset
+# or rebased onto upstream, which is the normal end of a fork workflow and would
+# otherwise leave every CI run -- including runs of unrelated PRs -- dying at
+# `git checkout` on an object that has been garbage-collected. Do not re-pin to
+# a fork SHA that no tag points at.
 #
-# THIS PIN MOVES THREE VOCABULARIES, not one. core 3.8 -> 3.10, clinical
-# 1.17 -> 1.19, coverage 1.6 -> 1.7. Two of those five version steps are
-# NOT widening -- clinical v1.18 and coverage v1.7 both move records from
-# unexamined to examined, so each could in principle reject a record that
-# validated before. That is why the whole suite was re-run at BOTH pins and
-# diffed fixture by fixture rather than only counted.
+# THIS PIN MOVES FOUR VOCABULARIES: core 3.10 -> 3.12, coverage 1.7 -> 1.8,
+# checkup 3.3 -> 3.4. health, clinical and pots are unchanged.
 #
-# WHAT MOVING THE PIN DID: exactly one verdict changed across all 163
-# fixtures, and it is the one this PR exists to cause --
-# clinical/social-history-consent-scope-wrong-value.INVALID.ttl goes
-# NO_VIOLATION -> pass, because core v3.10's cascade:ConsentScopeShape is
-# the first constraint anywhere in this specification that mentions consent.
-# No existing fixture changed verdict, gained a warning or lost one.
+# ONLY ONE SHAPE FILE CHANGED, and only one fixture was affected by it.
+# `core.shapes.ttl` is the sole `*.shapes.ttl` touched between the two pins; the
+# other three version steps are ONTOLOGY-ONLY. That asymmetry is the whole story
+# of this pin and is why the constraint-check total does not move.
 #
-#   old pin 9b13ae4 : 136 passed / 27 failed / 163 total, 63,334 checks
-#   new pin 40e581f : 137 passed / 26 failed / 163 total, 63,354 checks
+#   core v3.11  OPENED the cascade:consentScope value set. D-CONSENT-1 ratified
+#               it as open -- "sh:in at sh:Warning at most, never sh:Violation
+#               ... a closed list missing a member rejects conformant data" --
+#               and v3.10 had published the opposite, one member at
+#               sh:Violation. The shape SPLIT rather than softening: sh:nodeKind
+#               / sh:minCount / sh:maxCount keep sh:Violation in a block with no
+#               sh:in, and sh:in moved alone to a second block at sh:Warning.
+#   core v3.12  cascade:ConflictDetail and cascade:AIDiscardedExtraction gain
+#               rdfs:subClassOf prov:Entity. No shape change.
+#   coverage    v1.8: coverage:ClaimRecord and coverage:BenefitStatement gain
+#               rdfs:subClassOf prov:Entity. coverage.shapes.ttl untouched.
+#   checkup     v3.4: a settings class declared as a record class. No shape
+#               change.
+#
+# The three ontology-only steps are one change -- jayostis/spec#13, seven record
+# classes declaring the PROV superclass the class-coverage gate reads.
+#
+# WHAT MOVING THE PIN DID: exactly one fixture was affected across all 177, and
+# this PR converts it rather than leaving it red.
+# `clinical/social-history-consent-scope-wrong-value` asserted a sh:Violation
+# that core v3.11 deliberately stopped performing, so it went pass ->
+# NO_VIOLATION. It is renamed `.INVALID.ttl` -> `.WARN.ttl`, which is the claim
+# the vocabulary now supports: the value set still FIRES, at Warning, and
+# nothing rejects the record. Its data is unchanged.
+#
+# MEASURED IN BOTH DIRECTIONS, because a rename that is merely cosmetic would
+# look identical from one side:
+#
+#   old pin 40e581f, fixture as .INVALID.ttl : 151 passed / 26 failed / 177 total
+#   new pin 3362861, fixture as .WARN.ttl    : 151 passed / 26 failed / 177 total
+#   new pin 3362861, fixture as .INVALID.ttl : 150 passed / 27 failed  (NO_VIOLATION)
+#   old pin 40e581f, fixture as .WARN.ttl    : 150 passed / 27 failed  (VIOLATIONS)
+#
+# The last two lines are the point. The fixture is correct for exactly one
+# vocabulary version in each polarity, so the rename is tied to core v3.11 and
+# is not a cosmetic choice. No other fixture changed verdict, gained a warning
+# or lost one.
+#
+# 63,817 constraint checks at BOTH pins, unchanged, and that is expected rather
+# than suspicious: the consent-scope split turned one four-constraint block into
+# a three-plus-one pair, which evaluates the same four constraints. The shape
+# corpus did move -- 7,753 -> 7,762 shapes triples (the split) and 149 -> 156
+# subclass axioms (spec#13's seven declarations) -- while node shapes stay at
+# 126, since no shape was added or removed.
+#
+# WHAT REACHES NO FIXTURE, named here rather than left implied. core v3.12,
+# coverage v1.8 and checkup v3.4 are ontology-only and add ZERO constraint
+# checks to this suite. The seven classes they declare as record data are the
+# same seven that no shape targets, so the declarations are invisible here until
+# `spec` shapes them. checkup v3.4's settings class is inside the intake-form
+# nesting question that #5 is blocked on. See VOCAB_VERSIONS for the per-row
+# detail.
 #
 # The 26 failures are the same 26 (fixture, reason) pairs KNOWN_FAILURES.json
 # already carried, so no entry is added and none is removed. Only the file's
 # `specPin` scalar advances, which check_baseline.py requires and refuses to
 # run without.
-#
-# WHERE THE +20 CONSTRAINT CHECKS WENT, since a version row that reaches no
-# fixture is the thing this repository exists to catch:
-#   +8   the two new consent-scope fixtures, 12 -> 16 each. Those 4 are
-#        cascade:ConsentScopeShape's nodeKind / in / minCount / maxCount.
-#   +12  the six coverage fixtures, 47 -> 49 each: coverage v1.7's new
-#        sh:property block on coverage:sourceRecordId (datatype, maxCount).
-#   +0   clinical v1.18 and v1.19. Both act on clinical:CoverageRecord --
-#        v1.18 shapes the class, v1.19 adds CoverageTypeVocabularyShape --
-#        and NO fixture asserts that class any more, because PR #4 retyped
-#        coverage-001 to coverage:InsurancePlan. spec's own changelog says
-#        so. A legacy-read fixture for it is a separate piece of work.
-# health, checkup and pots are unchanged by this commit.
 
 repo=https://github.com/jayostis/spec
-commit=40e581f83faf19a41327d262108b439771efdff1
-vocab=core=3.10 health=2.8 clinical=1.19 coverage=1.7 checkup=3.3 pots=1.4
+commit=3362861f03fc153bb809f9c51ccbccb9bb6718a5
+vocab=core=3.12 health=2.8 clinical=1.19 coverage=1.8 checkup=3.4 pots=1.4
