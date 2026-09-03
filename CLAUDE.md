@@ -25,8 +25,8 @@ python3 scripts/run_conformance.py --spec-dir ../spec --json results.json
 python3 scripts/check_baseline.py --results results.json
 ```
 
-Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.12 / health 2.8 /
-clinical 1.19 / coverage 1.8 / checkup 3.4 / pots 1.4), which is what CI executes: **151 passed / 26
+Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.13 / health 2.9 /
+clinical 1.20 / coverage 1.9 / checkup 3.5 / pots 1.5), which is what CI executes: **151 passed / 26
 failed / 0 skipped / 177 total**, 63,817 constraint checks, and all 26 are
 enumerated in `KNOWN_FAILURES.json`, so the ratchet holds and the job is green.
 
@@ -106,12 +106,24 @@ spec tag → conformance fixtures added → SDK releases
 
 Check `VOCAB_VERSIONS` at the repo root. Compare against `spec/VOCAB_VERSIONS` to see what's missing.
 
-### Vocabulary coverage (as of 2026-09-02)
+### Vocabulary coverage (as of 2026-09-03)
 
-Covered up to core=3.12, health=2.8, clinical=1.19, coverage=1.8, checkup=3.4, pots=1.4.
+Covered up to core=3.13, health=2.9, clinical=1.20, coverage=1.9, checkup=3.5, pots=1.5.
 Read the comments in
 `VOCAB_VERSIONS`: each row now names what a fixture actually exercises and what it does
 not, measured by recording which node shapes matched a focus node across the whole suite.
+- core v3.13 / health v2.9 / clinical v1.20 / coverage v1.9 / checkup v3.5 /
+  pots v1.5: **one release across all six, ontology- and context-only, and no
+  fixture reaches any of it.** `cascade:RecordClass` is declared in core and
+  carried directly by 83 classes across these six vocabularies, replacing a
+  reading of `rdfs:subClassOf prov:Entity` that jayostis/spec#34 (ASK-05)
+  ruled out as PROV-O alignment; `clinical:CoverageRecord` names
+  `coverage:InsurancePlan` as its successor in a triple; twelve record classes
+  gain a JSON-LD name. No `*.shapes.ttl` file changed, so no fixture's verdict
+  moves and the marker carries no SHACL constraint anywhere for a fixture to
+  assert. Six tags landed at one commit, `vocab/core-v3.13` through
+  `vocab/pots-v1.5` — see jayostis/spec#54, which the releases sat behind,
+  untagged, until it tagged them.
 - core v3.11: the `cascade:consentScope` value set OPENS, on D-CONSENT-1. The
   shape SPLITS rather than softening — `sh:nodeKind`/`sh:minCount`/`sh:maxCount`
   keep `sh:Violation` in a block carrying no `sh:in`, and `sh:in` moves alone to

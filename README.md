@@ -155,7 +155,7 @@ The runner also refuses a checkout that sits at the pinned commit but has uncomm
 
 ## Current status
 
-As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.12, health 2.8, clinical 1.19, coverage 1.8, checkup 3.4, pots 1.4):
+As of the pinned revision in `scripts/SPEC_PIN` (`spec` at core 3.13, health 2.9, clinical 1.20, coverage 1.9, checkup 3.5, pots 1.5):
 
 ```
 passed  151
