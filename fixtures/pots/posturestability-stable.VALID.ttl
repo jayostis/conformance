@@ -1,0 +1,37 @@
+# pots v1.4 — a posture stability sample from the standing phase.
+#
+# THIS CLASS HAS NO sh:Violation CONSTRAINT AT ALL. pots:PostureStabilityShape
+# declares three: pots:isStable at sh:Warning, pots:stabilityScore and
+# pots:atSeconds at sh:Info. Nothing it can report rises to Violation severity.
+#
+# That has two consequences worth stating, because both are easy to get wrong.
+#
+# FIRST, this class CANNOT have an .INVALID.ttl fixture. There is no constraint
+# to violate, so any graph written for it -- however malformed -- produces no
+# sh:Violation and the fixture fails with NO_VIOLATION. jayostis/conformance#10's
+# acceptance criteria originally asked for a negative per covered class; that is
+# unachievable here, and the issue was corrected before delivery rather than the
+# criterion being quietly skipped.
+#
+# SECOND, a .VALID.ttl for this class asserts very little on its own. It says no
+# violation was reported, which would remain true if pots:PostureStabilityShape
+# did not exist. The claim that the shape FIRES is made by
+# posturestability-isstable-repeated.WARN.ttl beside this file, which is the only
+# polarity that can make it. This fixture's job is narrower and still worth
+# having: it shows the well-formed record the warning fixture departs from, and
+# it is what a producer should be writing.
+#
+# A stability score of 0.94 with isStable true is a clean standing phase -- the
+# accelerometer saw very little sway. That matters clinically: an unstable posture
+# during a NASA Lean test inflates heart rate through movement artefact rather
+# than orthostatic response, which is why the check records this at all.
+#
+# Fully synthetic.
+
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:b0750008-0000-4a00-8000-000000004010> a pots:PostureStability ;
+    pots:isStable true ;
+    pots:stabilityScore "0.94"^^xsd:double ;
+    pots:atSeconds "300"^^xsd:integer .

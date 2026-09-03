@@ -1,0 +1,45 @@
+# pots v1.4 — WARN. Two contradictory pots:isStable values on one sample.
+#
+# THIS IS THE ONLY FIXTURE THAT CAN PROVE pots:PostureStabilityShape FIRES.
+# The shape declares no sh:Violation constraint anywhere -- pots:isStable is
+# sh:Warning, pots:stabilityScore and pots:atSeconds are sh:Info -- so an
+# .INVALID.ttl for this class is impossible and would fail with NO_VIOLATION,
+# and a .VALID.ttl passes whether or not the shape exists. .WARN. states the
+# actual claim: something noticed this record, at Warning severity, and nothing
+# rejected it.
+#
+# WHY REPEATING THE PROPERTY, WHEN A MISSING ONE WOULD BE THE OBVIOUS CHOICE.
+# pots:isStable carries sh:datatype xsd:boolean and sh:maxCount 1 -- and NO
+# sh:minCount. So omitting it entirely reports nothing at all, and a fixture
+# written that way would fail with NO_WARNING while looking exactly like a
+# reasonable test. The two ways to reach the warning are a non-boolean value or
+# more than one value, and this fixture uses the second.
+#
+# EXACTLY ONE CONSTRAINT FIRES:
+#   pots:PostureStabilityShape / path pots:isStable / MaxCountConstraintComponent
+#
+# true AND false on one sample is not a contrived shape for a graph to take. It
+# is what a read-modify-write cycle produces when the writer adds a corrected
+# reading instead of replacing the original -- the defect
+# jayostis/sdk-typescript#38 describes on the reading side. The record then says
+# the posture was both stable and unstable, and a consumer picking either answer
+# is guessing. Warning rather than Violation is the right severity for it: the
+# sample is still readable and the rest of the check is unaffected, so rejecting
+# the whole record would lose more than it protects.
+#
+# EVERYTHING ELSE MUST BE CLEAN, or the fixture proves nothing -- a warn fixture
+# that also violates something is rejected outright and is not evidence about the
+# warning. Here that is easy, since the shape has no Violation constraint to
+# breach; the Info-severity stabilityScore (0-1) and atSeconds (non-negative) are
+# both in range anyway, so nothing else is reported at any severity.
+#
+# Fully synthetic.
+
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:b0750009-0000-4a00-8000-000000004020> a pots:PostureStability ;
+    pots:isStable true ;
+    pots:isStable false ;
+    pots:stabilityScore "0.41"^^xsd:double ;
+    pots:atSeconds "420"^^xsd:integer .

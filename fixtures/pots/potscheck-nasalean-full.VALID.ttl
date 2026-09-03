@@ -1,0 +1,154 @@
+# pots v1.4 — a complete NASA Lean orthostatic screening check.
+#
+# FIRST FIXTURE FOR THIS VOCABULARY. pots has been released and enforced by
+# `cascade validate` since Phase 4 (2026-02-18) and no fixture had ever asserted
+# one of its classes, so none of its Violation constraints had ever executed.
+# See jayostis/conformance#10.
+#
+# This one graph carries all five reachable classes, because that is the shape
+# the data actually takes: a POTSCheckResult REQUIRES a supine heart rate of
+# class pots:HeartRateMeasurement (sh:class, sh:minCount 1, at sh:Violation), so
+# a check result cannot be written standalone. Each nested node is TYPED, which
+# is what lets each sub-shape's own sh:targetClass reach it and validate it at
+# its own severities. The per-class fixtures beside this one exist so that a
+# failure can be attributed to one shape rather than to this bundle.
+#
+# ALL FIVE sh:Violation CONSTRAINTS ON POTSCheckResultShape ARE SATISFIED HERE,
+# and the count is five rather than the three the "REQUIRED (sh:Violation)"
+# header block suggests: pots:date, pots:protocol, pots:supineHeartRate and
+# pots:potsThresholdMet carry sh:severity sh:Violation explicitly, and
+# cascade:schemaVersion is declared in a separate block at the end of the shape
+# that also carries sh:Violation. Miss the last one and the fixture fails for a
+# reason the header does not mention.
+#
+# THE THREE sh:Warning CONSTRAINTS ARE ALSO SATISFIED, deliberately — this is a
+# .VALID. fixture and must produce no violation, but leaving the warnings
+# unsatisfied would make it noisy rather than wrong. pots:standingHeartRates
+# (sh:minCount 1), pots:supineBloodPressure (sh:class, sh:maxCount 1) and
+# cascade:dataProvenance (sh:minCount 1, sh:maxCount 1) are all present. The
+# warning path is exercised deliberately by posturestability-isstable-repeated.WARN.ttl.
+#
+# WHY THE COLLECTION PROPERTIES ARE RDF LISTS. pots.ttl declares
+# rdfs:range rdf:List on pots:standingHeartRates (:118), pots:symptomEvents
+# (:156) and pots:postureStability (:224). The SHACL shape does NOT enforce
+# that — pots:standingHeartRates carries only sh:minCount 1 at sh:Warning, and
+# repeated plain properties would satisfy it equally. The list form is used here
+# because it is the documented intent and nothing contradicts it; no producer
+# exists for this vocabulary, so this fixture is the first thing to state a
+# convention, and it should state the one the ontology already declares rather
+# than invent a second. A reader who later finds that the Swift producer emits
+# repeated properties should change this fixture and say so, not add a rival.
+#
+# Note the list members stay individually typed, so pots:HeartRateMeasurement,
+# pots:SymptomEvent and pots:PostureStability are each still reached by their own
+# sh:targetClass. Wrapping them in a list hides nothing from validation.
+#
+# CLINICALLY COHERENT, not merely in-range. A NASA Lean test records a supine
+# baseline then heart rates through ten minutes of standing. 72 bpm supine rising
+# to 118 bpm is a +46 bpm delta, past the adult >=30 bpm POTS threshold, which is
+# why pots:potsThresholdMet is true and pots:maxHeartRateDelta is 46.0. A fixture
+# whose numbers were merely inside 20-300 would validate identically and teach a
+# reader nothing about what the record means.
+#
+# Fully synthetic: no real patient, invented subject IRIs.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix ucum: <http://unitsofmeasure.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:b0750001-0000-4a00-8000-000000000001> a pots:POTSCheckResult ;
+    pots:date "2031-03-14T09:12:00Z"^^xsd:dateTime ;
+    pots:protocol "nasaLean" ;
+    pots:potsThresholdMet true ;
+    pots:supineHeartRate <urn:uuid:b0750001-0000-4a00-8000-000000001000> ;
+    pots:standingHeartRates (
+        <urn:uuid:b0750001-0000-4a00-8000-000000001001>
+        <urn:uuid:b0750001-0000-4a00-8000-000000001002>
+        <urn:uuid:b0750001-0000-4a00-8000-000000001003>
+    ) ;
+    pots:supineBloodPressure <urn:uuid:b0750001-0000-4a00-8000-000000002000> ;
+    pots:symptomEvents (
+        <urn:uuid:b0750001-0000-4a00-8000-000000003001>
+    ) ;
+    pots:postureStability (
+        <urn:uuid:b0750001-0000-4a00-8000-000000004001>
+    ) ;
+    pots:maxHeartRateDelta "46.0"^^xsd:double ;
+    pots:orthostaticHypotensionSuspected false ;
+    pots:isIncomplete false ;
+    pots:userAgeAtTest "34"^^xsd:integer ;
+    pots:baselineDurationSeconds "300"^^xsd:integer ;
+    pots:uprightDurationSeconds "600"^^xsd:integer ;
+    pots:postureQualityScore "A" ;
+    pots:movementArtifactPercentage "2.5"^^xsd:double ;
+    pots:recoveryHeartRate "78.0"^^xsd:double ;
+    cascade:dataProvenance cascade:PatientReported ;
+    cascade:schemaVersion "1.4" .
+
+<urn:uuid:b0750001-0000-4a00-8000-000000001000> a pots:HeartRateMeasurement ;
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "72.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "0.0"^^xsd:double .
+
+<urn:uuid:b0750001-0000-4a00-8000-000000001001> a pots:HeartRateMeasurement ;
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "104.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "60.0"^^xsd:double .
+
+<urn:uuid:b0750001-0000-4a00-8000-000000001002> a pots:HeartRateMeasurement ;
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "112.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "300.0"^^xsd:double .
+
+<urn:uuid:b0750001-0000-4a00-8000-000000001003> a pots:HeartRateMeasurement ;
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "118.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "600.0"^^xsd:double .
+
+<urn:uuid:b0750001-0000-4a00-8000-000000002000> a pots:BloodPressureMeasurement ;
+    fhir:component [
+        fhir:code loinc:8480-6 ;
+        fhir:valueQuantity [
+            fhir:value "118.0"^^xsd:double ;
+            fhir:unit "mmHg" ;
+            fhir:code ucum:mm-Hg
+        ]
+    ] ;
+    fhir:component [
+        fhir:code loinc:8462-4 ;
+        fhir:valueQuantity [
+            fhir:value "76.0"^^xsd:double ;
+            fhir:unit "mmHg" ;
+            fhir:code ucum:mm-Hg
+        ]
+    ] ;
+    pots:secondsSinceStand "0.0"^^xsd:double .
+
+<urn:uuid:b0750001-0000-4a00-8000-000000003001> a pots:SymptomEvent ;
+    pots:symptom "lightheadedness" ;
+    pots:notes "Reported at four minutes standing; resolved on sitting." ;
+    pots:timestampSeconds "240.0"^^xsd:double .
+
+<urn:uuid:b0750001-0000-4a00-8000-000000004001> a pots:PostureStability ;
+    pots:isStable true ;
+    pots:stabilityScore "0.94"^^xsd:double ;
+    pots:atSeconds "300"^^xsd:integer .

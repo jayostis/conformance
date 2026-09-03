@@ -1,0 +1,93 @@
+# pots v1.4 — NEGATIVE. A check result claiming a protocol the vocabulary does
+# not define.
+#
+# pots:POTSCheckResultShape binds pots:protocol with sh:in ("nasaLean") at
+# sh:Violation -- a value set of exactly one member. "tiltTable" is the realistic
+# wrong value: the head-up tilt table test is the clinical gold standard for
+# diagnosing POTS and the term any practitioner would reach for, but it is a
+# supervised procedure performed on a motorised table in a clinic, not something
+# a phone and a watch can run. A record claiming a tilt table result is claiming
+# a different examination was performed.
+#
+# THAT IS WHY THIS IS A VIOLATION AND NOT A WARNING, and the contrast with
+# clinical/coverage-record-legacy-type-vocabulary.WARN.ttl is the point. There
+# the FHIR binding is EXTENSIBLE, so a payer-local code is conformant at source
+# and gets flagged rather than rejected. Here the value set is not extensible
+# and is not a terminology binding at all: it names which measurement procedure
+# the numbers in this record came from. A consumer that reads a tilt-table
+# protocol will interpret the heart rate deltas against different thresholds. The
+# record is not diminished, it is wrong.
+#
+# EXACTLY ONE CONSTRAINT FIRES:
+#   pots:POTSCheckResultShape / path pots:protocol / InConstraintComponent
+#
+# ALL FOUR OTHER sh:Violation CONSTRAINTS ARE SATISFIED, deliberately and with
+# some care, because a check result is the hardest fixture in this directory to
+# make fail for exactly one reason. pots:date is present and xsd:dateTime;
+# pots:potsThresholdMet is present and xsd:boolean; cascade:schemaVersion matches
+# the major.minor pattern; and pots:supineHeartRate carries a node that is TYPED
+# pots:HeartRateMeasurement -- the constraint is sh:class, so an untyped node or
+# a bare literal would fail it and add a second violation. That nested
+# measurement is itself valid, since pots:HeartRateMeasurementShape reaches it by
+# its own sh:targetClass and would otherwise contribute violations of its own.
+#
+# The three sh:Warning constraints are satisfied too. They do not affect an
+# .INVALID. verdict, which reads only sh:Violation, but leaving them unmet would
+# make this fixture noisy and would obscure which finding the test is about.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix ucum: <http://unitsofmeasure.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:b0750010-0000-4a00-8000-000000000010> a pots:POTSCheckResult ;
+    pots:date "2031-03-14T09:12:00Z"^^xsd:dateTime ;
+    pots:protocol "tiltTable" ;
+    pots:potsThresholdMet true ;
+    pots:supineHeartRate <urn:uuid:b0750010-0000-4a00-8000-000000001030> ;
+    pots:standingHeartRates (
+        <urn:uuid:b0750010-0000-4a00-8000-000000001031>
+    ) ;
+    pots:supineBloodPressure <urn:uuid:b0750010-0000-4a00-8000-000000002030> ;
+    cascade:dataProvenance cascade:PatientReported ;
+    cascade:schemaVersion "1.4" .
+
+<urn:uuid:b0750010-0000-4a00-8000-000000001030> a pots:HeartRateMeasurement ;
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "72.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "0.0"^^xsd:double .
+
+<urn:uuid:b0750010-0000-4a00-8000-000000001031> a pots:HeartRateMeasurement ;
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "118.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "600.0"^^xsd:double .
+
+<urn:uuid:b0750010-0000-4a00-8000-000000002030> a pots:BloodPressureMeasurement ;
+    fhir:component [
+        fhir:code loinc:8480-6 ;
+        fhir:valueQuantity [
+            fhir:value "118.0"^^xsd:double ;
+            fhir:unit "mmHg" ;
+            fhir:code ucum:mm-Hg
+        ]
+    ] ;
+    fhir:component [
+        fhir:code loinc:8462-4 ;
+        fhir:valueQuantity [
+            fhir:value "76.0"^^xsd:double ;
+            fhir:unit "mmHg" ;
+            fhir:code ucum:mm-Hg
+        ]
+    ] .

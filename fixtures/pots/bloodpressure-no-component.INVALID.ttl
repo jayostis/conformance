@@ -1,0 +1,41 @@
+# pots v1.4 — NEGATIVE. A blood pressure observation carrying no component.
+#
+# This is the whole of pots:BloodPressureMeasurementShape's Violation surface:
+# one constraint, sh:path fhir:component with sh:minCount 1. A blood pressure
+# with no components is a record that says a reading was taken and does not say
+# what it was -- worse than a missing record, because it occupies the slot a real
+# reading would fill and reads as data.
+#
+# EXACTLY ONE CONSTRAINT FIRES:
+#   pots:BloodPressureMeasurementShape / path fhir:component
+#   / MinCountConstraintComponent
+#
+# THE REALISTIC PRODUCER ERROR is putting the numbers where they do not belong,
+# so that is what this fixture does. It carries fhir:valueQuantity directly on
+# the observation -- the shape a HEART RATE takes -- rather than nesting the two
+# values under fhir:component. A converter written for the single-valued case and
+# reused for blood pressure emits precisely this: a plausible-looking node whose
+# systolic reading has quietly become the observation's own value and whose
+# diastolic has been dropped. Nothing in the shape rejects the stray
+# fhir:valueQuantity; the missing component is what makes it invalid, and the
+# record is wrong in a way a reader skimming the Turtle would not notice.
+#
+# pots:secondsSinceStand is Info-severity and correct, so it contributes nothing
+# to the verdict either way.
+#
+# Fully synthetic.
+
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix ucum: <http://unitsofmeasure.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:b0750005-0000-4a00-8000-000000002020> a pots:BloodPressureMeasurement ;
+    fhir:code loinc:8480-6 ;
+    fhir:valueQuantity [
+        fhir:value "118.0"^^xsd:double ;
+        fhir:unit "mmHg" ;
+        fhir:code ucum:mm-Hg
+    ] ;
+    pots:secondsSinceStand "0.0"^^xsd:double .

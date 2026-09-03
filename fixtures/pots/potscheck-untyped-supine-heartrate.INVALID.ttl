@@ -1,0 +1,100 @@
+# pots v1.4 — NEGATIVE. A supine heart rate that carries no rdf:type.
+#
+# WHY THIS FIXTURE IS WORTH MORE THAN ITS OWN CONSTRAINT. pots:supineHeartRate
+# is bound with sh:class pots:HeartRateMeasurement at sh:Violation, and sh:class
+# reaches only a node carrying rdf:type. The node below is structurally complete
+# -- it has the fhir:valueQuantity, the datatype is right, the timing property is
+# present and correct -- and it is rejected anyway, for the single reason that
+# nobody wrote `a pots:HeartRateMeasurement` on it.
+#
+# THE VALUE IS 350.0 bpm, WHICH IS THE POINT AND NOT AN OVERSIGHT. It is the same
+# out-of-range value heartrate-above-range.INVALID.ttl carries, and that fixture
+# reports a MaxInclusiveConstraintComponent for it. Here the identical number
+# reports nothing, because the only difference between the two nodes is the
+# rdf:type. That makes the two files a controlled pair: same value, typed node
+# fails the range check, untyped node is never asked. An in-range value such as
+# 72.0 could not state this -- the absence of a range violation would be equally
+# explained by the number being legal, so the output would be consistent with the
+# shape having fired and passed, and a future spec change that gave
+# HeartRateMeasurementShape a target reaching untyped nodes would leave this
+# fixture passing unchanged while its header quietly became false.
+#
+# The record is therefore NOT clinically coherent, unlike every other fixture in
+# this directory: a 350 bpm supine baseline against a 118 bpm standing rate does
+# not describe a real check, and pots:potsThresholdMet true is arbitrary here.
+# That is the cost of making the silence observable, and it is worth paying in
+# this one fixture because the silence is the entire claim.
+#
+# THAT IS THE QUESTION jayostis/spec#14 IS BLOCKED ON, demonstrated where it can
+# be demonstrated. That issue wants to replace seventeen `sh:node` sites in
+# checkup:IntakeFormDataShape with `sh:class`, relying on each sub-shape's own
+# sh:targetClass to validate the nested node at its own severities. The premise
+# is that intake sub-records carry rdf:type in real data. If they are bare blank
+# nodes, the change silently stops validating them altogether -- and this fixture
+# is what that silence looks like from the other side of the same mechanism: the
+# untyped node is not merely unvalidated by pots:HeartRateMeasurementShape, it is
+# invisible to it. Here a second constraint happens to catch the omission. In
+# checkup, after the sh:node is dropped, nothing would.
+#
+# This is evidence about the MECHANISM, not about checkup's data, and it does not
+# unblock spec#14 -- only a look at what CheckupSerializer actually emits can do
+# that. It does show, cheaply and in a vocabulary that already ships, that
+# "typed or untyped" is a verdict-changing distinction rather than a stylistic one.
+#
+# EXACTLY ONE CONSTRAINT FIRES:
+#   pots:POTSCheckResultShape / path pots:supineHeartRate
+#   / ClassConstraintComponent
+#
+# Note what does NOT fire, and why that is the whole point: no constraint from
+# pots:HeartRateMeasurementShape appears in the report at all. That shape reaches
+# its focus nodes by sh:targetClass, the node has no type, so the shape never
+# sees it. Every constraint it declares is skipped in silence -- including the
+# 20-300 bpm range that this node's own 350.0 bpm plainly breaks, and which
+# heartrate-above-range.INVALID.ttl reports for that same value on a typed node.
+# The missing MaxInclusiveConstraintComponent is the observable evidence: it is
+# absent from the one-line report above, and running the pair shows the contrast.
+#
+# The other four Violation constraints on the check result are satisfied, so the
+# untyped reference is the only thing the validator objects to. It is not the
+# only thing wrong with the record -- the 350.0 is wrong too, and is ignored,
+# which is precisely the finding.
+#
+# Fully synthetic.
+
+@prefix cascade: <https://ns.cascadeprotocol.org/core/v1#> .
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix ucum: <http://unitsofmeasure.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:b0750011-0000-4a00-8000-000000000011> a pots:POTSCheckResult ;
+    pots:date "2031-03-14T09:12:00Z"^^xsd:dateTime ;
+    pots:protocol "nasaLean" ;
+    pots:potsThresholdMet true ;
+    pots:supineHeartRate <urn:uuid:b0750011-0000-4a00-8000-000000001040> ;
+    pots:standingHeartRates (
+        <urn:uuid:b0750011-0000-4a00-8000-000000001041>
+    ) ;
+    cascade:dataProvenance cascade:PatientReported ;
+    cascade:schemaVersion "1.4" .
+
+# NO rdf:type, and the value is out of range. A typed node carrying 350.0 reports
+# a range violation; this one reports nothing at all. See the header.
+<urn:uuid:b0750011-0000-4a00-8000-000000001040>
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "350.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "0.0"^^xsd:double .
+
+<urn:uuid:b0750011-0000-4a00-8000-000000001041> a pots:HeartRateMeasurement ;
+    fhir:code loinc:8867-4 ;
+    fhir:valueQuantity [
+        fhir:value "118.0"^^xsd:double ;
+        fhir:unit "beats/minute" ;
+        fhir:code ucum:min-1
+    ] ;
+    pots:secondsSinceStand "600.0"^^xsd:double .

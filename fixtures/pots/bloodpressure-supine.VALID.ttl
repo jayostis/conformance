@@ -1,0 +1,54 @@
+# pots v1.4 — a supine blood pressure reading, on its own.
+#
+# THE FHIR COMPONENT PATTERN. A blood pressure is one observation with two
+# component values, not two observations: FHIR models it as an Observation whose
+# fhir:component repeats, each component carrying its own code and quantity. That
+# is what pots:BloodPressureMeasurementShape's single Violation constraint
+# checks -- sh:path fhir:component, sh:minCount 1 -- and it is deliberately
+# structural rather than numeric.
+#
+# WHAT IS NOT CHECKED HERE, AND WHY THAT MATTERS. Neither component's VALUE is
+# validated by anything. pots.shapes.ttl defines pots:SystolicComponentShape
+# (40-300 mmHg) and pots:DiastolicComponentShape (20-200 mmHg), and both are
+# UNREACHABLE: neither carries sh:targetClass, and the file contains no sh:node
+# site to reach them by. So a systolic of 900 mmHg validates exactly as cleanly
+# as the 118 below, and this fixture cannot be written to prove otherwise. That
+# is a spec defect, reported as jayostis/spec#40, and it is out of scope here --
+# jayostis/conformance#10 is deliberately scoped to the five REACHABLE classes so
+# that it does not wait on spec picking a route.
+#
+# It is stated here rather than left silent because the natural reading of a
+# passing blood-pressure fixture is that the numbers were checked. They were not.
+# When spec#40 lands, the negative fixtures for those ranges belong beside this
+# one and this paragraph should be replaced by them.
+#
+# 118/76 supine: an unremarkable normotensive baseline. A POTS screening is about
+# the heart rate response to standing, so a normal supine pressure is the
+# expected accompaniment rather than an incidental choice.
+#
+# Fully synthetic.
+
+@prefix pots: <https://ns.cascadeprotocol.org/pots/v1#> .
+@prefix fhir: <http://hl7.org/fhir/> .
+@prefix loinc: <http://loinc.org/rdf#> .
+@prefix ucum: <http://unitsofmeasure.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<urn:uuid:b0750004-0000-4a00-8000-000000002010> a pots:BloodPressureMeasurement ;
+    fhir:component [
+        fhir:code loinc:8480-6 ;
+        fhir:valueQuantity [
+            fhir:value "118.0"^^xsd:double ;
+            fhir:unit "mmHg" ;
+            fhir:code ucum:mm-Hg
+        ]
+    ] ;
+    fhir:component [
+        fhir:code loinc:8462-4 ;
+        fhir:valueQuantity [
+            fhir:value "76.0"^^xsd:double ;
+            fhir:unit "mmHg" ;
+            fhir:code ucum:mm-Hg
+        ]
+    ] ;
+    pots:secondsSinceStand "0.0"^^xsd:double .

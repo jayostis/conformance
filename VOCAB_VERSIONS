@@ -313,18 +313,65 @@ coverage=1.7
 #   targeted by no shape, so claim-001, benefit-001 and denial-001 evaluate zero
 #   constraints and there can be no negative counterpart for them yet.
 #
-# NO FIXTURE COVERAGE — these two rows are retained to record the versions this repo
-# is aligned to, but no fixture in fixtures/ instantiates any class either vocabulary
-# shapes, so the suite evaluates zero constraints from them. Measured 2026-08-03 by
-# recording which node shapes matched a focus node across all 118 fixtures: no
-# checkup: or pots: shape fired. (One phenopacket oracle uses the predicate
-# checkup:recommendedActions, which no shape targets.) Treat both as UNVERIFIED
-# until fixtures exist.
+# checkup: STILL NO FIXTURE COVERAGE. This row records the version this repo is
+# aligned to; no fixture instantiates any class checkup.shapes.ttl shapes, so the
+# suite evaluates zero constraints from it. Treat as UNVERIFIED. Tracked as #5,
+# which is BLOCKED rather than merely undone: the fixture turns on whether intake
+# exports nest their sub-records, and the only producer -- CheckupSerializer, in
+# the private Swift SDK -- cannot be read from here. Asked at jayostis/spec#14.
+# (One phenopacket oracle uses the predicate checkup:recommendedActions, which no
+# shape targets, so it is not coverage.)
 checkup=3.3
 # checkup=3.3: icd10Code pattern corrected to allow alphanumeric characters in
 #   positions 2-3 per ICD-10-CM Official Guidelines I.A.2 (C4A/D3A/M1A classes).
 #   Still no checkup: fixture; the UNVERIFIED caveat above continues to apply.
 pots=1.4
+# pots=1.4: COVERED as of 2026-09-01 (#10). This row read "NO FIXTURE COVERAGE"
+#   alongside checkup= until then. 11 .ttl fixtures in fixtures/pots/ cover all
+#   five reachable classes and EXECUTE all 9 reachable Violation constraints,
+#   +349 constraint checks. See fixtures/pots/INVENTORY.md.
+#
+#   EXECUTED IS NOT ASSERTED, and the gap is 4 constraints. Only 5 of the 9 are
+#   ever violated by a fixture: pots:protocol/In, pots:supineHeartRate/Class,
+#   ( fhir:valueQuantity fhir:value )/MaxInclusive, fhir:component/MinCount and
+#   pots:symptom/MinLength. pots:date, pots:potsThresholdMet,
+#   cascade:schemaVersion's ^[0-9]+\.[0-9]+$ pattern and
+#   fhir:valueQuantity/MinCount are only ever satisfied, so deleting or
+#   deactivating any of those four in spec would leave all 11 fixtures passing
+#   and the suite unchanged -- exactly the vacuity this repository exists to
+#   catch. Four more negative fixtures would close it; nothing blocks them.
+#
+#   THE COUNTS HERE ARE MEASURED BY PARSING, NOT BY GREP, and that distinction
+#   changed them. Grepping sh:Violation / sh:Warning / sh:Info as text over
+#   pots.shapes.ttl reports 13 / 6 / 20, because it also counts the severity
+#   legend in the file's header comment. Parsing the graph and reading each
+#   sh:property's EFFECTIVE severity -- an absent sh:severity means SHACL's
+#   default, sh:Violation -- reports 11 / 4 / 18. Issues #10, #5 and
+#   jayostis/spec#40 all carried the grep figures and were corrected.
+#
+#   TWO SHAPES ARE UNREACHABLE AND CANNOT BE COVERED FROM HERE.
+#   pots:SystolicComponentShape and pots:DiastolicComponentShape carry no
+#   sh:targetClass, and pots.shapes.ttl contains no sh:node site to reach them
+#   by; nothing in spec references either except a comment describing their mmHg
+#   ranges as if they were live. They hold 2 of the file's 11 Violation
+#   constraints and can never fire, so a blood-pressure component of any value
+#   validates clean. Reported as jayostis/spec#40. Do NOT add fixtures for them
+#   until that lands: a negative would fail NO_VIOLATION and a positive would
+#   pass vacuously.
+#
+#   pots:PostureStabilityShape declares NO Violation constraint at all -- one
+#   Warning, two Info -- so it has a .WARN.ttl rather than an .INVALID.ttl. That
+#   is the only polarity that can show the shape fires; .VALID. would pass
+#   whether or not the shape existed. #10's acceptance criteria originally asked
+#   for a negative per covered class and were corrected before delivery.
+#
+#   CONVENTION ESTABLISHED, because nothing produces this data and these fixtures
+#   are the first artefact to state one: the collection properties are written as
+#   RDF lists, following pots.ttl's own rdfs:range rdf:List on
+#   pots:standingHeartRates, pots:symptomEvents and pots:postureStability. The
+#   shape does not enforce it. If the private Swift producer turns out to emit
+#   repeated properties instead, change the fixtures and say so rather than
+#   adding a rival convention.
 #
 # 2026-07-15 batched draft sync (spec PENDING_DOWNSTREAM_SYNC rows 1-3). Per
 # D-PATH, pre-stable draft vocabs are NOT registered here (no version row) until
