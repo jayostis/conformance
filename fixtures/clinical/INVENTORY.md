@@ -4,7 +4,7 @@
 `clinical:` spelling of social history), `clinical` v1.16 (the encounter,
 document and status batch below), `clinical` v1.19 (the coverage-type
 vocabulary warning on the deprecated `clinical:CoverageRecord` spelling) and
-`core` v3.10 (the consent-scope pair —
+`core` v3.10/v3.11 (the consent-scope pair —
 records typed `clinical:SocialHistoryRecord`, constrained by a `core` shape,
 so they live here beside the other social history fixtures rather than in
 `../core/`).
@@ -78,7 +78,7 @@ is part of that fix.
 | Fixture | Expect | Scenario |
 |---|---|---|
 | `social-history-consent-scope.VALID.ttl` | PASS | `cascade:consentScope cascade:SocialHistoryConsent` on a social history record — the class `clinical.ttl` says "requires separate consent scope", so the record type a producer will write the property on first. It and its INVALID sibling differ in exactly one respect besides their subject IRIs — the value of `cascade:consentScope` — so `sh:in` is the only thing that can separate their verdicts. (It is *not* byte-identical to `social-history-smoking.ttl`: it carries a different `health:smokingStatus` and no `clinical:packsPerYear`. Neither is constrained on this class, which the counts show — strip the consent scope and it evaluates that fixture's same 12 checks.) |
-| `social-history-consent-scope-wrong-value.INVALID.ttl` | FAIL | `cascade:consentScope cascade:SelfReported`. **The value being a real term is the point.** `cascade:SelfReported` is a `cascade:DataProvenance` subclass declared in `core.ttl` since v1, so an invented IRI would have been caught by any constraint that merely checked the value resolved; an IRI that exists in the same namespace and is simply not in the closed `cascade:ConsentScope` list is caught only by the constraint this release added. It is also the confusion a producer will actually make, provenance being the other `cascade:` code list a record of this shape carries. Exactly one violation fires: `cascade:ConsentScopeShape / cascade:consentScope / sh:InConstraintComponent`. |
+| `social-history-consent-scope-wrong-value.WARN.ttl` | WARN | `cascade:consentScope cascade:SelfReported`. **The value being a real term is the point.** `cascade:SelfReported` is a `cascade:DataProvenance` subclass declared in `core.ttl` since v1, so an invented IRI would have been caught by any constraint that merely checked the value resolved; an IRI that exists in the same namespace and is simply not in the closed `cascade:ConsentScope` list is caught only by the constraint this release added. It is also the confusion a producer will actually make, provenance being the other `cascade:` code list a record of this shape carries. **This file was `.INVALID.ttl` until core v3.11**, which opened the value set on D-CONSENT-1 — `sh:in` at `sh:Warning`, never `sh:Violation`, because a closed list missing a member rejects conformant data. The data did not change; what the specification does with it did, and the polarity suffix is the only place a fixture can say so. It now fires exactly one warning and no violation: `cascade:ConsentScopeShape / cascade:consentScope / sh:InConstraintComponent`. |
 
 **What is deliberately NOT here, and must not be added.** There is no fixture
 asserting that a *missing* consent scope is rejected. core v3.10 requires the
@@ -181,9 +181,11 @@ cascade validate fixtures/clinical/<fixture> --shapes <flat dir of spec *.shapes
 
 All eleven verdicts agree with this runner's, including the lab report failure.
 
-### The consent-scope pair (core v3.10)
+### The consent-scope pair (core v3.10, reshaped at core v3.11)
 
-Same discipline, and the RED half is the whole argument for the polarity suffix.
+Same discipline, and the RED halves are the whole argument for the polarity
+suffix: the fixture is reported correctly at exactly one vocabulary version, and
+the two pins on either side each fail it for a different reason.
 
 ```sh
 # RED first: at the PREVIOUS pin (spec 9b13ae4, core v3.8), where no shape
@@ -191,16 +193,31 @@ Same discipline, and the RED half is the whole argument for the polarity suffix.
 python3 scripts/run_conformance.py --spec-dir <spec@9b13ae4> \
   --select 'clinical/social-history*'
 #   2 passed / 1 failed / 3 total.
-#   social-history-consent-scope-wrong-value.INVALID.ttl reports NO_VIOLATION:
-#   the two files are INDISTINGUISHABLE there, both evaluating the same 12
-#   constraint checks as social-history-smoking.ttl, because the consent scope
-#   on each is read by nothing. That is what .INVALID.ttl turns into a
-#   reported failure instead of a silent pass.
+#   social-history-consent-scope-wrong-value reports a failure: the two files
+#   are INDISTINGUISHABLE there, both evaluating the same 12 constraint checks
+#   as social-history-smoking.ttl, because the consent scope on each is read by
+#   nothing. That is what a polarity suffix turns into a reported failure
+#   instead of a silent pass.
+#
+#   NOTE the file is .WARN.ttl as of core v3.11 and was .INVALID.ttl before it,
+#   so the reason differs by pin: NO_VIOLATION for the old name, NO_WARNING for
+#   the current one. Either way the point stands -- a .VALID.ttl would have
+#   passed at core v3.8 and told nobody anything.
 
-# GREEN: at the pin now named in scripts/SPEC_PIN (spec 40e581f, core v3.10).
+# RED AGAIN at the pin in between (spec 40e581f, core v3.10), where the value
+# set was published CLOSED and the membership check was still sh:Violation.
 python3 scripts/run_conformance.py --spec-dir <spec@40e581f> \
   --select 'clinical/social-history*'
-#   3 passed / 0 failed / 3 total.
+#   2 passed / 1 failed / 3 total.
+#   social-history-consent-scope-wrong-value.WARN.ttl reports VIOLATIONS: a warn
+#   fixture must be NOTICED, not rejected, and core v3.10 rejects it. This is the
+#   half that makes the rename load-bearing rather than cosmetic -- the file
+#   passes at exactly one vocabulary version in each polarity.
+
+# GREEN: at the pin now named in scripts/SPEC_PIN (spec 3362861, core v3.12).
+python3 scripts/run_conformance.py --spec-dir <spec@3362861> \
+  --select 'clinical/social-history*'
+#   3 passed / 0 failed / 3 total, 44 constraint checks.
 ```
 
 The positive fixture is not proven by passing either — it passes under both
@@ -210,14 +227,22 @@ pins. What proves it is the count: **12 → 16** constraint checks, the four bei
 non-movement is the open-world assertion: the shape did not reach it, because it
 carries no consent scope.
 
-The negative fixture's single violation is
-`cascade:ConsentScopeShape / path cascade:consentScope / InConstraintComponent`,
-verbatim from `results.json` — one violation, from the constraint under test,
-and nothing else fires.
+The warn fixture's single finding is that same constraint, now reported at
+`sh:Warning`: `cascade:ConsentScopeShape / path cascade:consentScope /
+InConstraintComponent :: "advisory: value outside the known cascade:ConsentScope
+list"`, verbatim from `results.json` at spec 3362861 — **zero violations and
+exactly one warning**, from the constraint under test, and nothing else fires.
+Under core v3.10 the identical constraint reported the identical focus node at
+`sh:Violation`, and the file was `.INVALID.ttl` for exactly that reason; core
+v3.11 demoted the membership check, and the polarity suffix followed. If you are
+auditing this paragraph against `results.json`, read the `warnings` array — the
+`violations` array is empty and is meant to be.
 
 Measured across the **whole** suite at both pins, because two of the five
 version steps this pin moves (clinical v1.18, coverage v1.7) are explicitly not
 widening: 163 fixtures, exactly one verdict change, and it is
 `social-history-consent-scope-wrong-value.INVALID.ttl` going `NO_VIOLATION` →
-`pass`. No existing fixture changed verdict, gained a warning or lost one. See
+`pass`. (That file is now `.WARN.ttl`; core v3.11 opened the value set, so the
+rejection it asserted became a warning and the polarity had to follow. The
+2026-09-02 re-pin to spec 3362861 records that move.) No existing fixture changed verdict, gained a warning or lost one. See
 `scripts/SPEC_PIN` for the counts and for where the +20 constraint checks went.

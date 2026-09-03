@@ -15,9 +15,9 @@
 # scripts/SPEC_PIN, not from this file. If the two disagree, SPEC_PIN wins and
 # the rows below describe a vocabulary CI is not executing, so keep them in step:
 # SPEC_PIN's `vocab=` line must repeat the versions below verbatim. As of
-# 2026-09-01 both read core=3.10 health=2.8 clinical=1.19 coverage=1.7
-# checkup=3.3 pots=1.4, and the pin is the jayostis/spec PR #21 merge commit
-# 40e581f (tag vocab/core-v3.10).
+# 2026-09-02 both read core=3.12 health=2.8 clinical=1.19 coverage=1.8
+# checkup=3.4 pots=1.4, and the pin is the jayostis/spec PR #42 merge commit
+# 3362861 (tags vocab/core-v3.12, vocab/coverage-v1.8, vocab/checkup-v3.4).
 #
 # (Corrected 2026-09-01: the coverage row read 1.5 while SPEC_PIN read 1.6, so
 # the two had been out of step since the 2026-08-28 re-pin. The v1.6 note that
@@ -71,17 +71,60 @@
 # encounter-001 was a KNOWN_FAILURES entry with reason UNSHAPED: it reported
 # conforming while evaluating ZERO constraints, because clinical:Encounter had no
 # shape. It now evaluates 29, so the entry is gone.
-core=3.10
+core=3.12
+# core=3.12 and 3.11: ONE SHAPE CHANGE BETWEEN THEM, and it moved a fixture.
+#   v3.11 OPENED the cascade:consentScope value set. D-CONSENT-1 ratified it as
+#   open -- "sh:in at sh:Warning at most, never sh:Violation ... a closed list
+#   missing a member rejects conformant data" -- and v3.10 had published the
+#   opposite. The shape SPLIT rather than softening: sh:nodeKind / sh:minCount /
+#   sh:maxCount keep sh:Violation in a block carrying no sh:in, and sh:in moved
+#   alone to a second block at sh:Warning. So the STRUCTURAL constraints are
+#   still rejections and only the membership check is advisory.
+#     EXERCISED, and the fixture had to be renamed to say so:
+#     clinical/social-history-consent-scope-wrong-value went .INVALID.ttl ->
+#     .WARN.ttl at this pin. Its data is unchanged; what changed is what the
+#     specification does with it. As .INVALID.ttl it failed NO_VIOLATION here,
+#     and as .WARN.ttl it fails VIOLATIONS at the previous pin -- correct for
+#     exactly one vocabulary version in each polarity, which is what shows the
+#     rename tracks core v3.11 rather than being cosmetic.
+#     NOT covered, part 1: the two constraints that KEPT sh:Violation. Nothing
+#     asserts that two consent scopes on one record, or a literal where an IRI
+#     belongs, is rejected. Both would be .INVALID.ttl and neither is written.
+#     NOT covered, part 2 -- and NOT CLOSEABLE by any fixture: v3.11 did not only
+#     demote sh:in, it GREW it from one member to three, adding
+#     cascade:SubstanceUseConsent and cascade:MentalHealthConsent. Neither term
+#     appears anywhere in this repository. Measured, not assumed: delete both
+#     members from core.shapes.ttl and re-run, and all three social-history
+#     fixtures still pass at the same 12/16/16 constraint checks. So the exact
+#     records D-CONSENT-1 says v3.10 wrongly rejected are asserted by nothing.
+#     A second .VALID.ttl carrying cascade:SubstanceUseConsent does NOT close
+#     this, and was measured too: it passes at 16 checks against a one-member
+#     list and a three-member one alike. The reason is structural. sh:in now
+#     reports at sh:Warning, run_conformance.py calls pyshacl with
+#     allow_warnings=True, and a positive fixture's verdict reads violations
+#     only -- so MEMBERSHIP produces silence, and none of the three polarities
+#     asserts silence (.VALID = no violation, .INVALID = >=1 violation,
+#     .WARN = >=1 warning). Closing this needs a fourth polarity asserting
+#     "no warning", which is a runner change and belongs to its own issue.
+#   v3.12 is ONTOLOGY-ONLY: cascade:ConflictDetail and
+#   cascade:AIDiscardedExtraction gain rdfs:subClassOf prov:Entity. NO FIXTURE
+#   REACHES IT and none can -- no shape targets either class, so the declaration
+#   is invisible to a SHACL run. It is one of four vocabularies moving together
+#   for jayostis/spec#13; the suite sees it only as subclass axioms 149 -> 156.
 # core=3.10: cascade:consentScope, the cascade:ConsentScope code list, and
 #   cascade:ConsentScopeShape -- the FIRST constraint anywhere in this
 #   specification that mentions consent. cascade:SocialHistoryConsent had been
 #   declared since core v3.0 as the value of a property that was declared
 #   nowhere. Fixtures: clinical/social-history-consent-scope.VALID (the scope
 #   carried and accepted, 12 -> 16 constraint checks at this pin) and
-#   clinical/social-history-consent-scope-wrong-value.INVALID (cascade:SelfReported,
-#   a real cascade:DataProvenance term and not a consent scope, rejected by
-#   sh:InConstraintComponent). The negative was measured NO_VIOLATION against
-#   core 3.8, where the two files are indistinguishable.
+#   clinical/social-history-consent-scope-wrong-value, then named .INVALID.ttl
+#   (cascade:SelfReported, a real cascade:DataProvenance term and not a consent
+#   scope, rejected by sh:InConstraintComponent). The negative was measured
+#   NO_VIOLATION against core 3.8, where the two files are indistinguishable.
+#   THAT FILE IS NOW .WARN.ttl -- core v3.11 opened the value set, so what it
+#   asserts became a warning rather than a rejection. This paragraph describes
+#   v3.10 as shipped and is left as the historical record; see the core=3.12
+#   row above for the rename.
 #   They are filed under fixtures/clinical/ because the records they carry are
 #   clinical:SocialHistoryRecord; the shape constraining them is core's.
 #   NOT covered by a negative fixture, and deliberately: ABSENCE of a consent
@@ -264,7 +307,13 @@ clinical=1.19
 #   SocialHistoryRecordShape (clinical/social-history-smoking.ttl, social-003).
 # clinical=1.9: cascade:AIExtracted added to the dataProvenance sh:in enum on every clinical record shape; an AIExtracted Medication is now SHACL-valid. Fixtures: med-011.
 # clinical=1.8: Medication RDF type and predicates migrated from health: to clinical: namespace
-coverage=1.7
+coverage=1.8
+# coverage=1.8: ONTOLOGY-ONLY, and NO FIXTURE REACHES IT.
+#   coverage:ClaimRecord and coverage:BenefitStatement gain rdfs:subClassOf
+#   prov:Entity; coverage.shapes.ttl is untouched. Neither class is shaped --
+#   they are two of the four named under "Known gaps" in CLAUDE.md -- so
+#   claim-001 and benefit-001 still evaluate zero constraints and this step adds
+#   none. Part of jayostis/spec#13 with core v3.12 and checkup v3.4.
 # coverage=1.7: one sh:property block, for coverage:sourceRecordId -- declared
 #   since coverage v1.3 and constrained by nothing since, because it was
 #   authored for coverage:ClaimRecord and coverage:BenefitStatement and neither
@@ -321,7 +370,13 @@ coverage=1.7
 # the private Swift SDK -- cannot be read from here. Asked at jayostis/spec#14.
 # (One phenopacket oracle uses the predicate checkup:recommendedActions, which no
 # shape targets, so it is not coverage.)
-checkup=3.3
+checkup=3.4
+# checkup=3.4: ONTOLOGY-ONLY, and NO FIXTURE REACHES IT. A settings class is
+#   declared a record class (rdfs:subClassOf prov:Entity) -- four properties
+#   domain to it and checkup:IntakeFormData reaches an instance through
+#   checkup:hasCheckInSettings. That reach is INSIDE the intake-form nesting
+#   question #5 is blocked on, so a fixture for it waits on the same answer.
+#   Part of jayostis/spec#13 with core v3.12 and coverage v1.8.
 # checkup=3.3: icd10Code pattern corrected to allow alphanumeric characters in
 #   positions 2-3 per ICD-10-CM Official Guidelines I.A.2 (C4A/D3A/M1A classes).
 #   Still no checkup: fixture; the UNVERIFIED caveat above continues to apply.

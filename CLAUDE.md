@@ -25,8 +25,8 @@ python3 scripts/run_conformance.py --spec-dir ../spec --json results.json
 python3 scripts/check_baseline.py --results results.json
 ```
 
-Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.10 / health 2.8 /
-clinical 1.19 / coverage 1.7), which is what CI executes: **151 passed / 26
+Against the revision in `scripts/SPEC_PIN` (`spec` at core 3.12 / health 2.8 /
+clinical 1.19 / coverage 1.8 / checkup 3.4 / pots 1.4), which is what CI executes: **151 passed / 26
 failed / 0 skipped / 177 total**, 63,817 constraint checks, and all 26 are
 enumerated in `KNOWN_FAILURES.json`, so the ratchet holds and the job is green.
 
@@ -106,15 +106,41 @@ spec tag → conformance fixtures added → SDK releases
 
 Check `VOCAB_VERSIONS` at the repo root. Compare against `spec/VOCAB_VERSIONS` to see what's missing.
 
-### Vocabulary coverage (as of 2026-09-01)
+### Vocabulary coverage (as of 2026-09-02)
 
-Covered up to core=3.10, health=2.8, clinical=1.19, coverage=1.7. Read the comments in
+Covered up to core=3.12, health=2.8, clinical=1.19, coverage=1.8, checkup=3.4, pots=1.4.
+Read the comments in
 `VOCAB_VERSIONS`: each row now names what a fixture actually exercises and what it does
 not, measured by recording which node shapes matched a focus node across the whole suite.
+- core v3.11: the `cascade:consentScope` value set OPENS, on D-CONSENT-1. The
+  shape SPLITS rather than softening — `sh:nodeKind`/`sh:minCount`/`sh:maxCount`
+  keep `sh:Violation` in a block carrying no `sh:in`, and `sh:in` moves alone to
+  a second block at `sh:Warning`. One fixture moved and none was added:
+  `clinical/social-history-consent-scope-wrong-value` went `.INVALID.ttl` →
+  `.WARN.ttl` at this pin. Its data is unchanged; what changed is what the
+  specification does with it, and the polarity suffix is the only place a fixture
+  can say so. **NOT covered, and not closeable by any fixture:** v3.11 also grew
+  `sh:in` from one member to three, adding `cascade:SubstanceUseConsent` and
+  `cascade:MentalHealthConsent`. Neither term appears anywhere in this repo, and
+  no polarity can assert membership — `sh:in` now reports at `sh:Warning`, the
+  runner passes `allow_warnings=True`, so being *in* the list produces silence and
+  no polarity asserts silence. Do not "fix" this by adding a `.VALID.ttl`; it
+  passes identically against a one-member list. See the core=3.12 row in
+  `VOCAB_VERSIONS`.
+- core v3.12 / coverage v1.8 / checkup v3.4: **ontology-only, and no fixture
+  reaches any of them.** core v3.12 (`cascade:ConflictDetail`,
+  `cascade:AIDiscardedExtraction`) and coverage v1.8 (`coverage:ClaimRecord`,
+  `coverage:BenefitStatement`) add `rdfs:subClassOf prov:Entity` to classes no
+  shape targets; checkup v3.4 declares a settings class as a record class.
+  `core.shapes.ttl` is the only `*.shapes.ttl` that changed at this pin, so the
+  suite sees these three steps only as subclass axioms 149 → 156. None of them
+  can be given a fixture until a shape targets the class.
 - core v3.10: `cascade:consentScope` and `cascade:ConsentScopeShape`, the first
   constraint here that mentions consent. `clinical/social-history-consent-scope.VALID.ttl`
-  and `-wrong-value.INVALID.ttl`. Absence of the property is NOT constrained by
-  v3.10 and must not be given a fixture; `clinical/social-history-smoking.ttl`
+  and `-wrong-value.WARN.ttl` — that file was `.INVALID.ttl` when v3.10 shipped,
+  and core v3.11 opened the value set so the polarity had to follow. Absence of
+  the property is NOT constrained by v3.10 and must not be given a fixture;
+  `clinical/social-history-smoking.ttl`
   carries no scope, is deliberately unedited, and its continued pass is what
   asserts that. See the core=3.10 row in `VOCAB_VERSIONS`.
 - clinical v1.18/v1.19: **reached as of 2026-09-01** (#6, PR #11). Three fixtures
