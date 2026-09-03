@@ -87,9 +87,25 @@ core=3.12
 #     and as .WARN.ttl it fails VIOLATIONS at the previous pin -- correct for
 #     exactly one vocabulary version in each polarity, which is what shows the
 #     rename tracks core v3.11 rather than being cosmetic.
-#     NOT covered: the two constraints that KEPT sh:Violation. Nothing asserts
-#     that two consent scopes on one record, or a literal where an IRI belongs,
-#     is rejected. Both would be .INVALID.ttl and neither is written.
+#     NOT covered, part 1: the two constraints that KEPT sh:Violation. Nothing
+#     asserts that two consent scopes on one record, or a literal where an IRI
+#     belongs, is rejected. Both would be .INVALID.ttl and neither is written.
+#     NOT covered, part 2 -- and NOT CLOSEABLE by any fixture: v3.11 did not only
+#     demote sh:in, it GREW it from one member to three, adding
+#     cascade:SubstanceUseConsent and cascade:MentalHealthConsent. Neither term
+#     appears anywhere in this repository. Measured, not assumed: delete both
+#     members from core.shapes.ttl and re-run, and all three social-history
+#     fixtures still pass at the same 12/16/16 constraint checks. So the exact
+#     records D-CONSENT-1 says v3.10 wrongly rejected are asserted by nothing.
+#     A second .VALID.ttl carrying cascade:SubstanceUseConsent does NOT close
+#     this, and was measured too: it passes at 16 checks against a one-member
+#     list and a three-member one alike. The reason is structural. sh:in now
+#     reports at sh:Warning, run_conformance.py calls pyshacl with
+#     allow_warnings=True, and a positive fixture's verdict reads violations
+#     only -- so MEMBERSHIP produces silence, and none of the three polarities
+#     asserts silence (.VALID = no violation, .INVALID = >=1 violation,
+#     .WARN = >=1 warning). Closing this needs a fourth polarity asserting
+#     "no warning", which is a runner change and belongs to its own issue.
 #   v3.12 is ONTOLOGY-ONLY: cascade:ConflictDetail and
 #   cascade:AIDiscardedExtraction gain rdfs:subClassOf prov:Entity. NO FIXTURE
 #   REACHES IT and none can -- no shape targets either class, so the declaration
@@ -101,7 +117,7 @@ core=3.12
 #   declared since core v3.0 as the value of a property that was declared
 #   nowhere. Fixtures: clinical/social-history-consent-scope.VALID (the scope
 #   carried and accepted, 12 -> 16 constraint checks at this pin) and
-#   clinical/social-history-consent-scope-wrong-value, then .INVALID
+#   clinical/social-history-consent-scope-wrong-value, then named .INVALID.ttl
 #   (cascade:SelfReported, a real cascade:DataProvenance term and not a consent
 #   scope, rejected by sh:InConstraintComponent). The negative was measured
 #   NO_VIOLATION against core 3.8, where the two files are indistinguishable.

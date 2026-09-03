@@ -181,9 +181,11 @@ cascade validate fixtures/clinical/<fixture> --shapes <flat dir of spec *.shapes
 
 All eleven verdicts agree with this runner's, including the lab report failure.
 
-### The consent-scope pair (core v3.10)
+### The consent-scope pair (core v3.10, reshaped at core v3.11)
 
-Same discipline, and the RED half is the whole argument for the polarity suffix.
+Same discipline, and the RED halves are the whole argument for the polarity
+suffix: the fixture is reported correctly at exactly one vocabulary version, and
+the two pins on either side each fail it for a different reason.
 
 ```sh
 # RED first: at the PREVIOUS pin (spec 9b13ae4, core v3.8), where no shape
@@ -202,10 +204,20 @@ python3 scripts/run_conformance.py --spec-dir <spec@9b13ae4> \
 #   the current one. Either way the point stands -- a .VALID.ttl would have
 #   passed at core v3.8 and told nobody anything.
 
-# GREEN: at the pin now named in scripts/SPEC_PIN (spec 40e581f, core v3.10).
+# RED AGAIN at the pin in between (spec 40e581f, core v3.10), where the value
+# set was published CLOSED and the membership check was still sh:Violation.
 python3 scripts/run_conformance.py --spec-dir <spec@40e581f> \
   --select 'clinical/social-history*'
-#   3 passed / 0 failed / 3 total.
+#   2 passed / 1 failed / 3 total.
+#   social-history-consent-scope-wrong-value.WARN.ttl reports VIOLATIONS: a warn
+#   fixture must be NOTICED, not rejected, and core v3.10 rejects it. This is the
+#   half that makes the rename load-bearing rather than cosmetic -- the file
+#   passes at exactly one vocabulary version in each polarity.
+
+# GREEN: at the pin now named in scripts/SPEC_PIN (spec 3362861, core v3.12).
+python3 scripts/run_conformance.py --spec-dir <spec@3362861> \
+  --select 'clinical/social-history*'
+#   3 passed / 0 failed / 3 total, 44 constraint checks.
 ```
 
 The positive fixture is not proven by passing either — it passes under both
@@ -215,10 +227,16 @@ pins. What proves it is the count: **12 → 16** constraint checks, the four bei
 non-movement is the open-world assertion: the shape did not reach it, because it
 carries no consent scope.
 
-The negative fixture's single violation is
-`cascade:ConsentScopeShape / path cascade:consentScope / InConstraintComponent`,
-verbatim from `results.json` — one violation, from the constraint under test,
-and nothing else fires.
+The warn fixture's single finding is that same constraint, now reported at
+`sh:Warning`: `cascade:ConsentScopeShape / path cascade:consentScope /
+InConstraintComponent :: "advisory: value outside the known cascade:ConsentScope
+list"`, verbatim from `results.json` at spec 3362861 — **zero violations and
+exactly one warning**, from the constraint under test, and nothing else fires.
+Under core v3.10 the identical constraint reported the identical focus node at
+`sh:Violation`, and the file was `.INVALID.ttl` for exactly that reason; core
+v3.11 demoted the membership check, and the polarity suffix followed. If you are
+auditing this paragraph against `results.json`, read the `warnings` array — the
+`violations` array is empty and is meant to be.
 
 Measured across the **whole** suite at both pins, because two of the five
 version steps this pin moves (clinical v1.18, coverage v1.7) are explicitly not

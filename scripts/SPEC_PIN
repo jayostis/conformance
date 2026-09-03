@@ -31,8 +31,9 @@
 # `git checkout` on an object that has been garbage-collected. Do not re-pin to
 # a fork SHA that no tag points at.
 #
-# THIS PIN MOVES FOUR VOCABULARIES: core 3.10 -> 3.12, coverage 1.7 -> 1.8,
-# checkup 3.3 -> 3.4. health, clinical and pots are unchanged.
+# THIS PIN MOVES THREE VOCABULARIES across four version steps: core 3.10 -> 3.12
+# (two steps), coverage 1.7 -> 1.8, checkup 3.3 -> 3.4. health, clinical and pots
+# are unchanged.
 #
 # ONLY ONE SHAPE FILE CHANGED, and only one fixture was affected by it.
 # `core.shapes.ttl` is the sole `*.shapes.ttl` touched between the two pins; the
