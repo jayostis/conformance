@@ -15,9 +15,27 @@
 # scripts/SPEC_PIN, not from this file. If the two disagree, SPEC_PIN wins and
 # the rows below describe a vocabulary CI is not executing, so keep them in step:
 # SPEC_PIN's `vocab=` line must repeat the versions below verbatim. As of
-# 2026-09-02 both read core=3.12 health=2.8 clinical=1.19 coverage=1.8
-# checkup=3.4 pots=1.4, and the pin is the jayostis/spec PR #42 merge commit
-# 3362861 (tags vocab/core-v3.12, vocab/coverage-v1.8, vocab/checkup-v3.4).
+# 2026-09-03 both read core=3.13 health=2.9 clinical=1.20 coverage=1.9
+# checkup=3.5 pots=1.5, and the pin is the jayostis/spec PR #53 merge commit
+# e77ba5e (tags vocab/core-v3.13, vocab/health-v2.9, vocab/clinical-v1.20,
+# vocab/coverage-v1.9, vocab/checkup-v3.5, vocab/pots-v1.5 -- all six on that
+# same commit; see jayostis/spec#54, which the releases sat behind, untagged,
+# until it tagged them).
+#
+# 2026-09-03 batch: all six vocabularies move one minor version for a single
+# change -- jayostis/spec#50 -- ONTOLOGY- AND CONTEXT-ONLY, NO SHAPE FILE
+# CHANGED, and NO FIXTURE REACHES ANY OF IT. `cascade:RecordClass` is declared
+# in core and carried directly by 83 classes across these six vocabularies (127
+# counting the five drafts), replacing a reading of `rdfs:subClassOf
+# prov:Entity` that jayostis/spec#34 (ASK-05) ruled out as PROV-O alignment.
+# The marker carries no SHACL constraint anywhere, so no fixture's verdict
+# moves and none can assert it; it is visible to spec's own
+# check-class-coverage.py, not to this suite. Also in this release:
+# clinical:CoverageRecord names coverage:InsurancePlan as its successor in a
+# triple (an ontology fact, not a shape), and twelve record classes gain a
+# JSON-LD name in contexts/v1/, which this suite does not exercise either.
+# Constraint checks: 63,817 at both the old and new pin, unchanged. See
+# scripts/SPEC_PIN for the full accounting.
 #
 # (Corrected 2026-09-01: the coverage row read 1.5 while SPEC_PIN read 1.6, so
 # the two had been out of step since the 2026-08-28 re-pin. The v1.6 note that
@@ -71,7 +89,10 @@
 # encounter-001 was a KNOWN_FAILURES entry with reason UNSHAPED: it reported
 # conforming while evaluating ZERO constraints, because clinical:Encounter had no
 # shape. It now evaluates 29, so the entry is gone.
-core=3.12
+core=3.13
+# core=3.13: ONTOLOGY-ONLY, and NO FIXTURE REACHES IT. cascade:RecordClass is
+#   declared and twelve core classes carry it. See the 2026-09-03 batch note
+#   at the top of this file.
 # core=3.12 and 3.11: ONE SHAPE CHANGE BETWEEN THEM, and it moved a fixture.
 #   v3.11 OPENED the cascade:consentScope value set. D-CONSENT-1 ratified it as
 #   open -- "sh:in at sh:Warning at most, never sh:Violation ... a closed list
@@ -180,7 +201,10 @@ core=3.12
 #   ExportManifestShape / cascade:schemaVersion / sh:minCount).
 #   NOT covered: cascade:InteractionScenario has a shape and no fixture.
 # core=3.3: cascade:AIAsserted provenance leaf (ungrounded general-AI content, subClassOf ConsumerGenerated) + cascade:ProxyAgent caregiver-proxy actor (ProxyAgentShape requires actsForPatient, proxyRelationship, proxyGrantedAt). Fixtures: social-002, proxy-001, proxy-002.
-health=2.8
+health=2.9
+# health=2.9: ONTOLOGY-ONLY, and NO FIXTURE REACHES IT. Record classes marked
+#   with cascade:RecordClass (core v3.13). See the 2026-09-03 batch note at
+#   the top of this file.
 # health=2.8: health.shapes.ttl v1.5 declares clinical:status on two health:
 #   record shapes -- the predicate is clinical: on purpose, being the domain-free
 #   status carrier both import paths already write. health:LabResultRecordShape
@@ -221,7 +245,15 @@ health=2.8
 #   Note: health:SocialHistoryRecordShape declares only sh:Info-severity constraints,
 #   so no fixture can be rejected by it and the health: spelling has no negative
 #   counterpart. social-003 covers the clinical: spelling instead.
-clinical=1.19
+clinical=1.20
+# clinical=1.20: ONTOLOGY-ONLY, and NO FIXTURE REACHES THE NEW PART.
+#   cascade:RecordClass marks this vocabulary's record classes (core v3.13),
+#   and clinical:CoverageRecord names coverage:InsurancePlan as its successor
+#   in a triple -- an ontology fact beside the rdfs:seeAlso to fhir:Coverage it
+#   already had, not a shape change, so legacycoverage-001/002 and
+#   coverage-record-legacy-type-vocabulary.WARN.ttl continue to exercise
+#   clinical:CoverageRecordShape exactly as before. See the 2026-09-03 batch
+#   note at the top of this file.
 # clinical=1.19 and 1.18: BOTH REACHED as of 2026-09-01 (#6, PR #11). Both act on
 #   clinical:CoverageRecord -- v1.18 adds clinical:CoverageRecordShape (the class
 #   was deprecated-but-retained and targeted by nothing, so every record in the
@@ -307,7 +339,10 @@ clinical=1.19
 #   SocialHistoryRecordShape (clinical/social-history-smoking.ttl, social-003).
 # clinical=1.9: cascade:AIExtracted added to the dataProvenance sh:in enum on every clinical record shape; an AIExtracted Medication is now SHACL-valid. Fixtures: med-011.
 # clinical=1.8: Medication RDF type and predicates migrated from health: to clinical: namespace
-coverage=1.8
+coverage=1.9
+# coverage=1.9: ONTOLOGY-ONLY, and NO FIXTURE REACHES IT. Record classes
+#   marked with cascade:RecordClass (core v3.13). See the 2026-09-03 batch
+#   note at the top of this file.
 # coverage=1.8: ONTOLOGY-ONLY, and NO FIXTURE REACHES IT.
 #   coverage:ClaimRecord and coverage:BenefitStatement gain rdfs:subClassOf
 #   prov:Entity; coverage.shapes.ttl is untouched. Neither class is shaped --
@@ -370,7 +405,10 @@ coverage=1.8
 # the private Swift SDK -- cannot be read from here. Asked at jayostis/spec#14.
 # (One phenopacket oracle uses the predicate checkup:recommendedActions, which no
 # shape targets, so it is not coverage.)
-checkup=3.4
+checkup=3.5
+# checkup=3.5: ONTOLOGY-ONLY, and NO FIXTURE REACHES IT. Record classes marked
+#   with cascade:RecordClass (core v3.13). See the 2026-09-03 batch note at
+#   the top of this file. Still blocked by #5, same as checkup=3.4 below.
 # checkup=3.4: ONTOLOGY-ONLY, and NO FIXTURE REACHES IT. A settings class is
 #   declared a record class (rdfs:subClassOf prov:Entity) -- four properties
 #   domain to it and checkup:IntakeFormData reaches an instance through
@@ -380,7 +418,11 @@ checkup=3.4
 # checkup=3.3: icd10Code pattern corrected to allow alphanumeric characters in
 #   positions 2-3 per ICD-10-CM Official Guidelines I.A.2 (C4A/D3A/M1A classes).
 #   Still no checkup: fixture; the UNVERIFIED caveat above continues to apply.
-pots=1.4
+pots=1.5
+# pots=1.5: ONTOLOGY-ONLY, and NO FIXTURE REACHES THE NEW PART. Record classes
+#   marked with cascade:RecordClass (core v3.13); the 11 fixtures below
+#   continue to exercise pots.shapes.ttl exactly as before, since no shape
+#   changed. See the 2026-09-03 batch note at the top of this file.
 # pots=1.4: COVERED as of 2026-09-01 (#10). This row read "NO FIXTURE COVERAGE"
 #   alongside checkup= until then. 11 .ttl fixtures in fixtures/pots/ cover all
 #   five reachable classes and EXECUTE all 9 reachable Violation constraints,
